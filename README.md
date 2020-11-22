@@ -4,11 +4,12 @@ The Dactyl Lynx is a parameterized, split-hand, concave, columnar, ergonomic key
 This is my fork of [the original Dactyl][]. I've changed a few things:
 * Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][] and the way my thumbs move)
 * Steeper tenting angle
-* Ergodox-compatible keycaps! (it doesn't use _all_ of the Ergodox keys, but the keys it has should all be able to be sourced from Ergodox keycap sets - effectively the same as [the Phat Dactyl][])
+* Ergodox-compatible keycaps! (it doesn't use _all_ of the Ergodox keys, but the keys it has should all be able to be sourced from [Ergodox keycap sets][] - effectively the same as [the Phat Dactyl][])
 * A simpler one-piece chassis
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
 [the Dactyl-ManuForm]: https://github.com/tshort/dactyl-keyboard
+[Ergodox keycap sets]: https://www.reddit.com/r/ergodox/comments/gu4cbm/every_site_for_ergodox_keycaps_that_are_currently/
 [the Phat Dactyl]: https://github.com/adereth/dactyl-keyboard/pull/48
 
 ![Preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
