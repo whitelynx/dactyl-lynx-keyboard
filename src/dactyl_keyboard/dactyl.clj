@@ -132,6 +132,7 @@
                               (translate [0 0 (- row-radius)])
                               (rotate (* α (- 2 row)) [1 0 0])
                               (translate [0 0 row-radius]))
+        column (if (>= column 5) (+ column (* (+ -4 column) 0.25)) column)
         column-offset (cond
                         (= column 2) [0 2.82 -3.0] ;;was moved -4.5
                         (>= column 4) [0 -5.8 5.64]
@@ -143,14 +144,15 @@
                           (translate [0 0 column-radius])
                           (translate column-offset))]
     (->> placed-shape
-         (rotate (/ π 12) [0 1 0])
-         (translate [0 0 13]))))
+         (rotate (/ π 10) [0 1 0])
+         (translate [0 0 22]))))
 
 (defn case-place [column row shape]
   (let [row-placed-shape (->> shape
                               (translate [0 0 (- row-radius)])
                               (rotate (* α (- 2 row)) [1 0 0])
                               (translate [0 0 row-radius]))
+        column (if (> column 4.5) (+ column (* (+ -4.5 column) 0.5)) column)
         column-offset [0 -4.35 5.64]
         column-angle (* β (- 2 column))
         placed-shape (->> row-placed-shape
@@ -159,8 +161,8 @@
                           (translate [0 0 column-radius])
                           (translate column-offset))]
     (->> placed-shape
-         (rotate (/ π 12) [0 1 0])
-         (translate [0 0 13]))))
+         (rotate (/ π 10) [0 1 0])
+         (translate [0 0 22]))))
 
 (def key-holes
   (apply union
@@ -177,7 +179,7 @@
                row rows
                :when (or (not= column 0)
                          (not= row 4))]
-           (->> (sa-cap (if (= column 5) 1 1))
+           (->> (sa-cap (if (= column 5) 1.5 1))
                 (key-place column row)))))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -242,7 +244,7 @@
         row-radius (+ (/ (/ (+ mount-height 1) 2)
                          (Math/sin (/ α 2)))
                       cap-top-height)
-        β (/ π 36)
+        β (/ π -36)
         column-radius (+ (/ (/ (+ mount-width 2) 2)
                             (Math/sin (/ β 2)))
                          cap-top-height)
@@ -257,9 +259,10 @@
          (rotate (* column β) [0 1 0])
          (translate [0 0 column-radius])
          (translate [mount-width 0 0])
-         (rotate (* π (- 1/4 3/16)) [0 0 1])
+         (rotate (* π 3/16) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (translate [-52 -45 40]))))
+         (rotate (/ π -8/3) [-1 1 0])
+         (translate [-52 -45 39]))))
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
@@ -446,6 +449,11 @@
                  (place-fn x (+ y step) sphere)
                  (place-fn (+ x step) (+ y step) sphere)))))
 
+(defn curtain [& shapes]
+  (hull
+    shapes
+    (translate [0 0 -100] (union shapes))))
+
 (def front-wall
   (let [step wall-step ;;0.1
         wall-step 0.05 ;;0.05
@@ -490,7 +498,15 @@
      (hull (place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
            (place 1.7 4 (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 1 4 web-post-bl)
-           (key-place 1 4 web-post-br)))))
+           (key-place 1 4 web-post-br))
+     ; Curtains (from bottom edge of walls to z=0):
+     (apply union
+            (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
+              (curtain
+                (place x 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
+                (place (+ x step) 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
+                )))
+     )))
 
 (def back-wall
   (let [step wall-step
@@ -539,39 +555,75 @@
      (hull (place (- 5 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (key-place 4 0 web-post-tr)
-           (key-place 5 0 web-post-tl)))))
+           (key-place 5 0 web-post-tl))
+
+     ; Curtains (from bottom edge of walls to z=0):
+     (curtain
+       (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (place (+ left-wall-column 1) 0  (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
+     (curtain
+       (place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
+       (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
+     (apply union
+            (for [x (range 1 5)]
+              (union
+                (curtain
+                  (place (- x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
+                  (place (+ x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))))))
+     (curtain
+       (place (- 5 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
+       (place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
+     )))
 
 (def right-wall
   (let [place case-place]
     (union
-     (apply union
-            (map (partial apply hull)
-                 (partition 2 1
-                            (for [scale (range-inclusive 0 1 0.01)]
-                              (let [x (scale-to-range 4 0.02 scale)]
-                                (hull (place right-wall-column x (wall-sphere-top scale))
-                                      (place right-wall-column x (wall-sphere-bottom scale))))))))
+      (apply union
+             (map (partial apply hull)
+                  (partition 2 1
+                             (for [scale (range-inclusive 0 1 0.01)]
+                               (let [x (scale-to-range 4 0.02 scale)]
+                                 (hull (place right-wall-column x (wall-sphere-top scale))
+                                       (place right-wall-column x (wall-sphere-bottom scale))))))))
 
-          (apply union
-            (concat
-             (for [x (range 0 5)]
-               (union
-                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                      (key-place 5 x web-post-br)
-                      (key-place 5 x web-post-tr))))
-             (for [x (range 0 4)]
-               (union
-                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                      (place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                      (key-place 5 x web-post-br)
-                      (key-place 5 (inc x) web-post-tr))))
-             [(union
-               (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
-                     (key-place 5 0 web-post-tr))
-               (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
-                     (key-place 5 4 web-post-br)))])))))
+      (apply union
+             (concat
+               (for [x (range 0 5)]
+                 (union
+                   (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                         (key-place 5 x web-post-br)
+                         (key-place 5 x web-post-tr))))
+               (for [x (range 0 4)]
+                 (union
+                   (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                         (place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                         (key-place 5 x web-post-br)
+                         (key-place 5 (inc x) web-post-tr))))
+               [(union
+                  (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                        (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+                        (key-place 5 0 web-post-tr))
+                  (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                        (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
+                        (key-place 5 4 web-post-br)))]))
+      ; Curtains (from bottom edge of walls to z=0):
+      (apply union
+             (concat
+               (for [x (range 0 4)]
+                 (union
+                   (curtain
+                     (place right-wall-column x (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
+                     (place right-wall-column (inc x) (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2))))
+                   ))
+               [(union
+                  (curtain
+                    (place right-wall-column 0 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
+                    (place right-wall-column 0.02 (translate [-0.5 -0.5 0.5] (wall-sphere-bottom 1))))
+                  (curtain
+                    (place right-wall-column 4 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
+                    (place right-wall-column 4 (translate [-0.5 0.5 0.5] (wall-sphere-bottom 0))))
+                  )]))
+     )))
 
 (def left-wall
   (let [place case-place]
@@ -606,7 +658,18 @@
            (key-place 0 3 web-post-tl))
      (hull (place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
            (thumb-place 1 1 web-post-tr)
-           (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))))))
+           (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back)))
+     ; Curtains (from bottom edge of walls to z=0):
+     (curtain
+       (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
+     (curtain
+       (place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back))
+       (place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
+     (curtain
+       (place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back))
+       (place left-wall-column 1.6666  (translate [0.5 0 0.5] wall-sphere-bottom-front)))
+     )))
 
 (def thumb-back-wall
   (let [step wall-step
@@ -627,12 +690,14 @@
                     (thumb-place (+ x step) back-y wall-sphere-top-back)
                     (thumb-place x back-y wall-sphere-bottom-back)
                     (thumb-place (+ x step) back-y wall-sphere-bottom-back))))
-     (hull (thumb-place 1/2 back-y wall-sphere-top-back)
-           (thumb-place 1/2 back-y wall-sphere-bottom-back)
-           (case-place left-wall-column 1.6666 wall-sphere-top-front))
-     (hull (thumb-place 1/2 back-y wall-sphere-bottom-back)
-           (case-place left-wall-column 1.6666 wall-sphere-top-front)
-           (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
+     (hull
+       (thumb-place 1/2 back-y wall-sphere-top-back)
+       (thumb-place 1/2 back-y wall-sphere-bottom-back)
+       (case-place left-wall-column 1.6666 wall-sphere-top-front))
+     (hull
+       (thumb-place 1/2 back-y wall-sphere-bottom-back)
+       (case-place left-wall-column 1.6666 wall-sphere-top-front)
+       (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
      (hull
       (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
       (thumb-place 1 1 web-post-tr)
@@ -642,7 +707,18 @@
       (thumb-place (+ 5/2 0.05) thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
       (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
       (thumb-place 1 1 web-post-tl)
-      (thumb-place 2 1 web-post-tl)))))
+      (thumb-place 2 1 web-post-tl))
+     ; Curtains (from bottom edge of walls to z=0):
+     (curtain
+       (thumb-place 1/2 back-y wall-sphere-bottom-back)
+       (case-place left-wall-column 1.6666 (translate [0.5 0 0.5] wall-sphere-bottom-front)))
+     (curtain
+       (thumb-place 1/2 back-y wall-sphere-bottom-back)
+       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back))
+     (curtain
+       (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
+       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back))
+     )))
 
 (def thumb-left-wall
   (let [step wall-step
@@ -681,7 +757,18 @@
       (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
       (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
       (thumb-place 2 -1 web-post-tl)
-      (thumb-place 2 -1 web-post-bl)))))
+      (thumb-place 2 -1 web-post-bl))
+     ; Curtains (from bottom edge of walls to z=0):
+     (curtain
+       (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back)
+       (thumb-place thumb-left-wall-column 0 wall-sphere-bottom-back))
+     (curtain
+       (thumb-place thumb-left-wall-column 0 wall-sphere-bottom-back)
+       (thumb-place thumb-left-wall-column -1 wall-sphere-bottom-back))
+     (curtain
+       (thumb-place thumb-left-wall-column -1 wall-sphere-bottom-back)
+       (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-bottom-front))
+     )))
 
 (def thumb-front-wall
   (let [step wall-step ;;0.1
@@ -731,7 +818,18 @@
            (place 0 -1/2 thumb-bl)
            (place 1 -1/2 thumb-bl)
            (place 1 -1/2 thumb-br)
-           (place 2 -1 web-post-br)))))
+           (place 2 -1 web-post-br))
+     ; Curtains (from bottom edge of walls to z=0):
+     (curtain
+       (place (+ 5/2 0.05) thumb-front-row wall-sphere-bottom-front)
+       (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
+     (curtain
+       (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front))
+       (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
+     (curtain
+       (case-place 0.7 4 (translate [1 0 1.5] wall-sphere-bottom-front))
+       (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front)))
+     )))
 
 (def new-case
   (union front-wall
@@ -741,6 +839,11 @@
          thumb-back-wall
          thumb-left-wall
          thumb-front-wall))
+
+(def new-case-trimmed
+  (difference
+    new-case
+    (->> (cube 1000 1000 100) (translate [0 0 -50]))))
 
 ;;;;;;;;;;;;
 ;; Bottom ;;
@@ -1117,23 +1220,23 @@
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
 
-(def trrs-diameter 6.6)
+(def trrs-diameter 7.85)
 (def trrs-radius (/ trrs-diameter 2))
-(def trrs-hole-depth 10)
+(def trrs-hole-depth 13)
 
 (def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
                            (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
                                 (translate [0 (/ (+ trrs-radius 5) 2) 0])))
-                    (rotate (/ π 2) [1 0 0])
-                    (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+                    (rotate (/ π 2.9) [0 1 0])
+                    (translate [(+ (/ mount-height -4) 4) 0 (- -20 trrs-radius)])
                     (with-fn 50)))
 
 (def trrs-hole-just-circle
   (->> (cylinder trrs-radius trrs-hole-depth)
-       (rotate (/ π 2) [1 0 0])
-       (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+       (rotate (/ π 2.9) [0 1 0])
+       (translate [(+ (/ mount-height -4) 4) 0 (- -20 trrs-radius)])
        (with-fn 50)
-       (key-place 1/2 0)))
+       (key-place 0 3/2)))
 
 (def trrs-box-hole (->> (cube 14 14 7 )
                         (translate [0 1 -3.5])))
@@ -1226,10 +1329,9 @@
    (union key-holes
           connectors
           thumb
-          new-case
+          new-case-trimmed
           teensy-support)
-   trrs-hole-just-circle
-   screw-holes))
+   trrs-hole-just-circle))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1238,8 +1340,7 @@
                   connectors
                   thumb
                   new-case)
-           trrs-hole-just-circle
-           screw-holes)))
+           trrs-hole-just-circle)))
 
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
@@ -1250,17 +1351,11 @@
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
 
-(spit "things/dactyl-bottom-right.scad"
-      (write-scad dactyl-bottom-right))
-
 (spit "things/dactyl-top-left.scad"
       (write-scad dactyl-top-left))
-
-(spit "things/dactyl-bottom-left.scad"
-      (write-scad dactyl-bottom-left))
 
 (spit "things/dactyl-top-left-with-teensy.scad"
       (write-scad (mirror [-1 0 0] dactyl-top-right)))
 
-(spit "things/dactyl-bottom-left-with-teensy.scad"
-      (write-scad (mirror [-1 0 0] dactyl-bottom-right)))
+(spit "things/dactyl-top-right-preview.scad"
+      (write-scad (union dactyl-top-right caps thumbcaps)))
