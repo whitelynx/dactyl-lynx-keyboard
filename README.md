@@ -5,11 +5,8 @@ This is my fork of [the original Dactyl][], with rotated thumb clusters, a steep
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
 
-<img src="https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png"/>
+![Preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
 
-There's a talk about the motivation and design of the Dactyl that helps provide context for this repo:
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/uk3A41U0iO4/0.jpg)](https://www.youtube.com/watch?v=uk3A41U0iO4)
 
 ## Assembly
 
@@ -36,13 +33,15 @@ There's a talk about the motivation and design of the Dactyl that helps provide 
 ### Printing
 Pregenerated STL files are available in the [things/](things/) directory.
 
+
 ### Wiring
 Masks for the flexible PCBs I used are available for the [left](resources/pcb-left.svg) and [right](resources/pcb-right.svg) side.
 
 A [very rough guide for the brave is here](guide/README.org#wiring) - It will be improved over time (**TODO**)!
 
+
 ## License
 
-Copyright © 2015 Matthew Adereth
+Copyright © 2015-2020 Matthew Adereth and David H. Bronke
 
 The source code for generating the models (everything excluding the [things/](things/) and [resources/](resources/) directories is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).  The generated models and PCB designs are distributed under the [Creative Commons Attribution-ShareAlike License Version 4.0](LICENSE-models).
