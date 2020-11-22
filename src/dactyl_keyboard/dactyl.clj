@@ -976,9 +976,9 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-proton-c))
+          (placed-board board-mount-pro-mini))
    trrs-hole-just-circle
-   (placed-board board-cutout-proton-c)))
+   (placed-board board-cutout-pro-mini)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -996,7 +996,16 @@
     (color [0.1 0.1 0.1] dactyl-top-right)
     caps
     thumbcaps
-    (placed-board board-shape-proton-c)))
+    (placed-board board-shape-pro-mini)))
+
+(def dactyl-top-left-preview
+  (union
+    (color [0.1 0.1 0.1] dactyl-top-left)
+    (mirror [-1 0 0]
+            (union
+              caps
+              thumbcaps
+              (placed-board board-shape-proton-c)))))
 
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
@@ -1013,5 +1022,21 @@
 (spit "things/dactyl-top-left-with-teensy.scad"
       (write-scad (mirror [-1 0 0] dactyl-top-right)))
 
-(spit "things/dactyl-top-right-preview.scad"
-      (write-scad dactyl-top-right-preview))
+(spit "things/dactyl-preview.scad"
+      (write-scad (union
+                    (translate [-115 0 0] (rotate (/ π -10) [0 0 1] dactyl-top-left-preview))
+                    (translate [115 0 0] (rotate (/ π 10) [0 0 1] dactyl-top-right-preview)))))
+
+(spit "things/board-proton-c.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-proton-c)
+                    board-cutout-proton-c
+                    (translate [0 0 0] board-mount-proton-c)
+                    )))
+
+(spit "things/board-pro-mini.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-pro-mini)
+                    board-cutout-pro-mini
+                    (translate [0 0 0] board-mount-pro-mini)
+                    )))
