@@ -905,8 +905,8 @@
 (defn board-mount-bare [[x y z]]
   (difference
     (union
-      (translate [(/ x 2) (/ (+ y 0.375) 2) 0] mount-post)
-      (translate [(/ x -2) (/ (+ y 0.375) 2) 0] mount-post)
+      (translate [(/ x 2) (/ (+ y 1.5) 2) 0] mount-post)
+      (translate [(/ x -2) (/ (+ y 1.5) 2) 0] mount-post)
       (translate [0 (- (/ y -2) 1) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
     (board-cutout-bare [x y z])))
 
@@ -991,6 +991,13 @@
            trrs-hole-just-circle
            (placed-board board-cutout-proton-c))))
 
+(def dactyl-top-right-preview
+  (union
+    (color [0.1 0.1 0.1] dactyl-top-right)
+    caps
+    thumbcaps
+    (placed-board board-shape-proton-c)))
+
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
 
@@ -1007,9 +1014,4 @@
       (write-scad (mirror [-1 0 0] dactyl-top-right)))
 
 (spit "things/dactyl-top-right-preview.scad"
-      (write-scad (union
-                    (color [0.1 0.1 0.1] dactyl-top-right)
-                    caps
-                    thumbcaps
-                    (placed-board board-shape-proton-c)
-                    )))
+      (write-scad dactyl-top-right-preview))
