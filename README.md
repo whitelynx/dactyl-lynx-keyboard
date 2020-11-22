@@ -1,8 +1,8 @@
-# The Dactyl Keyboard
-The Dactyl is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
+# The Dactyl Lynx Keyboard
+The Dactyl Lynx is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
 This is my fork of [the original Dactyl][]. I've changed a few things:
-* Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][])
+* Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][] and the way my thumbs move)
 * Steeper tenting angle
 * Ergodox-compatible keycaps! (it doesn't use _all_ of the Ergodox keys, but the keys it has should all be able to be sourced from Ergodox keycap sets - effectively the same as [the Phat Dactyl][])
 * A simpler one-piece chassis
@@ -41,8 +41,6 @@ Pregenerated STL files are available in the [things/](things/) directory.
 
 
 ### Wiring
-Masks for the flexible PCBs I used are available for the [left](resources/pcb-left.svg) and [right](resources/pcb-right.svg) side.
-
 A [very rough guide for the brave is here](guide/README.org#wiring) - It will be improved over time (**TODO**)!
 
 
