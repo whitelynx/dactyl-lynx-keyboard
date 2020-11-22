@@ -1062,9 +1062,6 @@
 (spit "things/dactyl-top-left.scad"
       (write-scad dactyl-top-left))
 
-(spit "things/dactyl-top-left-with-teensy.scad"
-      (write-scad (mirror [-1 0 0] dactyl-top-right)))
-
 (spit "things/dactyl-preview.scad"
       (write-scad (union
                     (translate [-115 0 0] (rotate (/ π -10) [0 0 1] dactyl-top-left-preview))
