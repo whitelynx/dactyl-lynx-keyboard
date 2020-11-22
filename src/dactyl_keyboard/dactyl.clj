@@ -892,7 +892,7 @@
 
 
 (defn board-shape-bare [[x y z]]
-  (translate [0 0 (/ z 2)] (color [0.14 0.2 0.1] (cube x y z))))
+  (translate [0 (- (/ y -2) 2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z))))
 
 (defn board-cutout-bare [[x y z]]
   (board-shape-bare [x y z]))
@@ -905,23 +905,24 @@
 (defn board-mount-bare [[x y z]]
   (difference
     (union
-      (translate [(/ x 2) (/ (+ y 1.5) 2) 0] mount-post)
-      (translate [(/ x -2) (/ (+ y 1.5) 2) 0] mount-post)
-      (translate [0 (- (/ y -2) 1) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
+      (translate [(/ (- x 5.08) 2) -1.25 0] mount-post)
+      (translate [(/ (- x 5.08) -2) -1.25 0] mount-post)
+      (translate [0 (- (- y) 3) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
     (board-cutout-bare [x y z])))
+
 
 (defn board-shape-with-usb-c [[x y z]]
   (let [usb-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
     (union
-      (translate [0 0 (/ z 2)] (color [0.14 0.2 0.1] (cube x y z)))
-      (translate [0 (/ y 2) usb-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
+      (translate [0 (/ y -2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z)))
+      (translate [0 0 usb-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
       )))
 
 (defn board-cutout-with-usb-c [[x y z]]
   (let [usb-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
     (union
       (board-shape-with-usb-c [x y z])
-      (translate [0 (/ y 2) usb-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
+      (translate [0 0 usb-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
       )))
 
 (def mount-post
@@ -932,10 +933,11 @@
 (defn board-mount-with-usb-c [[x y z]]
   (difference
     (union
-      (translate [(/ (- x 5.08) 2) (/ (- y 5.08) 2) 0] mount-post)
-      (translate [(/ (- x 5.08) -2) (/ (- y 5.08) 2) 0] mount-post)
-      (translate [0 (- (/ y -2) 1) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
+      (translate [(/ (- x 5.08) 2) (/ -5.08 2) 0] mount-post)
+      (translate [(/ (- x 5.08) -2) (/ -5.08 2) 0] mount-post)
+      (translate [0 (- (- y) 1) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
     (board-cutout-with-usb-c [x y z])))
+
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
 (def board-teensy [18 30.5 1.6])
@@ -958,13 +960,38 @@
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-13 47 15])
+(def board-position [-38 47 17])
 
 (defn placed-board [shape]
   (->> shape
        (rotate (/ π 2) [1 0 0])
        (rotate (/ π -2) [0 1 0])
        (translate board-position)))
+
+;;;;;;;;;;;;;;;;;
+;; Rubber Feet ;;
+;;;;;;;;;;;;;;;;;
+
+(def foot-radius 5)
+(def foot-lip 0.5)
+(def foot-support-height 8)
+
+(defn place-feet [foot]
+  (union
+    (translate [-72 -26.5 0] foot)
+    (translate [-33 -59 0] foot)
+    (translate [-35 47.5 0] foot)
+    (translate [80 47.5 0] foot)
+    (translate [80 -55 0] foot)))
+
+(def foot-supports
+  (place-feet
+    (translate [0 0 (/ foot-support-height 2)]
+               (cylinder (+ foot-radius foot-lip) foot-support-height))))
+
+(def foot-cutouts
+  (place-feet
+    (cylinder foot-radius foot-lip)))
 
 ;;;;;;;;;;;;;;;;;;
 ;; Final Export ;;
@@ -976,9 +1003,11 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-pro-mini))
+          (placed-board board-mount-pro-mini)
+          foot-supports)
    trrs-hole-just-circle
-   (placed-board board-cutout-pro-mini)))
+   (placed-board board-cutout-pro-mini)
+   foot-cutouts))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -987,9 +1016,11 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-proton-c))
+                  (placed-board board-mount-proton-c)
+                  foot-supports)
            trrs-hole-just-circle
-           (placed-board board-cutout-proton-c))))
+           (placed-board board-cutout-proton-c)
+           foot-cutouts)))
 
 (def dactyl-top-right-preview
   (union
