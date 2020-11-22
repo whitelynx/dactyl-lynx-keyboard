@@ -875,6 +875,16 @@
               trrs-box-hole)
        (key-place 1/2 0)))
 
+(def trrs-panel-mount-jack
+    (->> (translate [0 0 9] (difference
+                         (cylinder trrs-radius 20)
+                         (cylinder 1.75 22)))
+         (rotate (/ π 2.9) [0 1 0])
+         (translate [(+ (/ mount-height -4) 4) 0 (- -20 trrs-radius)])
+         (with-fn 50)
+         (key-place 0 3/2)
+         (color [0 0 0])))
+
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
 (def usb-c-jack-dimensions [8.94 3.26 7.6])
@@ -1027,6 +1037,7 @@
     (color [0.1 0.1 0.1] dactyl-top-right)
     caps
     thumbcaps
+    trrs-panel-mount-jack
     (placed-board board-shape-pro-mini)))
 
 (def dactyl-top-left-preview
@@ -1036,6 +1047,7 @@
             (union
               caps
               thumbcaps
+              trrs-panel-mount-jack
               (placed-board board-shape-proton-c)))))
 
 (spit "things/switch-hole.scad"
