@@ -883,7 +883,7 @@
          (translate [(+ (/ mount-height -4) 4) 0 (- -20 trrs-radius)])
          (with-fn 50)
          (key-place 0 3/2)
-         (color [0 0 0])))
+         (color [0.08 0.08 0.08])))
 
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
