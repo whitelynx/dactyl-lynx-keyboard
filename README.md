@@ -19,9 +19,11 @@ This is my fork of [the original Dactyl][]. I've changed a few things:
 * Modifying keyswitch holes to support [Kailh hot-swap sockets][]
 * Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
 * Adding mouse buttons and a scroll wheel next to the right-hand thumb cluster
+* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][])
 
 [TrackPoint module]: https://github.com/alonswartz/trackpoint
 [Kailh hot-swap sockets]: https://www.kailhswitch.com/mechanical-keyboard-switches/box-switches/hot-swapping-pcb-socket.html
+[Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
 
 
 ## Assembly
