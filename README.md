@@ -15,6 +15,14 @@ This is my fork of [the original Dactyl][]. I've changed a few things:
 ![Preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
 
 
+## Future plans
+* Modifying keyswitch holes to support Kailh hot-swap sockets
+* Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
+* Adding mouse buttons and a scroll wheel next to the right-hand thumb cluster
+
+[TrackPoint module]: https://github.com/alonswartz/trackpoint
+
+
 ## Assembly
 
 ### Generating a Design
