@@ -1026,10 +1026,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-proton-c)
+                  (placed-board board-mount-pro-micro)
                   foot-supports)
            trrs-hole-just-circle
-           (placed-board board-cutout-proton-c)
+           (placed-board board-cutout-pro-micro)
            foot-cutouts)))
 
 (def dactyl-top-right-preview
@@ -1048,7 +1048,7 @@
               caps
               thumbcaps
               trrs-panel-mount-jack
-              (placed-board board-shape-proton-c)))))
+              (placed-board board-shape-pro-micro)))))
 
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
