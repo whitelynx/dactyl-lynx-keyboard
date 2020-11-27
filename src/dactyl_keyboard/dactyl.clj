@@ -485,10 +485,10 @@
                  (place-fn x (+ y step) sphere)
                  (place-fn (+ x step) (+ y step) sphere)))))
 
-(defn curtain [& shapes]
+(defn curtain [offset & shapes]
   (hull
     shapes
-    (translate [0 0 -100] (union shapes))))
+    (translate offset (union shapes))))
 
 (def front-wall
   (let [step wall-step ;;0.1
@@ -538,7 +538,7 @@
      ; Curtains (from bottom edge of walls to z=0):
      (apply union
             (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
-              (curtain
+              (curtain [0 0 -100]
                 (place x 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
                 (place (+ x step) 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
                 )))
@@ -594,19 +594,27 @@
            (key-place 5 0 web-post-tl))
 
      ; Curtains (from bottom edge of walls to z=0):
-     (curtain
+     (curtain [0 25 -100]
        (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
        (place (+ left-wall-column 1) 0  (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
-     (curtain
+     (hull
+       (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (translate [0 0 -100] (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back)))
+       (translate [0 25 -100] (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))))
+     (curtain [0 25 -100]
        (place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
        (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
+     (hull
+       (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (translate [0 0 -100] (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
+       (translate [0 25 -100] (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back))))
      (apply union
             (for [x (range 1 5)]
               (union
-                (curtain
+                (curtain [0 25 -100]
                   (place (- x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
                   (place (+ x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))))))
-     (curtain
+     (curtain [0 25 -100]
        (place (- 5 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
        (place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
      )))
@@ -647,15 +655,15 @@
              (concat
                (for [x (range 0 4)]
                  (union
-                   (curtain
+                   (curtain [0 0 -100]
                      (place right-wall-column x (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
                      (place right-wall-column (inc x) (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2))))
                    ))
                [(union
-                  (curtain
+                  (curtain [0 0 -100]
                     (place right-wall-column 0 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
                     (place right-wall-column 0.02 (translate [-0.5 -0.5 0.5] (wall-sphere-bottom 1))))
-                  (curtain
+                  (curtain [0 0 -100]
                     (place right-wall-column 4 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
                     (place right-wall-column 4 (translate [-0.5 0.5 0.5] (wall-sphere-bottom 0))))
                   )]))
@@ -696,13 +704,13 @@
            (thumb-place 1 1 web-post-tr)
            (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back)))
      ; Curtains (from bottom edge of walls to z=0):
-     (curtain
+     (curtain [0 0 -100]
        (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
        (place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
-     (curtain
+     (curtain [0 0 -100]
        (place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back))
        (place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
-     (curtain
+     (curtain [0 0 -100]
        (place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back))
        (place left-wall-column 1.6666  (translate [0.5 0 0.5] wall-sphere-bottom-front)))
      )))
@@ -745,13 +753,13 @@
       (thumb-place 1 1 web-post-tl)
       (thumb-place 2 1 web-post-tl))
      ; Curtains (from bottom edge of walls to z=0):
-     (curtain
+     (curtain [0 0 -100]
        (thumb-place 1/2 back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 (translate [0.5 0 0.5] wall-sphere-bottom-front)))
-     (curtain
+     (curtain [0 0 -100]
        (thumb-place 1/2 back-y wall-sphere-bottom-back)
        (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back))
-     (curtain
+     (curtain [0 0 -100]
        (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
        (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back))
      )))
@@ -795,13 +803,13 @@
       (thumb-place 2 -1 web-post-tl)
       (thumb-place 2 -1 web-post-bl))
      ; Curtains (from bottom edge of walls to z=0):
-     (curtain
+     (curtain [0 0 -100]
        (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back)
        (thumb-place thumb-left-wall-column 0 wall-sphere-bottom-back))
-     (curtain
+     (curtain [0 0 -100]
        (thumb-place thumb-left-wall-column 0 wall-sphere-bottom-back)
        (thumb-place thumb-left-wall-column -1 wall-sphere-bottom-back))
-     (curtain
+     (curtain [0 0 -100]
        (thumb-place thumb-left-wall-column -1 wall-sphere-bottom-back)
        (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-bottom-front))
      )))
@@ -856,13 +864,13 @@
            (place 1 -1/2 thumb-br)
            (place 2 -1 web-post-br))
      ; Curtains (from bottom edge of walls to z=0):
-     (curtain
+     (curtain [0 0 -100]
        (place (+ 5/2 0.05) thumb-front-row wall-sphere-bottom-front)
        (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
-     (curtain
+     (curtain [0 0 -100]
        (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front))
        (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
-     (curtain
+     (curtain [0 0 -100]
        (case-place 0.7 4 (translate [1 0 1.5] wall-sphere-bottom-front))
        (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front)))
      )))
@@ -912,13 +920,39 @@
        (key-place 1/2 0)))
 
 (def trrs-panel-mount-jack
-    (->> (translate [0 0 9] (difference
-                         (cylinder trrs-radius 20)
-                         (cylinder 1.75 22)))
+    (->> (difference
+           (cylinder trrs-radius 20)
+           (cylinder 1.75 22))
+         (translate [0 0 9])
          (rotate (/ π 2.9) [0 1 0])
          (translate [(+ (/ mount-height -4) 4) 0 (- -20 trrs-radius)])
          (with-fn 50)
          (key-place 0 3/2)
+         (color [0.08 0.08 0.08])))
+
+
+(def mini-din-diameter 9.7)
+(def mini-din-radius (/ mini-din-diameter 2))
+(def mini-din-hole-depth 13)
+
+(def mini-din-hole-just-circle
+  (->> (cylinder mini-din-radius mini-din-hole-depth)
+       (rotate (/ π 2.9) [0 1 0])
+       (translate [(+ (/ mount-height -4) 4) 0 (- -20 mini-din-radius)])
+       (with-fn 50)
+       (key-place 0 5/4)))
+
+(def mini-din-panel-mount-jack
+    (->> (union
+           (difference
+             (cylinder mini-din-radius 10)
+             (cylinder 4.5 22))
+           (cylinder 4 10))
+         (translate [0 0 4])
+         (rotate (/ π 2.9) [0 1 0])
+         (translate [(+ (/ mount-height -4) 4) 0 (- -20 mini-din-radius)])
+         (with-fn 50)
+         (key-place 0 5/4)
          (color [0.08 0.08 0.08])))
 
 
@@ -943,9 +977,11 @@
 (defn board-cutout-bare [[x y z]]
   (board-shape-bare [x y z]))
 
+(def mount-post-height 3)
+
 (def mount-post
   (difference
-    (binding [*fs* 1] (translate [0 0 -2.5] (cylinder (* 0.75 2.54) 5)))
+    (binding [*fs* 1] (translate [0 0 (/ mount-post-height -2)] (cylinder (* 0.75 2.54) mount-post-height)))
     (binding [*fs* 0.5] (translate [0 0 -1.5] (cylinder 0.75 3)))))
 
 (defn board-mount-bare [[x y z]]
@@ -953,7 +989,7 @@
     (union
       (translate [(/ (- x 5.08) 2) -1.25 0] mount-post)
       (translate [(/ (- x 5.08) -2) -1.25 0] mount-post)
-      (translate [0 (- (- y) 3) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
+      (translate [0 (- (- y) 3) (- z (/ mount-post-height 2))] (cube 5 5 (+ mount-post-height (* 2 z)))))
     (board-cutout-bare [x y z])))
 
 
@@ -971,17 +1007,12 @@
       (translate [0 0 usb-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
       )))
 
-(def mount-post
-  (difference
-    (binding [*fs* 1] (translate [0 0 -2.5] (cylinder (* 0.75 2.54) 5)))
-    (binding [*fs* 0.5] (translate [0 0 -1.5] (cylinder 0.75 3)))))
-
 (defn board-mount-with-usb-c [[x y z]]
   (difference
     (union
       (translate [(/ (- x 5.08) 2) (/ -5.08 2) 0] mount-post)
       (translate [(/ (- x 5.08) -2) (/ -5.08 2) 0] mount-post)
-      (translate [0 (- (- y) 1) (- z 2.5)] (cube 5 5 (+ 5 (* 2 z)))))
+      (translate [0 (- (- y) 1) (- z (/ mount-post-height 2))] (cube 5 5 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z])))
 
 
@@ -1006,12 +1037,14 @@
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-38 47 17])
+(def board-position [-35 58.9 18])
 
 (defn placed-board [shape]
   (->> shape
        (rotate (/ π 2) [1 0 0])
        (rotate (/ π -2) [0 1 0])
+       (rotate (/ π 12) [1 0 0])
+       (rotate (/ π -28) [0 0 1])
        (translate board-position)))
 
 ;;;;;;;;;;;;;;;;;
@@ -1024,11 +1057,11 @@
 
 (defn place-feet [foot]
   (union
-    (translate [-72 -26.5 0] foot)
+    (translate [-71 -26.75 0] foot)
     (translate [-33 -59 0] foot)
-    (translate [-35 47.5 0] foot)
-    (translate [80 47.5 0] foot)
-    (translate [80 -55 0] foot)))
+    (translate [-33 58.9 0] foot)
+    (translate [78 52 0] foot)
+    (translate [78 -54.5 0] foot)))
 
 (def foot-supports
   (place-feet
@@ -1049,11 +1082,19 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-pro-mini)
+          (placed-board board-mount-pro-micro)
           foot-supports)
-   trrs-hole-just-circle
-   (placed-board board-cutout-pro-mini)
+   mini-din-hole-just-circle
+   (placed-board board-cutout-pro-micro)
    foot-cutouts))
+
+(def dactyl-top-right-preview
+  (union
+    (color [0.1 0.1 0.1] dactyl-top-right)
+    caps
+    thumbcaps
+    mini-din-panel-mount-jack
+    (placed-board board-shape-pro-micro)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1064,17 +1105,9 @@
                   new-case-trimmed
                   (placed-board board-mount-pro-micro)
                   foot-supports)
-           trrs-hole-just-circle
+           mini-din-hole-just-circle
            (placed-board board-cutout-pro-micro)
            foot-cutouts)))
-
-(def dactyl-top-right-preview
-  (union
-    (color [0.1 0.1 0.1] dactyl-top-right)
-    caps
-    thumbcaps
-    trrs-panel-mount-jack
-    (placed-board board-shape-pro-mini)))
 
 (def dactyl-top-left-preview
   (union
@@ -1083,7 +1116,7 @@
             (union
               caps
               thumbcaps
-              trrs-panel-mount-jack
+              mini-din-panel-mount-jack
               (placed-board board-shape-pro-micro)))))
 
 (spit "things/alps-single-plate.scad"
@@ -1094,9 +1127,6 @@
 
 (spit "things/cherry-backplate.scad"
       (write-scad cherry-backplate))
-
-(spit "things/single-plate-with-key-mount.scad"
-      (write-scad single-plate-with-key-mount))
 
 (spit "things/key-holes.scad"
       (write-scad (union connectors key-holes)))
