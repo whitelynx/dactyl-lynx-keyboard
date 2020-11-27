@@ -9,16 +9,19 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.4) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.4)
+(def keyswitch-height 14.0) ;; Was 14.1, then 14.25, then 14.4
+(def keyswitch-width 14.0)
+(def keyswitch-depth 5.08) ; From the base of the switch to the mounting plate face
 
 (def sa-profile-key-height 12.7)
 
 (def plate-thickness 4)
+(def backplate-thickness 1.25)
+(def backplate-orientation π)
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def old-single-plate
+(def cherry-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -27,14 +30,7 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
-                      (rotate (/ π 2) [1 0 0])
-                      (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 plate-thickness)
-                                 (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
-                                             0
-                                             (/ plate-thickness 2)]))))
-        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
+        plate-half (union top-wall left-wall)]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -45,7 +41,7 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+(def alps-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
@@ -65,6 +61,46 @@
            (->> plate-half
                 (mirror [1 0 0])
                 (mirror [0 1 0])))))
+
+(def cherry-backplate
+  (rotate backplate-orientation [0 0 1]
+    (difference
+      (cube (+ keyswitch-width 3) (+ keyswitch-height 3) backplate-thickness)
+      (binding [*fs* 0.5]
+        (union
+          (cylinder 1.9939 (+ backplate-thickness 1))
+          (translate [5.08 0 0] (cylinder 0.8509 (+ backplate-thickness 1)))
+          (translate [-5.08 0 0] (cylinder 0.8509 (+ backplate-thickness 1)))
+          (translate [-3.81 2.54 0] (cylinder 1.5 (+ backplate-thickness 1)))
+          (translate [2.54 5.08 0] (cylinder 1.5 (+ backplate-thickness 1)))
+          (translate [1.27 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
+          (translate [-1.27 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
+          (translate [3.81 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
+          (translate [-3.81 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1))))))))
+
+(def cherry-socket-walls
+  (let [height (- keyswitch-depth plate-thickness)
+        top-wall (->> (cube (+ keyswitch-width 3) 1.5 height)
+                      (translate [0
+                                  (+ (/ 1.5 2) (/ keyswitch-height 2))
+                                  (/ height -2)]))
+        left-wall (->> (cube 1.5 (+ keyswitch-height 3) height)
+                       (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
+                                   0
+                                   (/ height -2)]))
+        walls-half (union top-wall left-wall)]
+    (union walls-half
+           (->> walls-half
+                (mirror [1 0 0])
+                (mirror [0 1 0])))))
+
+(def cherry-plate-with-key-mount
+  (union
+    cherry-single-plate
+    cherry-socket-walls
+    (translate [0 0 (- plate-thickness keyswitch-depth (/ backplate-thickness 2))] cherry-backplate)))
+
+(def single-plate cherry-plate-with-key-mount)
 
 
 ;;;;;;;;;;;;;;;;
@@ -385,7 +421,7 @@
 (def thumb
   (union
    thumb-connectors
-   (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))
+   (thumb-layout single-plate)
    (thumb-place 0 -1/2 double-plates)
    (thumb-place 1 -1/2 double-plates)))
 
@@ -1050,10 +1086,19 @@
               trrs-panel-mount-jack
               (placed-board board-shape-pro-micro)))))
 
-(spit "things/switch-hole.scad"
-      (write-scad single-plate))
+(spit "things/alps-single-plate.scad"
+      (write-scad alps-single-plate))
 
-(spit "things/alps-holes.scad"
+(spit "things/cherry-plate-with-key-mount.scad"
+      (write-scad cherry-plate-with-key-mount))
+
+(spit "things/cherry-backplate.scad"
+      (write-scad cherry-backplate))
+
+(spit "things/single-plate-with-key-mount.scad"
+      (write-scad single-plate-with-key-mount))
+
+(spit "things/key-holes.scad"
       (write-scad (union connectors key-holes)))
 
 (spit "things/dactyl-top-right.scad"
