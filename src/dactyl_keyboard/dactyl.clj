@@ -889,6 +889,70 @@
     new-case
     (->> (cube 1000 1000 100) (translate [0 0 -50]))))
 
+;;;;;;;;;;;;;;;;;;;;
+;; IBM TrackPoint ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(def trackpoint-stem-hole-radius (/ 7.5 2))
+(def trackpoint-screw-hole-radius (/ 3.75 2))
+(def trackpoint-screw-hole-offset 9.975)
+(def trackpoint-mount-thickness (* plate-thickness 2))
+
+(def trackpoint-holes
+  (color
+    [1 0 0]
+    (binding [*fs* 0.5]
+      (key-place 0.5 2.5
+                 (union
+                   (cylinder trackpoint-stem-hole-radius (* trackpoint-mount-thickness 3))
+                   (translate [trackpoint-screw-hole-offset 0 0]
+                              (cylinder trackpoint-screw-hole-radius (* trackpoint-mount-thickness 3)))
+                   (translate [(- trackpoint-screw-hole-offset) 0 0]
+                              (cylinder trackpoint-screw-hole-radius (* trackpoint-mount-thickness 3)))
+                   )))))
+
+(def trackpoint-mount
+  (let [
+        cutout-x-offset 7
+        cutout-y-offset (+ (* trackpoint-screw-hole-radius 2) 5)
+        ]
+    (color
+      [0 1 0]
+      (key-place 0.5 2.5
+                 (difference
+                   (translate
+                     [0 0 (/ trackpoint-mount-thickness -2)]
+                     (union
+                       (cylinder (* trackpoint-stem-hole-radius 3) trackpoint-mount-thickness)
+                       (translate [trackpoint-screw-hole-offset 0 0]
+                                  (cylinder (* trackpoint-screw-hole-radius 2) trackpoint-mount-thickness))
+                       (translate [(- trackpoint-screw-hole-offset) 0 0]
+                                  (cylinder (* trackpoint-screw-hole-radius 2) trackpoint-mount-thickness))
+                       (cube (* trackpoint-screw-hole-offset 2) (* trackpoint-screw-hole-radius 4) trackpoint-mount-thickness)
+                       ))
+                   (translate [cutout-x-offset cutout-y-offset 0] (cube 10 10 20))
+                   (translate [(- cutout-x-offset) cutout-y-offset 0] (cube 10 10 20))
+                   (translate [cutout-x-offset (- cutout-y-offset) 0] (cube 10 10 20))
+                   (translate [(- cutout-x-offset) (- cutout-y-offset) 0] (cube 10 10 20))
+                   )))))
+
+(def trackpoint-stem-radius 0.6)
+(def trackpoint-stem-length 25) ; Slightly problematic since only barbells seem to come in this length
+(def trackpoint-ball-radius 1.5)
+(def trackpoint-stem-base-height 2)
+
+(def trackpoint-shape
+  (color
+    [0.8 0.8 0.8]
+    (binding [*fs* 0.5]
+      (key-place 0.5 2.5
+                 (translate
+                   [0 0 (+ (/ trackpoint-stem-length 2) (- trackpoint-mount-thickness) trackpoint-stem-base-height)]
+                   (union
+                     (cylinder trackpoint-stem-radius trackpoint-stem-length)
+                     (translate [0 0 (+ (/ trackpoint-stem-length 2) trackpoint-ball-radius)] (sphere trackpoint-ball-radius))
+                     ))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Boards and Connectors ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1083,8 +1147,10 @@
           thumb
           new-case-trimmed
           (placed-board board-mount-pro-micro)
+          trackpoint-mount
           foot-supports)
    mini-din-hole-just-circle
+   trackpoint-holes
    (placed-board board-cutout-pro-micro)
    foot-cutouts))
 
@@ -1094,6 +1160,7 @@
     caps
     thumbcaps
     mini-din-panel-mount-jack
+    trackpoint-shape
     (placed-board board-shape-pro-micro)))
 
 (def dactyl-top-left
