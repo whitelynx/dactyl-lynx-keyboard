@@ -1057,27 +1057,27 @@
     (board-cutout-bare [x y z])))
 
 
-(defn board-shape-with-usb-c [[x y z]]
-  (let [usb-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+(defn board-shape-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
     (union
       (translate [0 (/ y -2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z)))
-      (translate [0 0 usb-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
+      (translate [0 usb-y-offset usb-z-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
       )))
 
-(defn board-cutout-with-usb-c [[x y z]]
-  (let [usb-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+(defn board-cutout-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
     (union
-      (board-shape-with-usb-c [x y z])
-      (translate [0 0 usb-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
+      (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+      (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
       )))
 
-(defn board-mount-with-usb-c [[x y z]]
+(defn board-mount-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
   (difference
     (union
-      (translate [(/ (- x 5.08) 2) (/ -5.08 2) 0] mount-post)
-      (translate [(/ (- x 5.08) -2) (/ -5.08 2) 0] mount-post)
-      (translate [0 (- (- y) 1) (- z (/ mount-post-height 2))] (cube 5 5 (+ mount-post-height (* 2 z)))))
-    (board-cutout-with-usb-c [x y z])))
+      (translate [0 (- (- y) 0.75) 0] mount-post)
+      (translate [(/ (- x 2.58) 2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z))))
+      (translate [(/ (- x 2.58) -2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+    (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
 
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
@@ -1087,9 +1087,9 @@
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
 (def board-pro-micro [18 33.1 1.6])
-(def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro))
-(def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro))
-(def board-mount-pro-micro (board-mount-with-usb-c board-pro-micro))
+(def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
+(def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
+(def board-mount-pro-micro (board-mount-with-usb-c board-pro-micro :usb-y-offset 0.75))
 
 (def board-proton-c [18 50.88 1.6])
 (def board-shape-proton-c (board-shape-with-usb-c board-proton-c))
@@ -1101,12 +1101,13 @@
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-35 58.9 18])
+(def board-position [-36.5 58.9 18])
 
 (defn placed-board [shape]
   (->> shape
        (rotate (/ π 2) [1 0 0])
        (rotate (/ π -2) [0 1 0])
+       (rotate (/ π 120) [0 1 0])
        (rotate (/ π 12) [1 0 0])
        (rotate (/ π -28) [0 0 1])
        (translate board-position)))
@@ -1221,4 +1222,11 @@
                     (translate [0 0 20] board-shape-pro-mini)
                     board-cutout-pro-mini
                     (translate [0 0 0] board-mount-pro-mini)
+                    )))
+
+(spit "things/board-pro-micro.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-pro-micro)
+                    board-cutout-pro-micro
+                    (translate [0 0 0] board-mount-pro-micro)
                     )))
