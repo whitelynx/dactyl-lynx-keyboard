@@ -7,22 +7,22 @@ This is my fork of [the original Dactyl][]. I've changed a few things:
 * Ergodox-compatible keycaps! (it doesn't use _all_ of the Ergodox keys, but the keys it has should all be able to be sourced from [Ergodox keycap sets][] - effectively the same as [the Phat Dactyl][])
 * A simpler one-piece chassis
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
+* Added a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
 [the Dactyl-ManuForm]: https://github.com/tshort/dactyl-keyboard
 [Ergodox keycap sets]: https://www.reddit.com/r/ergodox/comments/gu4cbm/every_site_for_ergodox_keycaps_that_are_currently/
 [the Phat Dactyl]: https://github.com/adereth/dactyl-keyboard/pull/48
 [Kailh hot-swap sockets]: https://www.kailhswitch.com/mechanical-keyboard-switches/box-switches/hot-swapping-pcb-socket.html
+[TrackPoint module]: https://github.com/alonswartz/trackpoint
 
 ![Preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
 
 
 ## Future plans
-* Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
-* Adding mouse buttons and a scroll wheel next to the right-hand thumb cluster
+* Adding mouse buttons (and maybe a scroll wheel?) next to the right-hand thumb cluster
 * Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][])
 
-[TrackPoint module]: https://github.com/alonswartz/trackpoint
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
 
 
