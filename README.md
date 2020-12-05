@@ -21,9 +21,11 @@ This is my fork of [the original Dactyl][]. I've changed a few things:
 
 ## Future plans
 * Adding mouse buttons (and maybe a scroll wheel?) next to the right-hand thumb cluster
-* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][])
+* Adding a thumbstick to the left side?
+* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Use [QMK's Raw HID support][].
 
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
+[QMK's Raw HID support]: https://beta.docs.qmk.fm/using-qmk/software-features/feature_rawhid
 
 
 ## Assembly
