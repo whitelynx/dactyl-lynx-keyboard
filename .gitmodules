@@ -1,0 +1,3 @@
+[submodule "circuits/dactyl-lynx/ProMicroKiCad"]
+	path = circuits/dactyl-lynx/ProMicroKiCad
+	url = https://github.com/Biacco42/ProMicroKiCad.git
