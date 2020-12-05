@@ -1075,8 +1075,8 @@
   (difference
     (union
       (translate [0 (- (- y) 0.75) 0] mount-post)
-      (translate [(/ (- x 2.58) 2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z))))
-      (translate [(/ (- x 2.58) -2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+      (translate [(/ (- x 2.08) 2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z))))
+      (translate [(/ (- x 2.08) -2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
 
 
@@ -1096,12 +1096,17 @@
 (def board-cutout-proton-c (board-cutout-with-usb-c board-proton-c))
 (def board-mount-proton-c (board-mount-with-usb-c board-proton-c))
 
+(def board-hiletgo-stm32f103c8t6 [22 53 1.6])
+(def board-shape-hiletgo-stm32f103c8t6 (board-shape-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-cutout-hiletgo-stm32f103c8t6 (board-cutout-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-mount-hiletgo-stm32f103c8t6 (board-mount-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-36.5 58.9 18])
+(def board-position [-36.5 58.5 20])
 
 (defn placed-board [shape]
   (->> shape
@@ -1147,12 +1152,12 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-pro-micro)
+          (placed-board board-mount-hiletgo-stm32f103c8t6)
           trackpoint-mount
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes
-   (placed-board board-cutout-pro-micro)
+   (placed-board board-cutout-hiletgo-stm32f103c8t6)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1162,7 +1167,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-pro-micro)))
+    (placed-board board-shape-hiletgo-stm32f103c8t6)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1171,10 +1176,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-pro-micro)
+                  (placed-board board-mount-hiletgo-stm32f103c8t6)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-cutout-pro-micro)
+           (placed-board board-cutout-hiletgo-stm32f103c8t6)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
@@ -1185,7 +1190,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-pro-micro)))))
+              (placed-board board-shape-hiletgo-stm32f103c8t6)))))
 
 (spit "things/alps-single-plate.scad"
       (write-scad alps-single-plate))
@@ -1222,6 +1227,13 @@
                     (translate [0 0 20] board-shape-pro-mini)
                     board-cutout-pro-mini
                     (translate [0 0 0] board-mount-pro-mini)
+                    )))
+
+(spit "things/board-hiletgo-stm32f103c8t6.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-hiletgo-stm32f103c8t6)
+                    board-cutout-hiletgo-stm32f103c8t6
+                    (translate [0 0 0] board-mount-hiletgo-stm32f103c8t6)
                     )))
 
 (spit "things/board-pro-micro.scad"
