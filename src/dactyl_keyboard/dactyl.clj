@@ -1021,7 +1021,7 @@
 
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
-(def usb-c-jack-dimensions [8.94 3.26 7.6])
+(def usb-c-jack-dimensions [9.05 3.26 7.6])
 
 ; Or, rather, "the shape of a USB-C plug or jack" - the hull of two similar cylinders
 (defn elongated-cylinder [[width height length]]
@@ -1075,9 +1075,27 @@
   (difference
     (union
       (translate [0 (- (- y) 0.75) 0] mount-post)
-      (translate [(/ (- x 2.08) 2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z))))
-      (translate [(/ (- x 2.08) -2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+      (translate [(/ (- x 2.08) 2) 0.5 (- z (/ mount-post-height 2))]
+                 (cube 2.5 3 (+ mount-post-height (* 2 z))))
+      (translate [(/ (- x 2.08) -2) 0.5 (- z (/ mount-post-height 2))]
+                 (cube 2.5 3 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
+
+(defn board-mount-with-usb-c-alt [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [x-mount-post-offset (/ (+
+                          (first usb-c-jack-dimensions) ; USB-C jack width
+                          0.4                           ; Extra clearance
+                          2.5                           ; Mounting post width
+                          ) 2)]
+    (difference
+      (union
+        (translate [x-mount-post-offset (- (- y) 0.75) 0] mount-post)
+        (translate [(- x-mount-post-offset) (- (- y) 0.75) 0] mount-post)
+        (translate [x-mount-post-offset 0.5 (- z (/ mount-post-height 2))]
+                   (cube 2.5 3 (+ mount-post-height (* 2 z))))
+        (translate [(- x-mount-post-offset) 0.5 (- z (/ mount-post-height 2))]
+                   (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+      (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset))))
 
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
@@ -1100,6 +1118,11 @@
 (def board-shape-hiletgo-stm32f103c8t6 (board-shape-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
 (def board-cutout-hiletgo-stm32f103c8t6 (board-cutout-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
 (def board-mount-hiletgo-stm32f103c8t6 (board-mount-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+
+(def board-songhe-stm32f401 [22.3 56.15 1.65])
+(def board-shape-songhe-stm32f401 (board-shape-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-cutout-songhe-stm32f401 (board-cutout-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-mount-songhe-stm32f401 (board-mount-with-usb-c-alt board-songhe-stm32f401 :usb-y-offset 1.25))
 
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
@@ -1152,12 +1175,12 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-hiletgo-stm32f103c8t6)
+          (placed-board board-mount-songhe-stm32f401)
           trackpoint-mount
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes
-   (placed-board board-cutout-hiletgo-stm32f103c8t6)
+   (placed-board board-cutout-songhe-stm32f401)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1167,7 +1190,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-hiletgo-stm32f103c8t6)))
+    (placed-board board-shape-songhe-stm32f401)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1176,10 +1199,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-hiletgo-stm32f103c8t6)
+                  (placed-board board-mount-songhe-stm32f401)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-cutout-hiletgo-stm32f103c8t6)
+           (placed-board board-cutout-songhe-stm32f401)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
@@ -1190,7 +1213,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-hiletgo-stm32f103c8t6)))))
+              (placed-board board-shape-songhe-stm32f401)))))
 
 (spit "things/alps-single-plate.scad"
       (write-scad alps-single-plate))
@@ -1234,6 +1257,13 @@
                     (translate [0 0 20] board-shape-hiletgo-stm32f103c8t6)
                     board-cutout-hiletgo-stm32f103c8t6
                     (translate [0 0 0] board-mount-hiletgo-stm32f103c8t6)
+                    )))
+
+(spit "things/board-songhe-stm32f401.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-songhe-stm32f401)
+                    board-cutout-songhe-stm32f401
+                    (translate [0 0 0] board-mount-songhe-stm32f401)
                     )))
 
 (spit "things/board-pro-micro.scad"

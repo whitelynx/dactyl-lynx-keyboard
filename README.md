@@ -56,6 +56,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
 
 ### Bill of Materials
 * 2x microcontrollers - some combination of the following (see QMK docs for what combinations make sense)
+    * [SongHe STM32F401 Development Board for Arduino][] - [Note: ARM-based][]
     * [HiLetgo STM32F103C8T6 ARM STM32 Minimum System Development Board][] - [Note: ARM-based][]
     * [QMK Proton C][] - [Note: ARM-based][]
     * [SparkFun Pro Micro][] or possibly [SparkFun Qwiic Pro Micro - USB-C][]
@@ -64,6 +65,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
 * _TODO: Fill in the rest!_
 
 
+[SongHe STM32F401 Development Board for Arduino]: https://smile.amazon.com/gp/product/B07XBWGF9M/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
 [HiLetgo STM32F103C8T6 ARM STM32 Minimum System Development Board]: http://www.hiletgo.com/ProductDetail/2169541.html
 [Note: ARM-based]: https://beta.docs.qmk.fm/using-qmk/hardware-features/feature_split_keyboard
 [QMK Proton C]: https://qmk.fm/proton-c/
