@@ -889,6 +889,70 @@
     new-case
     (->> (cube 1000 1000 100) (translate [0 0 -50]))))
 
+;;;;;;;;;;;;;;;;;;;;
+;; IBM TrackPoint ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(def trackpoint-stem-hole-radius (/ 7.5 2))
+(def trackpoint-screw-hole-radius (/ 3.75 2))
+(def trackpoint-screw-hole-offset 9.975)
+(def trackpoint-mount-thickness (* plate-thickness 2))
+
+(def trackpoint-holes
+  (color
+    [1 0 0]
+    (binding [*fs* 0.5]
+      (key-place 0.5 2.5
+                 (union
+                   (cylinder trackpoint-stem-hole-radius (* trackpoint-mount-thickness 3))
+                   (translate [trackpoint-screw-hole-offset 0 0]
+                              (cylinder trackpoint-screw-hole-radius (* trackpoint-mount-thickness 3)))
+                   (translate [(- trackpoint-screw-hole-offset) 0 0]
+                              (cylinder trackpoint-screw-hole-radius (* trackpoint-mount-thickness 3)))
+                   )))))
+
+(def trackpoint-mount
+  (let [
+        cutout-x-offset 7
+        cutout-y-offset (+ (* trackpoint-screw-hole-radius 2) 5)
+        ]
+    (color
+      [0 1 0]
+      (key-place 0.5 2.5
+                 (difference
+                   (translate
+                     [0 0 (/ trackpoint-mount-thickness -2)]
+                     (union
+                       (cylinder (* trackpoint-stem-hole-radius 3) trackpoint-mount-thickness)
+                       (translate [trackpoint-screw-hole-offset 0 0]
+                                  (cylinder (* trackpoint-screw-hole-radius 2) trackpoint-mount-thickness))
+                       (translate [(- trackpoint-screw-hole-offset) 0 0]
+                                  (cylinder (* trackpoint-screw-hole-radius 2) trackpoint-mount-thickness))
+                       (cube (* trackpoint-screw-hole-offset 2) (* trackpoint-screw-hole-radius 4) trackpoint-mount-thickness)
+                       ))
+                   (translate [cutout-x-offset cutout-y-offset 0] (cube 10 10 20))
+                   (translate [(- cutout-x-offset) cutout-y-offset 0] (cube 10 10 20))
+                   (translate [cutout-x-offset (- cutout-y-offset) 0] (cube 10 10 20))
+                   (translate [(- cutout-x-offset) (- cutout-y-offset) 0] (cube 10 10 20))
+                   )))))
+
+(def trackpoint-stem-radius 0.6)
+(def trackpoint-stem-length 25) ; Slightly problematic since only barbells seem to come in this length
+(def trackpoint-ball-radius 1.5)
+(def trackpoint-stem-base-height 2)
+
+(def trackpoint-shape
+  (color
+    [0.8 0.8 0.8]
+    (binding [*fs* 0.5]
+      (key-place 0.5 2.5
+                 (translate
+                   [0 0 (+ (/ trackpoint-stem-length 2) (- trackpoint-mount-thickness) trackpoint-stem-base-height)]
+                   (union
+                     (cylinder trackpoint-stem-radius trackpoint-stem-length)
+                     (translate [0 0 (+ (/ trackpoint-stem-length 2) trackpoint-ball-radius)] (sphere trackpoint-ball-radius))
+                     ))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Boards and Connectors ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -993,27 +1057,27 @@
     (board-cutout-bare [x y z])))
 
 
-(defn board-shape-with-usb-c [[x y z]]
-  (let [usb-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+(defn board-shape-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
     (union
       (translate [0 (/ y -2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z)))
-      (translate [0 0 usb-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
+      (translate [0 usb-y-offset usb-z-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
       )))
 
-(defn board-cutout-with-usb-c [[x y z]]
-  (let [usb-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+(defn board-cutout-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
     (union
-      (board-shape-with-usb-c [x y z])
-      (translate [0 0 usb-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
+      (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+      (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
       )))
 
-(defn board-mount-with-usb-c [[x y z]]
+(defn board-mount-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
   (difference
     (union
-      (translate [(/ (- x 5.08) 2) (/ -5.08 2) 0] mount-post)
-      (translate [(/ (- x 5.08) -2) (/ -5.08 2) 0] mount-post)
-      (translate [0 (- (- y) 1) (- z (/ mount-post-height 2))] (cube 5 5 (+ mount-post-height (* 2 z)))))
-    (board-cutout-with-usb-c [x y z])))
+      (translate [0 (- (- y) 0.75) 0] mount-post)
+      (translate [(/ (- x 2.58) 2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z))))
+      (translate [(/ (- x 2.58) -2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+    (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
 
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
@@ -1023,9 +1087,9 @@
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
 (def board-pro-micro [18 33.1 1.6])
-(def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro))
-(def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro))
-(def board-mount-pro-micro (board-mount-with-usb-c board-pro-micro))
+(def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
+(def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
+(def board-mount-pro-micro (board-mount-with-usb-c board-pro-micro :usb-y-offset 0.75))
 
 (def board-proton-c [18 50.88 1.6])
 (def board-shape-proton-c (board-shape-with-usb-c board-proton-c))
@@ -1037,12 +1101,13 @@
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-35 58.9 18])
+(def board-position [-36.5 58.9 18])
 
 (defn placed-board [shape]
   (->> shape
        (rotate (/ π 2) [1 0 0])
        (rotate (/ π -2) [0 1 0])
+       (rotate (/ π 120) [0 1 0])
        (rotate (/ π 12) [1 0 0])
        (rotate (/ π -28) [0 0 1])
        (translate board-position)))
@@ -1083,8 +1148,10 @@
           thumb
           new-case-trimmed
           (placed-board board-mount-pro-micro)
+          trackpoint-mount
           foot-supports)
    mini-din-hole-just-circle
+   trackpoint-holes
    (placed-board board-cutout-pro-micro)
    foot-cutouts))
 
@@ -1094,6 +1161,7 @@
     caps
     thumbcaps
     mini-din-panel-mount-jack
+    trackpoint-shape
     (placed-board board-shape-pro-micro)))
 
 (def dactyl-top-left
@@ -1154,4 +1222,11 @@
                     (translate [0 0 20] board-shape-pro-mini)
                     board-cutout-pro-mini
                     (translate [0 0 0] board-mount-pro-mini)
+                    )))
+
+(spit "things/board-pro-micro.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-pro-micro)
+                    board-cutout-pro-micro
+                    (translate [0 0 0] board-mount-pro-micro)
                     )))
