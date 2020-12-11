@@ -1022,6 +1022,7 @@
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
 (def usb-c-jack-dimensions [9.05 3.26 7.6])
+(def board-clearance-height 20) ; The amount of clearance above the board to allow for pin headers and connectors
 
 ; Or, rather, "the shape of a USB-C plug or jack" - the hull of two similar cylinders
 (defn elongated-cylinder [[width height length]]
@@ -1040,6 +1041,9 @@
 
 (defn board-cutout-bare [[x y z]]
   (board-shape-bare [x y z]))
+
+(defn board-clearance-bare [[x y z]]
+  (board-shape-bare [x y (+ z board-clearance-height)]))
 
 (def mount-post-height 5)
 
@@ -1068,6 +1072,14 @@
   (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
     (union
       (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+      (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
+      )))
+
+(defn board-clearance-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
+    (union
+      (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+      (board-shape-bare [x y (+ z board-clearance-height)])
       (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
       )))
 
@@ -1102,31 +1114,37 @@
 (def board-teensy [18 30.5 1.6])
 (def board-shape-teensy (board-shape-with-usb-c board-teensy))
 (def board-cutout-teensy (board-cutout-with-usb-c board-teensy))
+(def board-clearance-teensy (board-clearance-with-usb-c board-teensy))
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
 (def board-pro-micro [18 33.1 1.6])
 (def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
+(def board-clearance-pro-micro (board-clearance-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-mount-pro-micro (board-mount-with-usb-c board-pro-micro :usb-y-offset 0.75))
 
 (def board-proton-c [18 50.88 1.6])
 (def board-shape-proton-c (board-shape-with-usb-c board-proton-c))
 (def board-cutout-proton-c (board-cutout-with-usb-c board-proton-c))
+(def board-clearance-proton-c (board-clearance-with-usb-c board-proton-c))
 (def board-mount-proton-c (board-mount-with-usb-c board-proton-c))
 
 (def board-hiletgo-stm32f103c8t6 [22 53 1.6])
 (def board-shape-hiletgo-stm32f103c8t6 (board-shape-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
 (def board-cutout-hiletgo-stm32f103c8t6 (board-cutout-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-clearance-hiletgo-stm32f103c8t6 (board-clearance-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
 (def board-mount-hiletgo-stm32f103c8t6 (board-mount-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
 
 (def board-songhe-stm32f401 [22.3 56.15 1.65])
 (def board-shape-songhe-stm32f401 (board-shape-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
 (def board-cutout-songhe-stm32f401 (board-cutout-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-clearance-songhe-stm32f401 (board-clearance-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
 (def board-mount-songhe-stm32f401 (board-mount-with-usb-c-alt board-songhe-stm32f401 :usb-y-offset 1.25))
 
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
+(def board-clearance-pro-mini (board-clearance-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
 (def board-position [-36.5 56.5 15])
@@ -1146,7 +1164,7 @@
 
 (def foot-radius 5)
 (def foot-lip 0.5)
-(def foot-support-height 3.5)
+(def foot-support-height 5)
 
 (defn place-feet [foot]
   (union
@@ -1180,7 +1198,7 @@
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes
-   (placed-board board-cutout-songhe-stm32f401)
+   (placed-board board-clearance-songhe-stm32f401)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1202,7 +1220,7 @@
                   (placed-board board-mount-songhe-stm32f401)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-cutout-songhe-stm32f401)
+           (placed-board board-clearance-songhe-stm32f401)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
