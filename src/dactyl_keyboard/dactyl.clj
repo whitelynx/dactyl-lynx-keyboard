@@ -1041,7 +1041,7 @@
 (defn board-cutout-bare [[x y z]]
   (board-shape-bare [x y z]))
 
-(def mount-post-height 3)
+(def mount-post-height 5)
 
 (def mount-post
   (difference
@@ -1058,14 +1058,14 @@
 
 
 (defn board-shape-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
-  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+  (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
     (union
       (translate [0 (/ y -2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z)))
       (translate [0 usb-y-offset usb-z-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
       )))
 
 (defn board-cutout-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
-  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+  (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
     (union
       (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
       (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
@@ -1129,7 +1129,7 @@
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-36.5 58.5 20])
+(def board-position [-36.5 56.5 15])
 
 (defn placed-board [shape]
   (->> shape
@@ -1146,7 +1146,7 @@
 
 (def foot-radius 5)
 (def foot-lip 0.5)
-(def foot-support-height 8)
+(def foot-support-height 3.5)
 
 (defn place-feet [foot]
   (union
