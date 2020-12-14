@@ -1021,7 +1021,8 @@
 
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
-(def usb-c-jack-dimensions [8.94 3.26 7.6])
+(def usb-c-jack-dimensions [9.05 3.26 7.6])
+(def board-clearance-height 20) ; The amount of clearance above the board to allow for pin headers and connectors
 
 ; Or, rather, "the shape of a USB-C plug or jack" - the hull of two similar cylinders
 (defn elongated-cylinder [[width height length]]
@@ -1041,7 +1042,10 @@
 (defn board-cutout-bare [[x y z]]
   (board-shape-bare [x y z]))
 
-(def mount-post-height 3)
+(defn board-clearance-bare [[x y z]]
+  (board-shape-bare [x y (+ z board-clearance-height)]))
+
+(def mount-post-height 5)
 
 (def mount-post
   (difference
@@ -1058,16 +1062,24 @@
 
 
 (defn board-shape-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
-  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+  (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
     (union
       (translate [0 (/ y -2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z)))
       (translate [0 usb-y-offset usb-z-offset] (rotate (/ π 2) [1 0 0] usb-c-jack))
       )))
 
 (defn board-cutout-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
-  (let [usb-z-offset (+ z (/ (nth usb-c-jack-dimensions 1) 2))]
+  (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
     (union
       (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+      (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
+      )))
+
+(defn board-clearance-with-usb-c [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [usb-z-offset (/ (nth usb-c-jack-dimensions 1) -2)]
+    (union
+      (board-shape-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+      (board-shape-bare [x y (+ z board-clearance-height)])
       (translate [0 usb-y-offset usb-z-offset] (rotate (/ π -2) [1 0 0] usb-c-plug))
       )))
 
@@ -1075,33 +1087,67 @@
   (difference
     (union
       (translate [0 (- (- y) 0.75) 0] mount-post)
-      (translate [(/ (- x 2.58) 2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z))))
-      (translate [(/ (- x 2.58) -2) 0.5 (- z (/ mount-post-height 2))] (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+      (translate [(/ (- x 2.08) 2) 0.5 (- z (/ mount-post-height 2))]
+                 (cube 2.5 3 (+ mount-post-height (* 2 z))))
+      (translate [(/ (- x 2.08) -2) 0.5 (- z (/ mount-post-height 2))]
+                 (cube 2.5 3 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
+
+(defn board-mount-with-usb-c-alt [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
+  (let [x-mount-post-offset (/ (+
+                          (first usb-c-jack-dimensions) ; USB-C jack width
+                          0.4                           ; Extra clearance
+                          2.5                           ; Mounting post width
+                          ) 2)]
+    (difference
+      (union
+        (translate [x-mount-post-offset (- (- y) 0.75) 0] mount-post)
+        (translate [(- x-mount-post-offset) (- (- y) 0.75) 0] mount-post)
+        (translate [x-mount-post-offset 0.5 (- z (/ mount-post-height 2))]
+                   (cube 2.5 3 (+ mount-post-height (* 2 z))))
+        (translate [(- x-mount-post-offset) 0.5 (- z (/ mount-post-height 2))]
+                   (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+      (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset))))
 
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
 (def board-teensy [18 30.5 1.6])
 (def board-shape-teensy (board-shape-with-usb-c board-teensy))
 (def board-cutout-teensy (board-cutout-with-usb-c board-teensy))
+(def board-clearance-teensy (board-clearance-with-usb-c board-teensy))
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
 (def board-pro-micro [18 33.1 1.6])
 (def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
+(def board-clearance-pro-micro (board-clearance-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-mount-pro-micro (board-mount-with-usb-c board-pro-micro :usb-y-offset 0.75))
 
 (def board-proton-c [18 50.88 1.6])
 (def board-shape-proton-c (board-shape-with-usb-c board-proton-c))
 (def board-cutout-proton-c (board-cutout-with-usb-c board-proton-c))
+(def board-clearance-proton-c (board-clearance-with-usb-c board-proton-c))
 (def board-mount-proton-c (board-mount-with-usb-c board-proton-c))
+
+(def board-hiletgo-stm32f103c8t6 [22 53 1.6])
+(def board-shape-hiletgo-stm32f103c8t6 (board-shape-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-cutout-hiletgo-stm32f103c8t6 (board-cutout-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-clearance-hiletgo-stm32f103c8t6 (board-clearance-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-mount-hiletgo-stm32f103c8t6 (board-mount-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+
+(def board-songhe-stm32f401 [22.3 56.15 1.65])
+(def board-shape-songhe-stm32f401 (board-shape-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-cutout-songhe-stm32f401 (board-cutout-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-clearance-songhe-stm32f401 (board-clearance-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-mount-songhe-stm32f401 (board-mount-with-usb-c-alt board-songhe-stm32f401 :usb-y-offset 1.25))
 
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
 (def board-cutout-pro-mini (board-cutout-bare board-pro-mini))
+(def board-clearance-pro-mini (board-clearance-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-36.5 58.9 18])
+(def board-position [-36.5 56.5 15])
 
 (defn placed-board [shape]
   (->> shape
@@ -1118,7 +1164,7 @@
 
 (def foot-radius 5)
 (def foot-lip 0.5)
-(def foot-support-height 8)
+(def foot-support-height 5)
 
 (defn place-feet [foot]
   (union
@@ -1147,12 +1193,12 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-pro-micro)
+          (placed-board board-mount-songhe-stm32f401)
           trackpoint-mount
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes
-   (placed-board board-cutout-pro-micro)
+   (placed-board board-clearance-songhe-stm32f401)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1162,7 +1208,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-pro-micro)))
+    (placed-board board-shape-songhe-stm32f401)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1171,10 +1217,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-pro-micro)
+                  (placed-board board-mount-songhe-stm32f401)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-cutout-pro-micro)
+           (placed-board board-clearance-songhe-stm32f401)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
@@ -1185,7 +1231,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-pro-micro)))))
+              (placed-board board-shape-songhe-stm32f401)))))
 
 (spit "things/alps-single-plate.scad"
       (write-scad alps-single-plate))
@@ -1222,6 +1268,20 @@
                     (translate [0 0 20] board-shape-pro-mini)
                     board-cutout-pro-mini
                     (translate [0 0 0] board-mount-pro-mini)
+                    )))
+
+(spit "things/board-hiletgo-stm32f103c8t6.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-hiletgo-stm32f103c8t6)
+                    board-cutout-hiletgo-stm32f103c8t6
+                    (translate [0 0 0] board-mount-hiletgo-stm32f103c8t6)
+                    )))
+
+(spit "things/board-songhe-stm32f401.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-songhe-stm32f401)
+                    board-cutout-songhe-stm32f401
+                    (translate [0 0 0] board-mount-songhe-stm32f401)
                     )))
 
 (spit "things/board-pro-micro.scad"
