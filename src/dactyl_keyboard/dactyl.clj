@@ -16,13 +16,20 @@
 (def sa-profile-key-height 12.7)
 
 (def plate-thickness 4)
+(def notch-plate-thickness 1.3) ; The thickness of the plate at the notches where the switch's clips are located
+(def notch-width 5)
+(def notch-depth 0.5)
 (def backplate-thickness 1.25)
 (def backplate-orientation π)
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
 (def cherry-single-plate
-  (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+  (let [top-wall (->> (difference
+                        (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+                        (->> (cube notch-width (* notch-depth 2) plate-thickness)  ; Notch for switch clips
+                             (translate [0 -0.75 (- notch-plate-thickness)]))
+                        )
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
                                   (/ plate-thickness 2)]))
