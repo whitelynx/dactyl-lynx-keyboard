@@ -65,6 +65,21 @@ Pregenerated STL files are available in the [things/](things/) directory.
         * [QMK Proton C][]
     * Other:
         * [PJRC Teensy][] _(Caveat: not sure *which* Teensy is actually supported by the board settings we have)_
+* 2x 4+-conductor jacks and matching cable to connect the two sides using I2C; one of:
+    * 4-pin mini-DIN (A.K.A. S-Video) - _recommended_
+    * TRRS audio jacks - _not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!_
+    * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
+* 70x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
+* 70x signal diodes _(1N4148 or similar works well)_
+* 70x [Kailh hot-swap sockets][] _(optional - you can change the definition of `single-plate` in <src/dactyl_keyboard/dactyl.clj> to use `cherry-single-plate` instead of `cherry-plate-with-key-mount` if you want to solder directly to the switches)_
+* A set of 70+ keycaps - ErgoDox keycap sets work well, and symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
+    * 56x 1u keycaps
+    * 10x 1.5u keycaps
+    * 4x 2u keycaps
+* A USB-C _(or USB Micro-B, depending on your microcontroller)_ to USB A cable to plug in your keyboard
+* connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
+
+
 [SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
 [SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
 [Arduino Pro Mini]: https://store.arduino.cc/usa/arduino-pro-mini
@@ -73,6 +88,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
 [Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
 [QMK Proton C]: https://qmk.fm/proton-c/
 [PJRC Teensy]: https://www.pjrc.com/teensy/
+[MX-style key switches]: https://mechanicalkeyboards.com/switches/index.php
 
 
 ### Wiring
