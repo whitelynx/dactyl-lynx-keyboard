@@ -1136,17 +1136,17 @@
 (def board-clearance-proton-c (board-clearance-with-usb-c board-proton-c))
 (def board-mount-proton-c (board-mount-with-usb-c board-proton-c))
 
-(def board-hiletgo-stm32f103c8t6 [22 53 1.6])
-(def board-shape-hiletgo-stm32f103c8t6 (board-shape-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
-(def board-cutout-hiletgo-stm32f103c8t6 (board-cutout-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
-(def board-clearance-hiletgo-stm32f103c8t6 (board-clearance-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
-(def board-mount-hiletgo-stm32f103c8t6 (board-mount-with-usb-c board-hiletgo-stm32f103c8t6 :usb-y-offset 0.75))
+(def board-blue-pill [23 53.4 1.6])
+(def board-shape-blue-pill (board-shape-with-usb-c board-blue-pill :usb-y-offset 0.75))
+(def board-cutout-blue-pill (board-cutout-with-usb-c board-blue-pill :usb-y-offset 0.75))
+(def board-clearance-blue-pill (board-clearance-with-usb-c board-blue-pill :usb-y-offset 0.75))
+(def board-mount-blue-pill (board-mount-with-usb-c board-blue-pill :usb-y-offset 0.75))
 
-(def board-songhe-stm32f401 [22.3 56.15 1.65])
-(def board-shape-songhe-stm32f401 (board-shape-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
-(def board-cutout-songhe-stm32f401 (board-cutout-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
-(def board-clearance-songhe-stm32f401 (board-clearance-with-usb-c board-songhe-stm32f401 :usb-y-offset 1.25))
-(def board-mount-songhe-stm32f401 (board-mount-with-usb-c-alt board-songhe-stm32f401 :usb-y-offset 1.25))
+(def board-black-pill [22.3 56.15 1.65])
+(def board-shape-black-pill (board-shape-with-usb-c board-black-pill :usb-y-offset 1.25))
+(def board-cutout-black-pill (board-cutout-with-usb-c board-black-pill :usb-y-offset 1.25))
+(def board-clearance-black-pill (board-clearance-with-usb-c board-black-pill :usb-y-offset 1.25))
+(def board-mount-black-pill (board-mount-with-usb-c-alt board-black-pill :usb-y-offset 1.25))
 
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
@@ -1200,12 +1200,12 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-songhe-stm32f401)
+          (placed-board board-mount-black-pill)
           trackpoint-mount
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes
-   (placed-board board-clearance-songhe-stm32f401)
+   (placed-board board-clearance-black-pill)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1215,7 +1215,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-songhe-stm32f401)))
+    (placed-board board-shape-black-pill)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1224,10 +1224,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-songhe-stm32f401)
+                  (placed-board board-mount-black-pill)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-clearance-songhe-stm32f401)
+           (placed-board board-clearance-black-pill)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
@@ -1238,7 +1238,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-songhe-stm32f401)))))
+              (placed-board board-shape-black-pill)))))
 
 (spit "things/alps-single-plate.scad"
       (write-scad alps-single-plate))
@@ -1277,18 +1277,18 @@
                     (translate [0 0 0] board-mount-pro-mini)
                     )))
 
-(spit "things/board-hiletgo-stm32f103c8t6.scad"
+(spit "things/board-blue-pill.scad"
       (write-scad (union
-                    (translate [0 0 20] board-shape-hiletgo-stm32f103c8t6)
-                    board-cutout-hiletgo-stm32f103c8t6
-                    (translate [0 0 0] board-mount-hiletgo-stm32f103c8t6)
+                    (translate [0 0 20] board-shape-blue-pill)
+                    board-cutout-blue-pill
+                    (translate [0 0 0] board-mount-blue-pill)
                     )))
 
-(spit "things/board-songhe-stm32f401.scad"
+(spit "things/board-black-pill.scad"
       (write-scad (union
-                    (translate [0 0 20] board-shape-songhe-stm32f401)
-                    board-cutout-songhe-stm32f401
-                    (translate [0 0 0] board-mount-songhe-stm32f401)
+                    (translate [0 0 20] board-shape-black-pill)
+                    board-cutout-black-pill
+                    (translate [0 0 0] board-mount-black-pill)
                     )))
 
 (spit "things/board-pro-micro.scad"
