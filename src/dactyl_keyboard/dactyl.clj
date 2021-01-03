@@ -104,7 +104,11 @@
 (def cherry-plate-with-key-mount
   (union
     cherry-single-plate
-    cherry-socket-walls
+    cherry-socket-walls))
+
+(def cherry-plate-with-key-mount-and-backplate
+  (union
+    cherry-plate-with-key-mount
     (translate [0 0 (- plate-thickness keyswitch-depth (/ backplate-thickness 2))] cherry-backplate)))
 
 (def single-plate cherry-plate-with-key-mount)
@@ -1245,6 +1249,9 @@
 
 (spit "things/cherry-plate-with-key-mount.scad"
       (write-scad cherry-plate-with-key-mount))
+
+(spit "things/cherry-plate-with-key-mount-and-backplate.scad"
+      (write-scad cherry-plate-with-key-mount-and-backplate))
 
 (spit "things/cherry-backplate.scad"
       (write-scad cherry-backplate))
