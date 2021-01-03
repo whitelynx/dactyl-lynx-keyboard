@@ -71,7 +71,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
 * 70x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
 * 70x signal diodes _(1N4148 or similar works well)_
-* 70x [Kailh hot-swap sockets][] _(optional - you can change the definition of `single-plate` in <src/dactyl_keyboard/dactyl.clj> to use `cherry-single-plate` instead of `cherry-plate-with-key-mount` if you want to solder directly to the switches)_
+* 70x [Kailh hot-swap sockets][] _(optional - you can change the definition of `single-plate` in <src/dactyl_keyboard/dactyl.clj> to use `cherry-plate-with-key-mount` instead of `cherry-plate-with-key-mount-and-backplate` if you want to solder directly to the switches)_
 * A set of 70+ keycaps - ErgoDox keycap sets work well, and symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
     * 56x 1u keycaps
     * 10x 1.5u keycaps
