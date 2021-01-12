@@ -84,7 +84,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
 [SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
 [Arduino Pro Mini]: https://store.arduino.cc/usa/arduino-pro-mini
 [(see QMK documentation!)]: https://beta.docs.qmk.fm/using-qmk/hardware-features/feature_split_keyboard
-[Black Pill]: https://smile.amazon.com/gp/product/B07XBWGF9M/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
+[Black Pill]: https://github.com/WeActTC/MiniF4-STM32F4x1
 [Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
 [QMK Proton C]: https://qmk.fm/proton-c/
 [PJRC Teensy]: https://www.pjrc.com/teensy/
