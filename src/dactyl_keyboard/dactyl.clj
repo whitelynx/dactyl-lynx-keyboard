@@ -1209,12 +1209,12 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-black-pill)
+          (placed-board board-mount-pro-micro)
           trackpoint-mount-placed
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes-placed
-   (placed-board board-clearance-black-pill)
+   (placed-board board-clearance-pro-micro)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1224,7 +1224,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-black-pill)))
+    (placed-board board-shape-pro-micro)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1233,10 +1233,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-black-pill)
+                  (placed-board board-mount-pro-micro)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-clearance-black-pill)
+           (placed-board board-clearance-pro-micro)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
@@ -1247,7 +1247,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-black-pill)))))
+              (placed-board board-shape-pro-micro)))))
 
 (defn place-trackpoint-mouse-trackpoint [shape]
   (translate [0 30 16.3] (rotate [(* π (/ -4 9.2)) 0 0] shape)))
