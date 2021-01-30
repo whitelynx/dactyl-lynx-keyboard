@@ -367,6 +367,7 @@
               (thumb-place column (dec row) web-post-tl)
               (thumb-place column (dec row) web-post-tr)))))
    (let [plate-height (/ (- sa-double-length mount-height) 2)
+         switch-clearance 10  ;;Clearance for the depth of the switch - only needed for the bottom right 2x key
          thumb-tl (->> web-post-tl
                        (translate [0 plate-height 0]))
          thumb-bl (->> web-post-bl
@@ -374,7 +375,15 @@
          thumb-tr (->> web-post-tr
                        (translate [0 plate-height 0]))
          thumb-br (->> web-post-br
-                       (translate [0 (- plate-height) 0]))]
+                       (translate [0 (- plate-height) 0]))
+         web-post-tr-clearance (->> web-post-tr
+                       (translate [0 0 (- web-thickness switch-clearance)]))
+         web-post-br-clearance (->> web-post-br
+                       (translate [0 0 (- web-thickness switch-clearance)]))
+         thumb-tr-clearance (->> thumb-tr
+                       (translate [0 0 (- web-thickness switch-clearance)]))
+         thumb-br-clearance (->> thumb-br
+                       (translate [0 0 (- web-thickness switch-clearance)]))]
      (union
 
       ;;Connecting the two doubles
@@ -408,15 +417,15 @@
             (thumb-place 2 -1 web-post-br))
 
       ;;Connecting the thumb to everything
-      (triangle-hulls (thumb-place 0 -1/2 thumb-br)
+      (triangle-hulls (thumb-place 0 -1/2 thumb-br-clearance)
                       (key-place 1 4 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 thumb-tr-clearance)
                       (key-place 1 4 web-post-tl)
                       (key-place 1 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 thumb-tr-clearance)
                       (key-place 0 3 web-post-br)
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 thumb-tr-clearance)
                       (thumb-place 0 -1/2 thumb-tl)
                       (key-place 0 3 web-post-bl)
                       (thumb-place 1 -1/2 thumb-tr)
@@ -425,8 +434,15 @@
                       (key-place 0 3 web-post-tl)
                       (thumb-place 1 1 web-post-br)
                       (thumb-place 1 1 web-post-tr))
-      (hull (thumb-place 0 -1/2 web-post-tr)
+      (hull (thumb-place 0 -1/2 thumb-tr-clearance)
             (thumb-place 0 -1/2 thumb-tr)
+            (thumb-place 0 -1/2 thumb-tl))
+      (hull (thumb-place 0 -1/2 thumb-tr)
+            (thumb-place 0 -1/2 thumb-tr-clearance)
+            (thumb-place 0 -1/2 thumb-br-clearance)
+            (thumb-place 0 -1/2 thumb-br))
+      (hull (thumb-place 0 -1/2 web-post-tr-clearance)
+            (thumb-place 0 -1/2 thumb-tr-clearance)
             (key-place 1 4 web-post-bl)
             (key-place 1 4 web-post-tl))))))
 
