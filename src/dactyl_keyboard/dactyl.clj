@@ -924,22 +924,23 @@
 (def trackpoint-stem-hole-radius (/ 7.5 2))
 (def trackpoint-screw-hole-radius (/ 3.75 2))
 (def trackpoint-screw-hole-offset 9.975)
-(def trackpoint-mount-thickness (* plate-thickness 2))
+(def trackpoint-mount-thickness plate-thickness)
 
-(def trackpoint-holes
+(defn trackpoint-holes [thickness]
   (color
     [1 0 0]
     (binding [*fs* 0.5]
                  (union
-                   (cylinder trackpoint-stem-hole-radius (* trackpoint-mount-thickness 3))
+                   (cylinder trackpoint-stem-hole-radius (* thickness 3))
                    (translate [trackpoint-screw-hole-offset 0 0]
-                              (cylinder trackpoint-screw-hole-radius (* trackpoint-mount-thickness 3)))
+                              (cylinder trackpoint-screw-hole-radius (* thickness 3)))
                    (translate [(- trackpoint-screw-hole-offset) 0 0]
-                              (cylinder trackpoint-screw-hole-radius (* trackpoint-mount-thickness 3)))
+                              (cylinder trackpoint-screw-hole-radius (* thickness 3)))
+                   (translate [0 (- (/ 37 2) 8) (- -2.5 thickness)] (cube 27 37 5))
                    ))))
 
 (def trackpoint-holes-placed
-  (key-place 0.5 2.5 trackpoint-holes))
+  (key-place 0.5 2.5 (trackpoint-holes trackpoint-mount-thickness)))
 
 (defn trackpoint-mount [thickness]
   (let [
@@ -952,7 +953,7 @@
         (translate
           [0 0 (/ thickness -2)]
           (union
-            (cylinder (* trackpoint-stem-hole-radius 3) thickness)
+            (cylinder 8 thickness)
             (translate [trackpoint-screw-hole-offset 0 0]
                        (cylinder (* trackpoint-screw-hole-radius 2) thickness))
             (translate [(- trackpoint-screw-hole-offset) 0 0]
@@ -1149,7 +1150,7 @@
 (def board-clearance-teensy (board-clearance-with-usb-c board-teensy))
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
-(def board-pro-micro [18 33.1 1.6])
+(def board-pro-micro [18.15 33.1 1.6])
 (def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-clearance-pro-micro (board-clearance-with-usb-c board-pro-micro :usb-y-offset 0.75))
@@ -1275,25 +1276,76 @@
   (translate [97 0 36] (rotate [0 π (/ π -2)] shape)))
 
 (def trackpoint-mouse
-  (difference
-    (union
-      (place-trackpoint-mouse-trackpoint (trackpoint-mount 4))
-      (translate [-11.3 5 10] (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate)))
-      (translate [-11.3 5 29.5] (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate)))
-      (place-trackpoint-mouse-board board-mount-pro-micro)
-      (difference
-        (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
+  (let [thumb-buttons-offset [-11.3 5 5]
+        ]
+    (difference
+      (union
+        (translate
+          [0 0 14]
+          (union
+            (place-trackpoint-mouse-trackpoint (trackpoint-mount 3))
+            (translate
+              thumb-buttons-offset
+              (union
+                (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate))
+                (translate [0 0 19.5] (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate)))))
+            (place-trackpoint-mouse-board board-mount-pro-micro)
+            (binding [*fs* 0.5 *fa* 3]
+              (difference
+                (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
+                (difference
+                  (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
+                  (translate [(- -50 9.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
+                  )
+                (translate [0 0 -20] (cube 220 66 40))
+                (translate
+                  thumb-buttons-offset
+                  (union
+                    (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
+                    (translate [0 0 19.5] (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))))
+                ))))
+
+        (translate [0 (/ 60 2) 7] (cube 200 3 14))
+        (translate [0 (/ -60 2) 7] (cube 200 3 14))
+        (translate [98.5 0 7] (cube 3 63 14))
         (difference
-          (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
-          (translate [(- -50 9.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
-          )
-        (translate [0 0 -20] (cube 220 66 40))
-        (translate [(- -50 12.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
-        (translate [-11.3 5 10] (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))
-        (translate [-11.3 5 29.5] (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))
-      ))
-    (place-trackpoint-mouse-trackpoint trackpoint-holes)
-    (place-trackpoint-mouse-board board-clearance-pro-micro)))
+          (translate [-9.65 0 7] (place-trackpoint-mouse-thumb (cube 3 64 14)))
+          (translate
+            thumb-buttons-offset
+              (translate [0 0 14]
+                         (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))))
+
+        (place-trackpoint-mouse-trackpoint (translate [0 6.5 0.75] (cube 32 40 2)))
+        (difference
+          (place-trackpoint-mouse-trackpoint (translate [0 13 -1] (cube 32 40 4)))
+          (cube 100 57 100))
+
+        (translate
+          thumb-buttons-offset
+          (union
+            (translate
+              [0 0 -2.5]
+              (place-trackpoint-mouse-thumb
+                (translate
+                  [2.5 0 0]
+                  (cube (- keyswitch-depth 2) (+ keyswitch-height 3) 17))))
+            (translate
+              [0 0 23.5]
+              (place-trackpoint-mouse-thumb
+                (translate
+                  [2.5 0 0]
+                  (cube (- keyswitch-depth 2) (+ keyswitch-height 3) 3))))))
+        )
+      (translate [0 0 -20] (cube 220 80 40))
+      (translate
+        [0 0 14]
+        (union
+          (translate [(- -50 12.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
+          (place-trackpoint-mouse-trackpoint (trackpoint-holes 3))
+          (place-trackpoint-mouse-trackpoint
+            (translate [0 0 1]
+                       (cylinder [trackpoint-stem-hole-radius (* trackpoint-stem-hole-radius 2)] 3)))
+          (place-trackpoint-mouse-board board-clearance-pro-micro))))))
 
 (spit "things/trackpoint-mouse.scad"
       (write-scad trackpoint-mouse))
