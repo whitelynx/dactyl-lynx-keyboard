@@ -1342,9 +1342,8 @@
         (union
           (translate [(- -50 12.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
           (place-trackpoint-mouse-trackpoint (trackpoint-holes 3))
-          (place-trackpoint-mouse-trackpoint
-            (translate [0 0 1]
-                       (cylinder [trackpoint-stem-hole-radius (* trackpoint-stem-hole-radius 2)] 3)))
+          (place-trackpoint-mouse-trackpoint (translate [0 0 -1] (cylinder 4.5 6)))
+          (place-trackpoint-mouse-trackpoint (translate [0 0 1] (cylinder [4.5 9] 3)))
           (place-trackpoint-mouse-board board-clearance-pro-micro))))))
 
 (spit "things/trackpoint-mouse.scad"
