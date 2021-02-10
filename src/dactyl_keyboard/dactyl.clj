@@ -1081,9 +1081,19 @@
 (def mount-post-height 5)
 
 (def mount-post
-  (difference
-    (binding [*fs* 1] (translate [0 0 (/ mount-post-height -2)] (cylinder (* 0.75 2.54) mount-post-height)))
-    (binding [*fs* 0.5] (translate [0 0 -1.5] (cylinder 0.75 3)))))
+  (let [hole-radius (/ 1.6 2)
+        post-wall-thickness 2
+        block-width 10
+        block-length 10]
+    (difference
+      (union
+        (binding [*fs* 1] (translate [0 0 (/ mount-post-height -2)]
+                                     (cylinder (* 0.75 2.54) mount-post-height)))
+        (translate [0 (+ (/ block-length -2) hole-radius) (/ mount-post-height -2)]
+                   (cube block-width block-length mount-post-height))
+        )
+      (binding [*fs* 0.5] (translate [0 0 (/ mount-post-height -2)]
+                                     (cylinder hole-radius (+ mount-post-height 1)))))))
 
 (defn board-mount-bare [[x y z]]
   (difference
@@ -1150,7 +1160,7 @@
 (def board-clearance-teensy (board-clearance-with-usb-c board-teensy))
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
-(def board-pro-micro [18.15 33.1 1.6])
+(def board-pro-micro [18.25 33.1 1.6])
 (def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-clearance-pro-micro (board-clearance-with-usb-c board-pro-micro :usb-y-offset 0.75))
