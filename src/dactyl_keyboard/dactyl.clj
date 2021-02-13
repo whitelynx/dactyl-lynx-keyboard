@@ -926,26 +926,26 @@
 (def trackpoint-screw-hole-offset 9.975)
 (def trackpoint-mount-thickness plate-thickness)
 
-(defn trackpoint-holes [thickness]
+(defn trackpoint-holes [thickness hole-radius]
   (color
     [1 0 0]
     (binding [*fs* 0.5]
                  (union
                    (cylinder trackpoint-stem-hole-radius (* thickness 3))
                    (translate [trackpoint-screw-hole-offset 0 0]
-                              (cylinder trackpoint-screw-hole-radius (* thickness 3)))
+                              (cylinder hole-radius (* thickness 3)))
                    (translate [(- trackpoint-screw-hole-offset) 0 0]
-                              (cylinder trackpoint-screw-hole-radius (* thickness 3)))
+                              (cylinder hole-radius (* thickness 3)))
                    (translate [0 (- (/ 37 2) 8) (- -2.5 thickness)] (cube 27 37 5))
                    ))))
 
 (def trackpoint-holes-placed
-  (key-place 0.5 2.5 (trackpoint-holes trackpoint-mount-thickness)))
+  (key-place 0.5 2.5 (trackpoint-holes trackpoint-mount-thickness trackpoint-screw-hole-radius)))
 
-(defn trackpoint-mount [thickness]
+(defn trackpoint-mount [thickness hole-radius]
   (let [
         cutout-x-offset 7
-        cutout-y-offset (+ (* trackpoint-screw-hole-radius 2) 5)
+        cutout-y-offset (+ (* hole-radius 2) 5)
         ]
     (color
       [0 1 0]
@@ -955,10 +955,10 @@
           (union
             (cylinder 8 thickness)
             (translate [trackpoint-screw-hole-offset 0 0]
-                       (cylinder (* trackpoint-screw-hole-radius 2) thickness))
+                       (cylinder (* hole-radius 2) thickness))
             (translate [(- trackpoint-screw-hole-offset) 0 0]
-                       (cylinder (* trackpoint-screw-hole-radius 2) thickness))
-            (cube (* trackpoint-screw-hole-offset 2) (* trackpoint-screw-hole-radius 4) thickness)
+                       (cylinder (* hole-radius 2) thickness))
+            (cube (* trackpoint-screw-hole-offset 2) (* hole-radius 4) thickness)
             ))
         (translate [cutout-x-offset cutout-y-offset 0] (cube 10 10 20))
         (translate [(- cutout-x-offset) cutout-y-offset 0] (cube 10 10 20))
@@ -967,7 +967,7 @@
         ))))
 
 (def trackpoint-mount-placed
-  (key-place 0.5 2.5 (trackpoint-mount trackpoint-mount-thickness)))
+  (key-place 0.5 2.5 (trackpoint-mount trackpoint-mount-thickness trackpoint-screw-hole-radius)))
 
 (def trackpoint-stem-radius 0.6)
 (def trackpoint-stem-length 25) ; Slightly problematic since only barbells seem to come in this length
@@ -1277,7 +1277,7 @@
               (placed-board board-shape-pro-micro)))))
 
 (defn place-trackpoint-mouse-trackpoint [shape]
-  (translate [0 30 16.3] (rotate [(* π (/ -4 9.2)) 0 0] shape)))
+  (translate [0 0 10] (rotate [(* π -0.5) 0 0] (translate [0 0 31.5] shape))))
 
 (defn place-trackpoint-mouse-thumb [shape]
   (rotate [0 0 (/ π 12)] shape))
@@ -1293,8 +1293,8 @@
         (translate
           [0 0 14]
           (union
-            (place-trackpoint-mouse-trackpoint (trackpoint-mount 3))
-            (translate
+            (place-trackpoint-mouse-trackpoint (trackpoint-mount 3 1))
+            (translate ; Thumb button mounts
               thumb-buttons-offset
               (union
                 (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate))
@@ -1302,8 +1302,8 @@
             (place-trackpoint-mouse-board board-mount-pro-micro)
             (binding [*fs* 0.5 *fa* 3]
               (difference
-                (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
-                (difference
+                (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200))) ; Main body cylinder
+                (difference ; Inside of main body cylinder
                   (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
                   (translate [(- -50 9.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
                   )
@@ -1325,9 +1325,9 @@
               (translate [0 0 14]
                          (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))))
 
-        (place-trackpoint-mouse-trackpoint (translate [0 6.5 0.75] (cube 32 40 2)))
+        ;(place-trackpoint-mouse-trackpoint (translate [0 6.5 0.75] (cube 32 40 2)))
         (difference
-          (place-trackpoint-mouse-trackpoint (translate [0 13 -1] (cube 32 40 4)))
+          (place-trackpoint-mouse-trackpoint (translate [0 6 -2] (cube 24 40 2)))
           (cube 100 57 100))
 
         (translate
@@ -1351,9 +1351,16 @@
         [0 0 14]
         (union
           (translate [(- -50 12.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
-          (place-trackpoint-mouse-trackpoint (trackpoint-holes 3))
-          (place-trackpoint-mouse-trackpoint (translate [0 0 -1] (cylinder 4.5 6)))
-          (place-trackpoint-mouse-trackpoint (translate [0 0 1] (cylinder [4.5 9] 3)))
+          (place-trackpoint-mouse-trackpoint (trackpoint-holes 3 1))
+          (place-trackpoint-mouse-trackpoint ; Countersink
+            (binding [*fs* 0.5]
+              (union
+                (translate [trackpoint-screw-hole-offset 0 2]
+                           (cylinder 2.5 5))
+                (translate [(- trackpoint-screw-hole-offset) 0 2]
+                           (cylinder 2.5 5)))))
+          (place-trackpoint-mouse-trackpoint (translate [0 0 -1] (cylinder 4.5 6))) ; Larger stem hole
+          (place-trackpoint-mouse-trackpoint (translate [0 0 1] (cylinder [4.5 8.5] 3))) ; Stem hole counterbore
           (place-trackpoint-mouse-board board-clearance-pro-micro))))))
 
 (spit "things/trackpoint-mouse.scad"
