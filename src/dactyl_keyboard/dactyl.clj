@@ -1285,6 +1285,12 @@
 (defn place-trackpoint-mouse-board [shape]
   (translate [97 0 36] (rotate [0 π (/ π -2)] shape)))
 
+(defn place-trackpoint-mouse-thumb-part [x y z shape]
+  (place-trackpoint-mouse-thumb (translate [(- x 9.7) (+ y 5) (+ z 5)] shape)))
+
+(defn place-trackpoint-mouse-thumb-switch [y z]
+  (place-trackpoint-mouse-thumb-part (- keyswitch-depth 5) y z (rotate [0 (/ π 2) 0] single-plate)))
+
 (def trackpoint-mouse
   (let [thumb-buttons-offset [-11.3 5 5]
         ]
@@ -1294,63 +1300,51 @@
           [0 0 14]
           (union
             (place-trackpoint-mouse-trackpoint (trackpoint-mount 3 1))
-            (translate ; Thumb button mounts
-              thumb-buttons-offset
-              (union
-                (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate))
-                (translate [0 0 19.5] (place-trackpoint-mouse-thumb (rotate [0 (/ π 2) 0] single-plate)))))
+            ; Thumb button mounts:
+            (place-trackpoint-mouse-thumb-switch 5 0)
+            (place-trackpoint-mouse-thumb-switch 5 19.5)
+            (place-trackpoint-mouse-thumb-switch -14.5 9.75)
             (place-trackpoint-mouse-board board-mount-pro-micro)
             (binding [*fs* 0.5 *fa* 3]
-              (difference
-                (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200))) ; Main body cylinder
-                (difference ; Inside of main body cylinder
-                  (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
-                  (translate [(- -50 9.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
-                  )
-                (translate [0 0 -20] (cube 220 66 40))
-                (translate
-                  thumb-buttons-offset
+              (union ; Main body
+                (difference
                   (union
-                    (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
-                    (translate [0 0 19.5] (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))))
-                ))))
+                    (difference ; Main body cylinder
+                      (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
+                      (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
+                      (translate [0 0 -20] (cube 220 66 40))
+                      (translate [0 0 0] (cube 194 57 20))
+                      )
+                    ; Skirt walls:
+                    (translate [0 (/ 60 2) -6.75] (cube 200 3 14.5))
+                    (translate [0 (/ -60 2) -6.75] (cube 200 3 14.5))
+                    (translate [98.5 0 -7] (cube 3 63 14))
+                    )
+                  (translate [(- -50 12) 0 0] (place-trackpoint-mouse-thumb (cube 100 100 100))) ; Angled cut-off
+                  )
+                (difference ; Thumb end plate
+                  (intersection
+                    (union ; End plate pieces
+                      (place-trackpoint-mouse-thumb-part 2.54 -4.75 31 (cube (- keyswitch-depth 2) (+ (+ keyswitch-height 3) 19.5) 100))
+                      (place-trackpoint-mouse-thumb-part 0.5 0 31 (cube 3 100 100))
+                      )
+                    (union ; Main body profile
+                      (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
+                      (translate [0 0 -7] (cube 200 63 14))
+                      ))
+                  (place-trackpoint-mouse-thumb-part 0 5 0 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
+                  (place-trackpoint-mouse-thumb-part 0 5 19.5 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
+                  (place-trackpoint-mouse-thumb-part 0 -14.5 9.75 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
+                  )))))
 
-        (translate [0 (/ 60 2) 7] (cube 200 3 14))
-        (translate [0 (/ -60 2) 7] (cube 200 3 14))
-        (translate [98.5 0 7] (cube 3 63 14))
-        (difference
-          (translate [-9.65 0 7] (place-trackpoint-mouse-thumb (cube 3 64 14)))
-          (translate
-            thumb-buttons-offset
-              (translate [0 0 14]
-                         (place-trackpoint-mouse-thumb (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height))))))
-
-        ;(place-trackpoint-mouse-trackpoint (translate [0 6.5 0.75] (cube 32 40 2)))
         (difference
           (place-trackpoint-mouse-trackpoint (translate [0 6 -2] (cube 24 40 2)))
-          (cube 100 57 100))
-
-        (translate
-          thumb-buttons-offset
-          (union
-            (translate
-              [0 0 -2.5]
-              (place-trackpoint-mouse-thumb
-                (translate
-                  [2.5 0 0]
-                  (cube (- keyswitch-depth 2) (+ keyswitch-height 3) 17))))
-            (translate
-              [0 0 23.5]
-              (place-trackpoint-mouse-thumb
-                (translate
-                  [2.5 0 0]
-                  (cube (- keyswitch-depth 2) (+ keyswitch-height 3) 3))))))
+          (cube 100 57 100)
+          (translate [0 0 -20] (cube 220 80 40)))
         )
-      (translate [0 0 -20] (cube 220 80 40))
       (translate
         [0 0 14]
         (union
-          (translate [(- -50 12.85) 0 10] (place-trackpoint-mouse-thumb (cube 100 100 100)))
           (place-trackpoint-mouse-trackpoint (trackpoint-holes 3 1))
           (place-trackpoint-mouse-trackpoint ; Countersink
             (binding [*fs* 0.5]
