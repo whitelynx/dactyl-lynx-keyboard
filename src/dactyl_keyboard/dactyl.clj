@@ -944,8 +944,8 @@
 
 (defn trackpoint-mount [thickness hole-radius]
   (let [
-        cutout-x-offset 7
-        cutout-y-offset (+ (* hole-radius 2) 5)
+        cutout-x-offset 8
+        cutout-y-offset (+ (* hole-radius 2.1) 5)
         ]
     (color
       [0 1 0]
@@ -954,11 +954,11 @@
           [0 0 (/ thickness -2)]
           (union
             (cylinder 8 thickness)
-            (translate [trackpoint-screw-hole-offset 0 0]
-                       (cylinder (* hole-radius 2) thickness))
-            (translate [(- trackpoint-screw-hole-offset) 0 0]
-                       (cylinder (* hole-radius 2) thickness))
-            (cube (* trackpoint-screw-hole-offset 2) (* hole-radius 4) thickness)
+            (hull
+              (translate [trackpoint-screw-hole-offset 0 0]
+                         (cylinder (* hole-radius 2.1) thickness))
+              (translate [(- trackpoint-screw-hole-offset) 0 0]
+                         (cylinder (* hole-radius 2.1) thickness)))
             ))
         (translate [cutout-x-offset cutout-y-offset 0] (cube 10 10 20))
         (translate [(- cutout-x-offset) cutout-y-offset 0] (cube 10 10 20))
