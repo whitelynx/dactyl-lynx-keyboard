@@ -1082,7 +1082,6 @@
 
 (def mount-post
   (let [hole-radius (/ 1.6 2)
-        post-wall-thickness 2
         block-width 10
         block-length 10]
     (difference
@@ -1283,7 +1282,7 @@
   (rotate [0 0 (/ π 12)] shape))
 
 (defn place-trackpoint-mouse-board [shape]
-  (translate [97 0 36] (rotate [0 π (/ π -2)] shape)))
+  (translate [97 0 30] (rotate [0 π (/ π -2)] shape)))
 
 (defn place-trackpoint-mouse-thumb-part [x y z shape]
   (place-trackpoint-mouse-thumb (translate [(- x 9.7) (+ y 5) (+ z 5)] shape)))
@@ -1305,13 +1304,30 @@
             (place-trackpoint-mouse-thumb-switch 5 19.5)
             (place-trackpoint-mouse-thumb-switch -14.5 19.5)
             (place-trackpoint-mouse-board board-mount-pro-micro)
+            (intersection
+              (place-trackpoint-mouse-board
+                (let [hole-radius (/ 1.6 2)
+                      block-width 10
+                      block-length 15]
+                  (translate [0 (- (- (nth board-pro-micro 1)) 0.75) 0]
+                             (difference
+                               (translate [0 (+ (/ block-length -2) 2) (/ mount-post-height -2)]
+                                          (cube 100 block-length mount-post-height))
+                               (binding [*fs* 0.5] (translate [0 0 (/ mount-post-height -2)]
+                                                              (cylinder hole-radius (+ mount-post-height 1))))))))
+              (union ; Main body profile
+                     (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
+                     (translate [0 0 -7] (cube 200 63 14))
+                     ))
             (binding [*fs* 0.5 *fa* 3]
               (union ; Main body
                 (difference
                   (union
                     (difference ; Main body cylinder
                       (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
-                      (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
+                      (difference ; Inner face - cylinder with flattened top
+                        (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
+                        (translate [0 0 54] (cube 220 66 40)))
                       (translate [0 0 -20] (cube 220 66 40))
                       (translate [0 0 0] (cube 194 57 20))
                       )
