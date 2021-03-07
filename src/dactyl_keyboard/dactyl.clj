@@ -1303,7 +1303,7 @@
             ; Thumb button mounts:
             (place-trackpoint-mouse-thumb-switch 5 0)
             (place-trackpoint-mouse-thumb-switch 5 19.5)
-            (place-trackpoint-mouse-thumb-switch -14.5 9.75)
+            (place-trackpoint-mouse-thumb-switch -14.5 19.5)
             (place-trackpoint-mouse-board board-mount-pro-micro)
             (binding [*fs* 0.5 *fa* 3]
               (union ; Main body
@@ -1334,7 +1334,7 @@
                       ))
                   (place-trackpoint-mouse-thumb-part 0 5 0 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
                   (place-trackpoint-mouse-thumb-part 0 5 19.5 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
-                  (place-trackpoint-mouse-thumb-part 0 -14.5 9.75 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
+                  (place-trackpoint-mouse-thumb-part 0 -14.5 19.5 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
                   )))))
 
         (difference
