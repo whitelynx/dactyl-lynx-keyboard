@@ -1159,7 +1159,7 @@
 (def board-clearance-teensy (board-clearance-with-usb-c board-teensy))
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
-(def board-pro-micro [18.25 33.1 1.6])
+(def board-pro-micro [18.3 33.1 1.7])
 (def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-clearance-pro-micro (board-clearance-with-usb-c board-pro-micro :usb-y-offset 0.75))
@@ -1328,25 +1328,25 @@
                       (difference ; Inner face - cylinder with flattened top
                         (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 30 194)))
                         (translate [0 0 54] (cube 220 66 40)))
-                      (translate [0 0 -20] (cube 220 66 40))
+                      (translate [0 0 -25] (cube 220 66 40))
                       (translate [0 0 0] (cube 194 57 20))
                       )
                     ; Skirt walls:
-                    (translate [0 (/ 60 2) -6.75] (cube 200 3 14.5))
-                    (translate [0 (/ -60 2) -6.75] (cube 200 3 14.5))
-                    (translate [98.5 0 -7] (cube 3 63 14))
+                    (translate [0 (/ 60 2) -9.25] (cube 200 3 19.5))
+                    (translate [0 (/ -60 2) -9.25] (cube 200 3 19.5))
+                    (translate [98.5 0 -9.5] (cube 3 63 19))
                     )
                   (translate [(- -50 12) 0 0] (place-trackpoint-mouse-thumb (cube 100 100 100))) ; Angled cut-off
                   )
                 (difference ; Thumb end plate
                   (intersection
-                    (union ; End plate pieces
+                    (translate [0 0 -5] (union ; End plate pieces
                       (place-trackpoint-mouse-thumb-part 2.54 -4.75 31 (cube (- keyswitch-depth 2) (+ (+ keyswitch-height 3) 19.5) 100))
                       (place-trackpoint-mouse-thumb-part 0.5 0 31 (cube 3 100 100))
-                      )
+                      ))
                     (union ; Main body profile
                       (translate [0 0 10] (rotate [0 (/ π 2) 0] (cylinder 33 200)))
-                      (translate [0 0 -7] (cube 200 63 14))
+                      (translate [0 0 -9.5] (cube 200 63 19))
                       ))
                   (place-trackpoint-mouse-thumb-part 0 5 0 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
                   (place-trackpoint-mouse-thumb-part 0 5 19.5 (cube 20 (+ 2 keyswitch-width) (+ 2 keyswitch-height)))
@@ -1356,7 +1356,7 @@
         (difference
           (place-trackpoint-mouse-trackpoint (translate [0 6 -2] (cube 24 40 2)))
           (cube 100 57 100)
-          (translate [0 0 -20] (cube 220 80 40)))
+          (translate [0 0 -25] (cube 220 80 40)))
         )
       (translate
         [0 0 14]
