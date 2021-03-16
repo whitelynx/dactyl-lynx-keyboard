@@ -307,10 +307,10 @@
          (rotate (* column β) [0 1 0])
          (translate [0 0 column-radius])
          (translate [mount-width 0 0])
-         (rotate (* π 3/16) [0 0 1])
+         (rotate (* π 5/32) [0 0 1])
          (rotate (/ π 12) [1 1 0])
          (rotate (/ π -8/3) [-1 1 0])
-         (translate [-52 -45 39]))))
+         (translate [-46 -39 48]))))
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
@@ -870,18 +870,12 @@
            (case-place 0.5 4 wall-sphere-top-front)
            (case-place 0.7 4 wall-sphere-bottom-front))
 
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
-           (key-place 1 4 web-post-bl)
-           (place 0 -1/2 thumb-br)
-           (place 0 -1/2 web-post-br)
-           (case-place 0.7 4 wall-sphere-bottom-front))
-
      (hull (place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 2 -1 web-post-bl)
            (place 2 -1 web-post-br))
 
-     (hull (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+     (hull (translate [0 0 -0.5] (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front)))
            (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 0 -1/2 thumb-bl)
            (place 0 -1/2 thumb-br))
@@ -899,7 +893,7 @@
        (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front))
        (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
      (curtain [0 0 -100]
-       (case-place 0.7 4 (translate [1 0 1.5] wall-sphere-bottom-front))
+       (case-place 0.7 4 (translate [-1 0 1.5] wall-sphere-bottom-front))
        (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front)))
      )))
 
@@ -1210,8 +1204,8 @@
 
 (defn place-feet [foot]
   (union
-    (translate [-71 -26.75 0] foot)
-    (translate [-33 -59 0] foot)
+    (translate [-62 -20.75 0] foot)
+    (translate [-30 -52 0] foot)
     (translate [-33 58.9 0] foot)
     (translate [78 52 0] foot)
     (translate [78 -54.5 0] foot)))
