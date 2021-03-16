@@ -1153,6 +1153,12 @@
 (def board-clearance-teensy (board-clearance-with-usb-c board-teensy))
 (def board-mount-teensy (board-mount-with-usb-c board-teensy))
 
+(def board-micro [18 48.4 1.6])
+(def board-shape-micro (board-shape-with-usb-c board-micro :usb-y-offset 0.75))
+(def board-cutout-micro (board-cutout-with-usb-c board-micro :usb-y-offset 0.75))
+(def board-clearance-micro (board-clearance-with-usb-c board-micro :usb-y-offset 0.75))
+(def board-mount-micro (board-mount-with-usb-c board-micro :usb-y-offset 0.75))
+
 (def board-pro-micro [18.3 33.1 1.7])
 (def board-shape-pro-micro (board-shape-with-usb-c board-pro-micro :usb-y-offset 0.75))
 (def board-cutout-pro-micro (board-cutout-with-usb-c board-pro-micro :usb-y-offset 0.75))
@@ -1229,12 +1235,12 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-pro-micro)
+          (placed-board board-mount-micro)
           trackpoint-mount-placed
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes-placed
-   (placed-board board-clearance-pro-micro)
+   (placed-board board-clearance-micro)
    foot-cutouts))
 
 (def dactyl-top-right-preview
@@ -1244,7 +1250,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-pro-micro)))
+    (placed-board board-shape-micro)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1253,10 +1259,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-pro-micro)
+                  (placed-board board-mount-micro)
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-clearance-pro-micro)
+           (placed-board board-clearance-micro)
            foot-cutouts)))
 
 (def dactyl-top-left-preview
@@ -1267,7 +1273,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-pro-micro)))))
+              (placed-board board-shape-micro)))))
 
 (defn place-trackpoint-mouse-trackpoint [shape]
   (translate [0 0 10] (rotate [(* π -0.5) 0 0] (translate [0 0 31.5] shape))))
@@ -1422,6 +1428,13 @@
                     (translate [0 0 20] board-shape-black-pill)
                     board-cutout-black-pill
                     (translate [0 0 0] board-mount-black-pill)
+                    )))
+
+(spit "things/board-micro.scad"
+      (write-scad (union
+                    (translate [0 0 20] board-shape-micro)
+                    board-cutout-micro
+                    (translate [0 0 0] board-mount-micro)
                     )))
 
 (spit "things/board-pro-micro.scad"
