@@ -309,7 +309,7 @@
          (translate [mount-width 0 0])
          (rotate (* π 5/32) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (rotate (/ π -8/3) [-1 1 0])
+         (rotate (/ π -11/6) [-1 1 0])
          (translate [-46 -39 48]))))
 
 (defn thumb-2x-column [shape]
@@ -351,6 +351,8 @@
    (thumb-place 1 1 (sa-cap 1))
    (thumb-1x-column (sa-cap 1))))
 
+(def thumb-switch-clearance 12)  ;;Clearance for the depth of the switch - only needed for the bottom right 2x key and the top right 1x key
+
 (def thumb-connectors
   (union
    (apply union
@@ -367,7 +369,6 @@
               (thumb-place column (dec row) web-post-tl)
               (thumb-place column (dec row) web-post-tr)))))
    (let [plate-height (/ (- sa-double-length mount-height) 2)
-         switch-clearance 10  ;;Clearance for the depth of the switch - only needed for the bottom right 2x key
          thumb-tl (->> web-post-tl
                        (translate [0 plate-height 0]))
          thumb-bl (->> web-post-bl
@@ -377,13 +378,15 @@
          thumb-br (->> web-post-br
                        (translate [0 (- plate-height) 0]))
          web-post-tr-clearance (->> web-post-tr
-                       (translate [0 0 (- web-thickness switch-clearance)]))
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
          web-post-br-clearance (->> web-post-br
-                       (translate [0 0 (- web-thickness switch-clearance)]))
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
+         thumb-tl-clearance (->> thumb-tl
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
          thumb-tr-clearance (->> thumb-tr
-                       (translate [0 0 (- web-thickness switch-clearance)]))
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
          thumb-br-clearance (->> thumb-br
-                       (translate [0 0 (- web-thickness switch-clearance)]))]
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))]
      (union
 
       ;;Connecting the two doubles
@@ -426,25 +429,30 @@
                       (key-place 0 3 web-post-br)
                       (key-place 0 3 web-post-bl)
                       (thumb-place 0 -1/2 thumb-tr-clearance)
-                      (thumb-place 0 -1/2 thumb-tl)
+                      (thumb-place 0 -1/2 thumb-tl-clearance)
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 1 web-post-br)
+                      (thumb-place 1 -1/2 thumb-tr-clearance)
+                      (thumb-place 1 1 web-post-br-clearance)
                       (key-place 0 3 web-post-bl)
                       (key-place 0 3 web-post-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-tr))
+                      (thumb-place 1 1 web-post-br-clearance)
+                      (thumb-place 1 1 web-post-tr-clearance))
       (hull (thumb-place 0 -1/2 thumb-tr-clearance)
             (thumb-place 0 -1/2 thumb-tr)
-            (thumb-place 0 -1/2 thumb-tl))
+            (thumb-place 0 -1/2 thumb-tl)
+            (thumb-place 0 -1/2 thumb-tl-clearance))
       (hull (thumb-place 0 -1/2 thumb-tr)
             (thumb-place 0 -1/2 thumb-tr-clearance)
             (thumb-place 0 -1/2 thumb-br-clearance)
             (thumb-place 0 -1/2 thumb-br))
-      (hull (thumb-place 0 -1/2 web-post-tr-clearance)
-            (thumb-place 0 -1/2 thumb-tr-clearance)
-            (key-place 1 4 web-post-bl)
-            (key-place 1 4 web-post-tl))))))
+      (hull (thumb-place 0 -1/2 thumb-tl)
+            (thumb-place 0 -1/2 thumb-tl-clearance)
+            (thumb-place 1 1 web-post-br-clearance)
+            (thumb-place 1 1 web-post-br))
+      (hull (thumb-place 1 1 web-post-tr)
+            (thumb-place 1 1 web-post-tr-clearance)
+            (thumb-place 1 1 web-post-br-clearance)
+            (thumb-place 1 1 web-post-br))))))
 
 (def thumb
   (union
@@ -698,7 +706,9 @@
      )))
 
 (def left-wall
-  (let [place case-place]
+  (let [place case-place
+        web-post-tr-clearance (->> web-post-tr
+                                   (translate [0 0 (- web-thickness thumb-switch-clearance)]))]
     (union
      (apply union
             (for [x (range-inclusive -1 (- 1.6666 wall-step) wall-step)]
@@ -726,10 +736,10 @@
            (key-place 0 2 web-post-bl)
            (key-place 0 3 web-post-tl))
      (hull (place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
-           (thumb-place 1 1 web-post-tr)
+           (thumb-place 1 1 web-post-tr-clearance)
            (key-place 0 3 web-post-tl))
      (hull (place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
-           (thumb-place 1 1 web-post-tr)
+           (thumb-place 1 1 web-post-tr-clearance)
            (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back)))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
@@ -754,6 +764,8 @@
                                          (thumb-place (+ x top-step) y wall-sphere-top-back)
                                          (thumb-place x (+ y top-step) wall-sphere-top-back)
                                          (thumb-place (+ x top-step) (+ y top-step) wall-sphere-top-back)))))
+        web-post-tr-clearance (->> web-post-tr
+                                   (translate [0 0 (- web-thickness thumb-switch-clearance)]))
         back-y thumb-back-y]
     (union
      (apply union
@@ -763,16 +775,21 @@
                     (thumb-place x back-y wall-sphere-bottom-back)
                     (thumb-place (+ x step) back-y wall-sphere-bottom-back))))
      (hull
-       (thumb-place 1/2 back-y wall-sphere-top-back)
+       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back)
        (thumb-place 1/2 back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 wall-sphere-top-front))
      (hull
-       (thumb-place 1/2 back-y wall-sphere-bottom-back)
+       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 wall-sphere-top-front)
+       (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
+     (hull
+       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back)
+       (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
      (hull
       (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
       (thumb-place 1 1 web-post-tr)
+      (thumb-place 1 1 web-post-tr-clearance)
       (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
       (thumb-place 1 1 web-post-tl))
      (hull
@@ -782,14 +799,11 @@
       (thumb-place 2 1 web-post-tl))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
-       (thumb-place 1/2 back-y wall-sphere-bottom-back)
+       (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 (translate [0.5 0 0.5] wall-sphere-bottom-front)))
      (curtain [0 0 -100]
-       (thumb-place 1/2 back-y wall-sphere-bottom-back)
-       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back))
-     (curtain [0 0 -100]
        (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
-       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back))
+       (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-top-back))
      )))
 
 (def thumb-left-wall
@@ -832,14 +846,14 @@
       (thumb-place 2 -1 web-post-bl))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
-       (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back)
-       (thumb-place thumb-left-wall-column 0 wall-sphere-bottom-back))
+       (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
+       (thumb-place thumb-left-wall-column 0 wall-sphere-top-back))
      (curtain [0 0 -100]
-       (thumb-place thumb-left-wall-column 0 wall-sphere-bottom-back)
-       (thumb-place thumb-left-wall-column -1 wall-sphere-bottom-back))
+       (thumb-place thumb-left-wall-column 0 wall-sphere-top-back)
+       (thumb-place thumb-left-wall-column -1 wall-sphere-top-back))
      (curtain [0 0 -100]
-       (thumb-place thumb-left-wall-column -1 wall-sphere-bottom-back)
-       (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-bottom-front))
+       (thumb-place thumb-left-wall-column -1 wall-sphere-top-back)
+       (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-top-front))
      )))
 
 (def thumb-front-wall
@@ -854,7 +868,9 @@
         thumb-tr (->> web-post-tr
                       (translate [-0 plate-height 0]))
         thumb-br (->> web-post-br
-                      (translate [-0 (- plate-height) 0]))]
+                      (translate [-0 (- plate-height) 0]))
+        thumb-br-clearance (->> thumb-br
+                                (translate [0 0 (- web-thickness thumb-switch-clearance)]))]
     (union
      (apply union
             (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
@@ -863,12 +879,9 @@
                     (place x thumb-front-row wall-sphere-bottom-front)
                     (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
 
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-top-front)
-           (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
-           (case-place 0.5 4 wall-sphere-top-front))
      (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
            (case-place 0.5 4 wall-sphere-top-front)
-           (case-place 0.7 4 wall-sphere-bottom-front))
+           (place (+ 1/2 0.05) thumb-front-row wall-sphere-bottom-front))
 
      (hull (place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
@@ -878,7 +891,8 @@
      (hull (translate [0 0 -0.5] (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front)))
            (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 0 -1/2 thumb-bl)
-           (place 0 -1/2 thumb-br))
+           (place 0 -1/2 thumb-br)
+           (place 0 -1/2 thumb-br-clearance))
      (hull (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 0 -1/2 thumb-bl)
@@ -887,14 +901,8 @@
            (place 2 -1 web-post-br))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
-       (place (+ 5/2 0.05) thumb-front-row wall-sphere-bottom-front)
-       (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
-     (curtain [0 0 -100]
-       (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front))
-       (place (+ 3/2 0.05) thumb-front-row (translate [0 1 0.5] wall-sphere-bottom-front)))
-     (curtain [0 0 -100]
-       (case-place 0.7 4 (translate [-1 0 1.5] wall-sphere-bottom-front))
-       (place (+ 1/2 0.05) thumb-front-row (translate [0 1.5 0.5] wall-sphere-bottom-front)))
+       (translate [0 0 -3] (case-place 0.7 4 (translate [-1 0 1.5] wall-sphere-bottom-front)))
+       (translate [0 0 -0.5] (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-top-front)))
      )))
 
 (def new-case
@@ -1210,8 +1218,7 @@
 
 (defn place-feet [foot]
   (union
-    (translate [-62 -20.75 0] foot)
-    (translate [-30 -52 0] foot)
+    (translate [-75 -22.5 0] foot)
     (translate [-33 58.9 0] foot)
     (translate [78 52 0] foot)
     (translate [78 -54.5 0] foot)))
