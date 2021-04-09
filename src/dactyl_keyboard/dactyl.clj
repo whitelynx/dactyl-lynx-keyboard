@@ -1153,6 +1153,14 @@
                    (cube 2.5 3 (+ mount-post-height (* 2 z)))))
       (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset))))
 
+(defn mount-post-extra-support [[x y z]]
+  (let [hole-radius (/ 1.6 2)
+        block-width 30
+        block-length 10]
+    (translate [0 (- (- y) 0.75) 0]
+               (translate [(/ block-width -2) (+ (/ block-length -2) hole-radius) (/ mount-post-height -2)]
+                          (cube block-width block-length mount-post-height)))))
+
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
 (def board-teensy [18 30.5 1.6])
@@ -1247,6 +1255,9 @@
             (difference
               board-mount-micro
               (translate [0 10 0] (cube 20 20 20))))
+          (difference
+            (placed-board (mount-post-extra-support board-micro))
+            (->> (cube 1000 1000 100) (translate [0 0 -50])))
           trackpoint-mount-placed
           foot-supports)
    mini-din-hole-just-circle
@@ -1274,6 +1285,9 @@
                     (difference
                       board-mount-micro
                       (translate [0 10 0] (cube 20 20 20))))
+                  (difference
+                    (placed-board (mount-post-extra-support board-micro))
+                    (->> (cube 1000 1000 100) (translate [0 0 -50])))
                   foot-supports)
            mini-din-hole-just-circle
            (placed-board board-clearance-micro)
