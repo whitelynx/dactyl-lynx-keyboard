@@ -1189,7 +1189,7 @@
 (def board-clearance-pro-mini (board-clearance-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-36.5 56.5 15])
+(def board-position [-36.7 56.5 15])
 
 (defn placed-board [shape]
   (->> shape
@@ -1235,7 +1235,10 @@
           connectors
           thumb
           new-case-trimmed
-          (placed-board board-mount-micro)
+          (placed-board
+            (difference
+              board-mount-micro
+              (translate [0 10 0] (cube 20 20 20))))
           trackpoint-mount-placed
           foot-supports)
    mini-din-hole-just-circle
@@ -1259,7 +1262,10 @@
                   connectors
                   thumb
                   new-case-trimmed
-                  (placed-board board-mount-micro)
+                  (placed-board
+                    (difference
+                      board-mount-micro
+                      (translate [0 10 0] (cube 20 20 20))))
                   foot-supports)
            mini-din-hole-just-circle
            (placed-board board-clearance-micro)
