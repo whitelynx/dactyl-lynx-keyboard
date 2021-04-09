@@ -1230,7 +1230,8 @@
 
 (def foot-cutouts
   (place-feet
-    (cylinder foot-radius foot-lip)))
+    (translate [0 0 (/ foot-lip 2)]
+               (cylinder foot-radius foot-lip))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; Final Export ;;
