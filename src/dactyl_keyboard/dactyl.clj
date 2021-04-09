@@ -1056,7 +1056,7 @@
 
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
-(def usb-c-jack-dimensions [9.05 3.26 7.6])
+(def usb-c-jack-dimensions [9.2 3.4 7.6])
 (def board-clearance-height 20) ; The amount of clearance above the board to allow for pin headers and connectors
 
 ; Or, rather, "the shape of a USB-C plug or jack" - the hull of two similar cylinders
