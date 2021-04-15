@@ -292,7 +292,7 @@
         row-radius (+ (/ (/ (+ mount-height 1) 2)
                          (Math/sin (/ α 2)))
                       cap-top-height)
-        β (/ π -36)
+        β (/ π 17)
         column-radius (+ (/ (/ (+ mount-width 2) 2)
                             (Math/sin (/ β 2)))
                          cap-top-height)
@@ -307,10 +307,10 @@
          (rotate (* column β) [0 1 0])
          (translate [0 0 column-radius])
          (translate [mount-width 0 0])
-         (rotate (* π 5/32) [0 0 1])
+         (rotate (* π 7/32) [0 0 1])
          (rotate (/ π 12) [1 1 0])
          (rotate (/ π -11/6) [-1 1 0])
-         (translate [-46 -39 48]))))
+         (translate [-37 -42 48]))))
 
 (defn thumb-2x-column [shape]
   (union (thumb-place 0 -1/2 shape)
@@ -597,7 +597,7 @@
            (key-place 1 4 web-post-br))
      ; Curtains (from bottom edge of walls to z=0):
      (apply union
-            (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
+            (for [x (range-inclusive 1.25 (- right-wall-column step) step)]
               (curtain [0 0 -100]
                 (place x 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
                 (place (+ x step) 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
@@ -927,8 +927,15 @@
            (place 2 -1 web-post-br))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
-       (translate [0 0 -3] (case-place 0.7 4 (translate [-1 0 1.5] wall-sphere-bottom-front)))
+       (translate [0 0 -0.5] (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-bottom-front))
        (translate [0 0 -0.5] (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-top-front)))
+     (let [curtain-range-min 1.1
+           curtain-range-max (- (+ 5/2 0.05) step)]
+       (apply union
+              (for [x (range-inclusive curtain-range-min curtain-range-max step)]
+                (curtain [0 0 -100]
+                         (translate [0 (/ (- (+ curtain-range-max step) x) 5) -0.5] (thumb-place x (+ -1 0.07) wall-sphere-bottom-front))
+                         (translate [0 (/ (- curtain-range-max x) 5) -0.5] (thumb-place (+ x step) (+ -1 0.07) wall-sphere-bottom-front))))))
      )))
 
 (def new-case
@@ -1252,10 +1259,10 @@
 
 (defn place-feet [foot]
   (union
-    (translate [-75 -22.5 0] foot)
+    (translate [-70 -41.5 0] foot)
     (translate [-33 58.9 0] foot)
     (translate [78 52 0] foot)
-    (translate [78 -54.5 0] foot)))
+    (translate [78 -54.4 0] foot)))
 
 (def foot-supports
   (place-feet
