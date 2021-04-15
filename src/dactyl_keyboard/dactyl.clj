@@ -313,7 +313,8 @@
          (translate [-46 -39 48]))))
 
 (defn thumb-2x-column [shape]
-  (thumb-place 0 -1/2 shape))
+  (union (thumb-place 0 -1/2 shape)
+         (thumb-place 0 1 shape)))
 
 (defn thumb-2x+1-column [shape]
   (union (thumb-place 1 -1/2 shape)
@@ -346,7 +347,8 @@
 
 (def thumbcaps
   (union
-   (thumb-2x-column (sa-cap 2))
+   (thumb-place 0 -1/2 (sa-cap 2))
+   (thumb-place 0 1 (sa-cap 1))
    (thumb-place 1 -1/2 (sa-cap 2))
    (thumb-place 1 1 (sa-cap 1))
    (thumb-1x-column (sa-cap 1))))
@@ -357,7 +359,7 @@
   (union
    (apply union
           (concat
-           (for [column [2] row [1]]
+           (for [column [1 2] row [1]]
              (triangle-hulls (thumb-place column row web-post-br)
                              (thumb-place column row web-post-tr)
                              (thumb-place (dec column) row web-post-bl)
@@ -386,6 +388,25 @@
          thumb-tr-clearance (->> thumb-tr
                        (translate [0 0 (- web-thickness thumb-switch-clearance)]))
          thumb-br-clearance (->> thumb-br
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
+
+         edge-size (/ web-thickness 4)
+         web-edge (->> (cube edge-size edge-size web-thickness)
+                       (translate [0 0 (+ (/ web-thickness -2) plate-thickness)]))
+         edge-adj (/ edge-size 2)
+         web-edge-tr (translate [(- (/ mount-width 2) edge-adj) (- (/ mount-height 2) edge-adj) 0] web-edge)
+         web-edge-br (translate [(- (/ mount-width 2) edge-adj) (+ (/ mount-height -2) edge-adj) 0] web-edge)
+         web-edge-tr-clearance (->> web-edge-tr
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
+         web-edge-br-clearance (->> web-edge-br
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
+         thumb-edge-tr (->> web-edge-tr
+                       (translate [0 plate-height 0]))
+         thumb-edge-br (->> web-edge-br
+                       (translate [0 (- plate-height) 0]))
+         thumb-edge-tr-clearance (->> thumb-edge-tr
+                       (translate [0 0 (- web-thickness thumb-switch-clearance)]))
+         thumb-edge-br-clearance (->> thumb-edge-br
                        (translate [0 0 (- web-thickness thumb-switch-clearance)]))]
      (union
 
@@ -395,19 +416,19 @@
                       (thumb-place 1 -1/2 thumb-tr)
                       (thumb-place 1 -1/2 thumb-br))
 
-      ;;Connecting the double to the one above it
+      ;;Connecting the middle double to the one above it
       (triangle-hulls (thumb-place 1 -1/2 thumb-tr)
                       (thumb-place 1 -1/2 thumb-tl)
                       (thumb-place 1 1 web-post-br)
                       (thumb-place 1 1 web-post-bl))
 
-      ;;Connecting the 4 with the double in the bottom left
+      ;;Connecting the 3 singles in the top left with the middle double
       (triangle-hulls (thumb-place 1 1 web-post-bl)
                       (thumb-place 1 -1/2 thumb-tl)
                       (thumb-place 2 1 web-post-br)
                       (thumb-place 2 0 web-post-tr))
 
-      ;;Connecting the two singles with the middle double
+      ;;Connecting the two singles in the lower left with the middle double
       (hull (thumb-place 1 -1/2 thumb-tl)
             (thumb-place 1 -1/2 thumb-bl)
             (thumb-place 2 0 web-post-br)
@@ -419,6 +440,18 @@
             (thumb-place 2 -1 web-post-tr)
             (thumb-place 2 -1 web-post-br))
 
+      ;;Connecting the right double to the one above it
+      (triangle-hulls (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 thumb-tl)
+                      (thumb-place 0 1 web-post-br)
+                      (thumb-place 0 1 web-post-bl))
+
+      ;;Connecting the 2 singles in the top right with the 2 doubles
+      (triangle-hulls (thumb-place 0 1 web-post-bl)
+                      (thumb-place 0 -1/2 thumb-tl)
+                      (thumb-place 1 1 web-post-br)
+                      (thumb-place 1 -1/2 thumb-tr))
+
       ;;Connecting the thumb to everything
       (triangle-hulls (thumb-place 0 -1/2 thumb-br-clearance)
                       (key-place 1 4 web-post-bl)
@@ -429,30 +462,21 @@
                       (key-place 0 3 web-post-br)
                       (key-place 0 3 web-post-bl)
                       (thumb-place 0 -1/2 thumb-tr-clearance)
-                      (thumb-place 0 -1/2 thumb-tl-clearance)
-                      (key-place 0 3 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tr-clearance)
-                      (thumb-place 1 1 web-post-br-clearance)
-                      (key-place 0 3 web-post-bl)
                       (key-place 0 3 web-post-tl)
-                      (thumb-place 1 1 web-post-br-clearance)
-                      (thumb-place 1 1 web-post-tr-clearance))
-      (hull (thumb-place 0 -1/2 thumb-tr-clearance)
-            (thumb-place 0 -1/2 thumb-tr)
-            (thumb-place 0 -1/2 thumb-tl)
-            (thumb-place 0 -1/2 thumb-tl-clearance))
-      (hull (thumb-place 0 -1/2 thumb-tr)
-            (thumb-place 0 -1/2 thumb-tr-clearance)
-            (thumb-place 0 -1/2 thumb-br-clearance)
-            (thumb-place 0 -1/2 thumb-br))
-      (hull (thumb-place 0 -1/2 thumb-tl)
-            (thumb-place 0 -1/2 thumb-tl-clearance)
-            (thumb-place 1 1 web-post-br-clearance)
-            (thumb-place 1 1 web-post-br))
-      (hull (thumb-place 1 1 web-post-tr)
-            (thumb-place 1 1 web-post-tr-clearance)
-            (thumb-place 1 1 web-post-br-clearance)
-            (thumb-place 1 1 web-post-br))))))
+                      (thumb-place 0 1 web-post-br-clearance)
+                      (thumb-place 0 1 web-post-tr-clearance))
+      (hull (thumb-place 0 -1/2 thumb-edge-tr)
+            (thumb-place 0 -1/2 thumb-edge-tr-clearance)
+            (thumb-place 0 -1/2 thumb-edge-br-clearance)
+            (thumb-place 0 -1/2 thumb-edge-br))
+      (hull (thumb-place 0 -1/2 thumb-edge-tr)
+            (thumb-place 0 -1/2 thumb-edge-tr-clearance)
+            (thumb-place 0 1 web-edge-br-clearance)
+            (thumb-place 0 1 web-edge-br))
+      (hull (thumb-place 0 1 web-edge-tr)
+            (thumb-place 0 1 web-edge-tr-clearance)
+            (thumb-place 0 1 web-edge-br-clearance)
+            (thumb-place 0 1 web-edge-br))))))
 
 (def thumb
   (union
@@ -736,11 +760,11 @@
            (key-place 0 2 web-post-bl)
            (key-place 0 3 web-post-tl))
      (hull (place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
-           (thumb-place 1 1 web-post-tr-clearance)
+           (thumb-place 0 1 web-post-tr-clearance)
            (key-place 0 3 web-post-tl))
      (hull (place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
-           (thumb-place 1 1 web-post-tr-clearance)
-           (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back)))
+           (thumb-place 0 1 web-post-tr-clearance)
+           (thumb-place -1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back)))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
        (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
@@ -769,34 +793,36 @@
         back-y thumb-back-y]
     (union
      (apply union
-            (for [x (range-inclusive 1/2 (- (+ 5/2 0.05) step) step)]
-              (hull (thumb-place x back-y wall-sphere-top-back)
-                    (thumb-place (+ x step) back-y wall-sphere-top-back)
-                    (thumb-place x back-y wall-sphere-bottom-back)
-                    (thumb-place (+ x step) back-y wall-sphere-bottom-back))))
+            (for [x (range-inclusive -1/2 (- (+ 5/2 0.05) step) step)]
+              (union
+                (hull (thumb-place x back-y wall-sphere-top-back)
+                      (thumb-place (+ x step) back-y wall-sphere-top-back)
+                      (thumb-place x back-y wall-sphere-bottom-back)
+                      (thumb-place (+ x step) back-y wall-sphere-bottom-back))
+                (hull (thumb-place x back-y wall-sphere-bottom-back)
+                      (thumb-place (+ x step) back-y wall-sphere-bottom-back)
+                      (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
+              )))
      (hull
-       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back)
-       (thumb-place 1/2 back-y wall-sphere-bottom-back)
-       (case-place left-wall-column 1.6666 wall-sphere-top-front))
-     (hull
-       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back)
+       (thumb-place -1/2 back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 wall-sphere-top-front)
        (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
      (hull
-       (thumb-place 3/2 thumb-back-y wall-sphere-bottom-back)
-       (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
-       (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
-     (hull
+      (thumb-place -1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
+      (thumb-place 0 1 web-post-tr)
+      (thumb-place 0 1 web-post-tr-clearance)
       (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-      (thumb-place 1 1 web-post-tr)
-      (thumb-place 1 1 web-post-tr-clearance)
-      (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-      (thumb-place 1 1 web-post-tl))
+      (thumb-place 0 1 web-post-tl))
      (hull
       (thumb-place (+ 5/2 0.05) thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
       (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
       (thumb-place 1 1 web-post-tl)
       (thumb-place 2 1 web-post-tl))
+     (hull
+      (thumb-place (+ 3/2 0.05) thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
+      (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
+      (thumb-place 0 1 web-post-tl)
+      (thumb-place 1 1 web-post-tl))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
        (thumb-place (+ 5/2 0.05) thumb-back-y wall-sphere-bottom-back)
@@ -812,14 +838,24 @@
     (union
      (apply union
             (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
-              (hull (place thumb-left-wall-column x wall-sphere-top-front)
-                    (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
-                    (place thumb-left-wall-column x wall-sphere-bottom-front)
-                    (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))))
+              (union
+                (hull (place thumb-left-wall-column x wall-sphere-top-front)
+                      (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
+                      (place thumb-left-wall-column x wall-sphere-bottom-front)
+                      (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))
+                ; Curtains (from bottom edge of walls to z=0):
+                (curtain [0 0 -100]
+                         (place thumb-left-wall-column x wall-sphere-top-front)
+                         (place thumb-left-wall-column (+ x step) wall-sphere-top-front))
+                )))
      (hull (place thumb-left-wall-column 1.95 wall-sphere-top-front)
            (place thumb-left-wall-column 1.95 wall-sphere-bottom-front)
            (place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
            (place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back))
+     ; Curtains (from bottom edge of walls to z=0):
+     (curtain [0 0 -100]
+              (place thumb-left-wall-column 1.95 wall-sphere-top-front)
+              (place thumb-left-wall-column thumb-back-y wall-sphere-top-back))
 
      (hull
       (thumb-place thumb-left-wall-column thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
@@ -844,16 +880,6 @@
       (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
       (thumb-place 2 -1 web-post-tl)
       (thumb-place 2 -1 web-post-bl))
-     ; Curtains (from bottom edge of walls to z=0):
-     (curtain [0 0 -100]
-       (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
-       (thumb-place thumb-left-wall-column 0 wall-sphere-top-back))
-     (curtain [0 0 -100]
-       (thumb-place thumb-left-wall-column 0 wall-sphere-top-back)
-       (thumb-place thumb-left-wall-column -1 wall-sphere-top-back))
-     (curtain [0 0 -100]
-       (thumb-place thumb-left-wall-column -1 wall-sphere-top-back)
-       (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-top-front))
      )))
 
 (def thumb-front-wall
