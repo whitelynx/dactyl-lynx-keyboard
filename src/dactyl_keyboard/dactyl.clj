@@ -1161,9 +1161,9 @@
     (union
       (translate [0 (- (- y) 0.75) 0] mount-post)
       (translate [0 0.75 0] (cube (- x 2.08) 1.5 (+ mount-post-height (* 2 z))))
-      (translate [(/ (- x 2.08) 2) 0.5 (- z (/ mount-post-height 2))]
+      (translate [(/ (- x 2.5) 2) 0.5 (- z (/ mount-post-height 2))]
                  (cube 2.5 3 (+ mount-post-height (* 2 z))))
-      (translate [(/ (- x 2.08) -2) 0.5 (- z (/ mount-post-height 2))]
+      (translate [(/ (- x 2.5) -2) 0.5 (- z (/ mount-post-height 2))]
                  (cube 2.5 3 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
 
