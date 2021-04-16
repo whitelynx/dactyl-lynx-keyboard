@@ -1292,8 +1292,7 @@
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes-placed
-   (placed-board board-clearance-micro)
-   foot-cutouts))
+   (placed-board board-clearance-micro)))
 
 (def dactyl-top-right-preview
   (union
@@ -1320,8 +1319,7 @@
                     (->> (cube 1000 1000 100) (translate [0 0 -50])))
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-clearance-micro)
-           foot-cutouts)))
+           (placed-board board-clearance-micro))))
 
 (def dactyl-top-left-preview
   (union
