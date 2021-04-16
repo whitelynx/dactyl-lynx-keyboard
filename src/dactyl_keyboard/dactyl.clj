@@ -905,10 +905,6 @@
                     (place x thumb-front-row wall-sphere-bottom-front)
                     (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
 
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
-           (case-place 0.5 4 wall-sphere-top-front)
-           (place (+ 1/2 0.05) thumb-front-row wall-sphere-bottom-front))
-
      (hull (place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 2 -1 web-post-bl)
