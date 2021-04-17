@@ -465,18 +465,19 @@
       ;                (key-place 0 3 web-post-tl)
       ;                (thumb-place 0 1 web-post-br-clearance)
       ;                (thumb-place 0 1 web-post-tr-clearance))
-      (hull (thumb-place 0 -1/2 thumb-edge-tr)
-            (thumb-place 0 -1/2 thumb-edge-tr-clearance)
-            (thumb-place 0 -1/2 thumb-edge-br-clearance)
-            (thumb-place 0 -1/2 thumb-edge-br))
-      (hull (thumb-place 0 -1/2 thumb-edge-tr)
-            (thumb-place 0 -1/2 thumb-edge-tr-clearance)
-            (thumb-place 0 1 web-edge-br-clearance)
-            (thumb-place 0 1 web-edge-br))
-      (hull (thumb-place 0 1 web-edge-tr)
-            (thumb-place 0 1 web-edge-tr-clearance)
-            (thumb-place 0 1 web-edge-br-clearance)
-            (thumb-place 0 1 web-edge-br))))))
+      ;(hull (thumb-place 0 -1/2 thumb-edge-tr)
+      ;      (thumb-place 0 -1/2 thumb-edge-tr-clearance)
+      ;      (thumb-place 0 -1/2 thumb-edge-br-clearance)
+      ;      (thumb-place 0 -1/2 thumb-edge-br))
+      ;(hull (thumb-place 0 -1/2 thumb-edge-tr)
+      ;      (thumb-place 0 -1/2 thumb-edge-tr-clearance)
+      ;      (thumb-place 0 1 web-edge-br-clearance)
+      ;      (thumb-place 0 1 web-edge-br))
+      ;(hull (thumb-place 0 1 web-edge-tr)
+      ;      (thumb-place 0 1 web-edge-tr-clearance)
+      ;      (thumb-place 0 1 web-edge-br-clearance)
+      ;      (thumb-place 0 1 web-edge-br))
+      ))))
 
 (def thumb
   (union
@@ -493,7 +494,7 @@
 (def right-wall-column (+ (last columns) 0.55))
 (def left-wall-column (- (first columns) 1/2))
 (def thumb-back-y 0.93)
-(def thumb-right-wall (- -1/2 0.05))
+(def thumb-right-wall-column (- -1/2 0.05))
 (def thumb-front-row (+ -1 0.07))
 (def thumb-left-wall-column (+ 5/2 0.05))
 (def back-y 0.02)
@@ -793,7 +794,7 @@
         back-y thumb-back-y]
     (union
      (apply union
-            (for [x (range-inclusive -1/2 (- (+ 5/2 0.05) step) step)]
+            (for [x (range-inclusive thumb-right-wall-column (- (+ 5/2 0.05) step) step)]
               (union
                 (hull (thumb-place x back-y wall-sphere-top-back)
                       (thumb-place (+ x step) back-y wall-sphere-top-back)
@@ -804,7 +805,7 @@
                       (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
               )))
      (hull
-       (thumb-place -1/2 back-y wall-sphere-bottom-back)
+       (thumb-place thumb-right-wall-column back-y wall-sphere-bottom-back)
        (case-place left-wall-column 1.6666 wall-sphere-top-front)
        (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
      (hull
@@ -894,12 +895,10 @@
         thumb-tr (->> web-post-tr
                       (translate [-0 plate-height 0]))
         thumb-br (->> web-post-br
-                      (translate [-0 (- plate-height) 0]))
-        thumb-br-clearance (->> thumb-br
-                                (translate [0 0 (- web-thickness thumb-switch-clearance)]))]
+                      (translate [-0 (- plate-height) 0]))]
     (union
      (apply union
-            (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
+            (for [x (range-inclusive thumb-right-wall-column (- (+ 5/2 0.05) step) step)]
               (hull (place x thumb-front-row wall-sphere-top-front)
                     (place (+ x step) thumb-front-row wall-sphere-top-front)
                     (place x thumb-front-row wall-sphere-bottom-front)
@@ -910,11 +909,10 @@
            (place 2 -1 web-post-bl)
            (place 2 -1 web-post-br))
 
-     (hull (translate [0 0 -0.5] (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front)))
+     (hull (translate [0 0 -0.5] (place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front)))
            (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 0 -1/2 thumb-bl)
-           (place 0 -1/2 thumb-br)
-           (place 0 -1/2 thumb-br-clearance))
+           (place 0 -1/2 thumb-br))
      (hull (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place 0 -1/2 thumb-bl)
@@ -934,6 +932,43 @@
                          (translate [0 (/ (- curtain-range-max x) 5) -0.5] (thumb-place (+ x step) (+ -1 0.07) wall-sphere-bottom-front))))))
      )))
 
+(def thumb-right-wall
+  (let [step wall-step
+        place thumb-place
+        plate-height (/ (- sa-double-length mount-height) 2)
+        thumb-tr (->> web-post-tr
+                      (translate [0 plate-height 0]))
+        thumb-br (->> web-post-br
+                      (translate [0 (- plate-height) 0]))]
+    (union
+     (apply union
+            (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
+              (hull (place thumb-right-wall-column x wall-sphere-top-front)
+                    (place thumb-right-wall-column (+ x step) wall-sphere-top-front)
+                    (place thumb-right-wall-column x wall-sphere-bottom-front)
+                    (place thumb-right-wall-column (+ x step) wall-sphere-bottom-front))
+              ))
+     (hull (place thumb-right-wall-column 1.95 wall-sphere-top-front)
+           (place thumb-right-wall-column 1.95 wall-sphere-bottom-front)
+           (place thumb-right-wall-column thumb-back-y wall-sphere-top-back)
+           (place thumb-right-wall-column thumb-back-y wall-sphere-bottom-back))
+
+     (hull
+      (thumb-place thumb-right-wall-column thumb-back-y (translate [-1 -1 1] wall-sphere-bottom-back))
+      (thumb-place thumb-right-wall-column 0 (translate [-1 0 1] wall-sphere-bottom-back))
+      (thumb-place 0 1 web-post-tr)
+      (thumb-place 0 1 web-post-br))
+     (hull
+      (thumb-place thumb-right-wall-column 0 (translate [-1 0 1] wall-sphere-bottom-back))
+      (thumb-place 0 -1/2 thumb-tr)
+      (thumb-place 0 1 web-post-br))
+     (hull
+      (thumb-place thumb-right-wall-column 0 (translate [-1 0 1] wall-sphere-bottom-back))
+      (thumb-place thumb-right-wall-column (+ -1 0.07) (translate [-1 1 1] wall-sphere-bottom-front))
+      (thumb-place 0 -1/2 thumb-tr)
+      (thumb-place 0 -1/2 thumb-br))
+     )))
+
 (def new-case
   (union front-wall
          right-wall
@@ -941,7 +976,8 @@
          left-wall
          thumb-back-wall
          thumb-left-wall
-         thumb-front-wall))
+         thumb-front-wall
+         thumb-right-wall))
 
 (def new-case-trimmed
   (difference
