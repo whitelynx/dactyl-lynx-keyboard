@@ -554,228 +554,224 @@
 (def front-wall
   (let [step wall-step ;;0.1
         wall-step 0.05 ;;0.05
-        place case-place
         top-cover (fn [x-start x-end y-start y-end]
-                    (top-case-cover place wall-sphere-top-front
+                    (top-case-cover case-place wall-sphere-top-front
                                     x-start x-end y-start y-end
                                     wall-step))]
     (union
      (apply union
             (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
-              (hull (place x 4 wall-sphere-top-front)
-                    (place (+ x step) 4 wall-sphere-top-front)
-                    (place x 4 wall-sphere-bottom-front)
-                    (place (+ x step) 4 wall-sphere-bottom-front))))
+              (hull (case-place x 4 wall-sphere-top-front)
+                    (case-place (+ x step) 4 wall-sphere-top-front)
+                    (case-place x 4 wall-sphere-bottom-front)
+                    (case-place (+ x step) 4 wall-sphere-bottom-front))))
      (apply union
             (for [x (range-inclusive 0.5 0.7 0.01)]
-              (hull (place x 4 wall-sphere-top-front)
-                    (place (+ x step) 4 wall-sphere-top-front)
-                    (place 0.7 4 wall-sphere-bottom-front))))
+              (hull (case-place x 4 wall-sphere-top-front)
+                    (case-place (+ x step) 4 wall-sphere-top-front)
+                    (case-place 0.7 4 wall-sphere-bottom-front))))
      (top-cover 0.5 1.7 3.6 4)
      (top-cover 1.59 2.41 3.35 4) ;; was 3.32
      (top-cover 2.39 3.41 3.6 4)
      (apply union
             (for [x (range 2 5)]
               (union
-               (hull (place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-                     (place (+ x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+               (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+                     (case-place (+ x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                      (key-place x 4 web-post-bl)
                      (key-place x 4 web-post-br))
-               (hull (place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+               (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                      (key-place x 4 web-post-bl)
                      (key-place (- x 1) 4 web-post-br)))))
-     (hull (place right-wall-column 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
+     (hull (case-place right-wall-column 4 (translate [0 1 1] wall-sphere-bottom-front))
+           (case-place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 5 4 web-post-bl)
            (key-place 5 4 web-post-br))
-     (hull (place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
+     (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+           (case-place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 4 4 web-post-br)
            (key-place 5 4 web-post-bl))
-     (hull (place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (place 1.7 4 (translate [0 1 1] wall-sphere-bottom-front))
+     (hull (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
+           (case-place 1.7 4 (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 1 4 web-post-bl)
            (key-place 1 4 web-post-br))
      ; Curtains (from bottom edge of walls to z=0):
      (apply union
             (for [x (range-inclusive 1.25 (- right-wall-column step) step)]
               (curtain [0 0 -100]
-                (place x 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
-                (place (+ x step) 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
+                (case-place x 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
+                (case-place (+ x step) 4 (translate [-0.5 0.5 0.5] wall-sphere-bottom-front))
                 )))
      )))
 
 (def back-wall
   (let [step wall-step
         wall-sphere-top-backtep 0.05
-        place case-place
         front-top-cover (fn [x-start x-end y-start y-end]
                           (apply union
                                  (for [x (range-inclusive x-start (- x-end wall-sphere-top-backtep) wall-sphere-top-backtep)
                                        y (range-inclusive y-start (- y-end wall-sphere-top-backtep) wall-sphere-top-backtep)]
-                                   (hull (place x y wall-sphere-top-back)
-                                         (place (+ x wall-sphere-top-backtep) y wall-sphere-top-back)
-                                         (place x (+ y wall-sphere-top-backtep) wall-sphere-top-back)
-                                         (place (+ x wall-sphere-top-backtep) (+ y wall-sphere-top-backtep) wall-sphere-top-back)))))]
+                                   (hull (case-place x y wall-sphere-top-back)
+                                         (case-place (+ x wall-sphere-top-backtep) y wall-sphere-top-back)
+                                         (case-place x (+ y wall-sphere-top-backtep) wall-sphere-top-back)
+                                         (case-place (+ x wall-sphere-top-backtep) (+ y wall-sphere-top-backtep) wall-sphere-top-back)))))]
     (union
      (apply union
             (for [x (range-inclusive left-wall-column (- right-wall-column step) step)]
-              (hull (place x back-y wall-sphere-top-back)
-                    (place (+ x step) back-y wall-sphere-top-back)
-                    (place x back-y wall-sphere-bottom-back)
-                    (place (+ x step) back-y wall-sphere-bottom-back))))
+              (hull (case-place x back-y wall-sphere-top-back)
+                    (case-place (+ x step) back-y wall-sphere-top-back)
+                    (case-place x back-y wall-sphere-bottom-back)
+                    (case-place (+ x step) back-y wall-sphere-bottom-back))))
      (front-top-cover 1.56 2.44 back-y 0.1)
      (front-top-cover 3.56 4.44 back-y 0.13)
      (front-top-cover 4.3 right-wall-column back-y 0.13)
 
 
-     (hull (place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
-           (place (+ left-wall-column 1) 0  (translate [0 -1 1] wall-sphere-bottom-back))
+     (hull (case-place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
+           (case-place (+ left-wall-column 1) 0  (translate [0 -1 1] wall-sphere-bottom-back))
            (key-place 0 0 web-post-tl)
            (key-place 0 0 web-post-tr))
 
-     (hull (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
-           (place right-wall-column 0 (translate [0 -1 1] wall-sphere-bottom-back))
+     (hull (case-place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
+           (case-place right-wall-column 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (key-place 5 0 web-post-tl)
            (key-place 5 0 web-post-tr))
 
      (apply union
             (for [x (range 1 5)]
               (union
-               (hull (place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
-                     (place (+ x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
+               (hull (case-place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
+                     (case-place (+ x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
                      (key-place x 0 web-post-tl)
                      (key-place x 0 web-post-tr))
-               (hull (place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
+               (hull (case-place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
                      (key-place x 0 web-post-tl)
                      (key-place (- x 1) 0 web-post-tr)))))
-     (hull (place (- 5 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
-           (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
+     (hull (case-place (- 5 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
+           (case-place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (key-place 4 0 web-post-tr)
            (key-place 5 0 web-post-tl))
 
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 25 -100]
-       (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
-       (place (+ left-wall-column 1) 0  (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
+       (case-place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (case-place (+ left-wall-column 1) 0  (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
      (hull
-       (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
-       (translate [0 0 -100] (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back)))
-       (translate [0 25 -100] (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))))
+       (case-place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (translate [0 0 -100] (case-place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back)))
+       (translate [0 25 -100] (case-place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))))
      (curtain [0 25 -100]
-       (place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
-       (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
+       (case-place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
+       (case-place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
      (hull
-       (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back))
-       (translate [0 0 -100] (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
-       (translate [0 25 -100] (place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back))))
+       (case-place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (translate [0 0 -100] (case-place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back)))
+       (translate [0 25 -100] (case-place right-wall-column 0 (translate [-0.5 -0.75 0.5] wall-sphere-bottom-back))))
      (apply union
             (for [x (range 1 5)]
               (union
                 (curtain [0 25 -100]
-                  (place (- x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
-                  (place (+ x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))))))
+                  (case-place (- x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
+                  (case-place (+ x 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))))))
      (curtain [0 25 -100]
-       (place (- 5 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
-       (place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
+       (case-place (- 5 1/2) 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back))
+       (case-place 5 0 (translate [0 -0.75 0.5] wall-sphere-bottom-back)))
      )))
 
 (def right-wall
-  (let [place case-place]
-    (union
-      (apply union
-             (map (partial apply hull)
-                  (partition 2 1
-                             (for [scale (range-inclusive 0 1 0.01)]
-                               (let [x (scale-to-range 4 0.02 scale)]
-                                 (hull (place right-wall-column x (wall-sphere-top scale))
-                                       (place right-wall-column x (wall-sphere-bottom scale))))))))
+  (union
+    (apply union
+           (map (partial apply hull)
+                (partition 2 1
+                           (for [scale (range-inclusive 0 1 0.01)]
+                             (let [x (scale-to-range 4 0.02 scale)]
+                               (hull (case-place right-wall-column x (wall-sphere-top scale))
+                                     (case-place right-wall-column x (wall-sphere-bottom scale))))))))
 
-      (apply union
-             (concat
-               (for [x (range 0 5)]
-                 (union
-                   (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                         (key-place 5 x web-post-br)
-                         (key-place 5 x web-post-tr))))
-               (for [x (range 0 4)]
-                 (union
-                   (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                         (place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                         (key-place 5 x web-post-br)
-                         (key-place 5 (inc x) web-post-tr))))
-               [(union
-                  (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                        (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
-                        (key-place 5 0 web-post-tr))
-                  (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                        (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
-                        (key-place 5 4 web-post-br)))]))
-      ; Curtains (from bottom edge of walls to z=0):
-      (apply union
-             (concat
-               (for [x (range 0 4)]
-                 (union
-                   (curtain [0 0 -100]
-                     (place right-wall-column x (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column (inc x) (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2))))
-                   ))
-               [(union
-                  (curtain [0 0 -100]
-                    (place right-wall-column 0 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
-                    (place right-wall-column 0.02 (translate [-0.5 -0.5 0.5] (wall-sphere-bottom 1))))
-                  (curtain [0 0 -100]
-                    (place right-wall-column 4 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
-                    (place right-wall-column 4 (translate [-0.5 0.5 0.5] (wall-sphere-bottom 0))))
-                  )]))
-     )))
+    (apply union
+           (concat
+             (for [x (range 0 5)]
+               (union
+                 (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                       (key-place 5 x web-post-br)
+                       (key-place 5 x web-post-tr))))
+             (for [x (range 0 4)]
+               (union
+                 (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                       (case-place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                       (key-place 5 x web-post-br)
+                       (key-place 5 (inc x) web-post-tr))))
+             [(union
+                (hull (case-place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                      (case-place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+                      (key-place 5 0 web-post-tr))
+                (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                      (case-place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
+                      (key-place 5 4 web-post-br)))]))
+    ; Curtains (from bottom edge of walls to z=0):
+    (apply union
+           (concat
+             (for [x (range 0 4)]
+               (union
+                 (curtain [0 0 -100]
+                          (case-place right-wall-column x (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
+                          (case-place right-wall-column (inc x) (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2))))
+                 ))
+             [(union
+                (curtain [0 0 -100]
+                         (case-place right-wall-column 0 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
+                         (case-place right-wall-column 0.02 (translate [-0.5 -0.5 0.5] (wall-sphere-bottom 1))))
+                (curtain [0 0 -100]
+                         (case-place right-wall-column 4 (translate [-0.5 0 0.5] (wall-sphere-bottom 1/2)))
+                         (case-place right-wall-column 4 (translate [-0.5 0.5 0.5] (wall-sphere-bottom 0))))
+                )]))
+    ))
 
 (def left-wall
-  (let [place case-place
-        web-post-tr-clearance (->> web-post-tr
+  (let [web-post-tr-clearance (->> web-post-tr
                                    (translate [0 0 (- web-thickness thumb-switch-clearance)]))]
     (union
      (apply union
             (for [x (range-inclusive -1 (- 1.6666 wall-step) wall-step)]
-              (hull (place left-wall-column x wall-sphere-top-front)
-                    (place left-wall-column (+ x wall-step) wall-sphere-top-front)
-                    (place left-wall-column x wall-sphere-bottom-front)
-                    (place left-wall-column (+ x wall-step) wall-sphere-bottom-front))))
-     (hull (place left-wall-column -1 wall-sphere-top-front)
-           (place left-wall-column -1 wall-sphere-bottom-front)
-           (place left-wall-column 0.02 wall-sphere-top-back)
-           (place left-wall-column 0.02 wall-sphere-bottom-back))
-     (hull (place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
-           (place left-wall-column 1 (translate [1 0 1] wall-sphere-bottom-back))
+              (hull (case-place left-wall-column x wall-sphere-top-front)
+                    (case-place left-wall-column (+ x wall-step) wall-sphere-top-front)
+                    (case-place left-wall-column x wall-sphere-bottom-front)
+                    (case-place left-wall-column (+ x wall-step) wall-sphere-bottom-front))))
+     (hull (case-place left-wall-column -1 wall-sphere-top-front)
+           (case-place left-wall-column -1 wall-sphere-bottom-front)
+           (case-place left-wall-column 0.02 wall-sphere-top-back)
+           (case-place left-wall-column 0.02 wall-sphere-bottom-back))
+     (hull (case-place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
+           (case-place left-wall-column 1 (translate [1 0 1] wall-sphere-bottom-back))
            (key-place 0 0 web-post-tl)
            (key-place 0 0 web-post-bl))
-     (hull (place left-wall-column 1 (translate [1 0 1] wall-sphere-bottom-back))
-           (place left-wall-column 2 (translate [1 0 1] wall-sphere-bottom-back))
+     (hull (case-place left-wall-column 1 (translate [1 0 1] wall-sphere-bottom-back))
+           (case-place left-wall-column 2 (translate [1 0 1] wall-sphere-bottom-back))
            (key-place 0 0 web-post-bl)
            (key-place 0 1 web-post-bl))
-     (hull (place left-wall-column 2 (translate [1 0 1] wall-sphere-bottom-back))
-           (place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
+     (hull (case-place left-wall-column 2 (translate [1 0 1] wall-sphere-bottom-back))
+           (case-place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
            (key-place 0 1 web-post-bl)
            (key-place 0 2 web-post-bl))
-     (hull (place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
+     (hull (case-place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
            (key-place 0 2 web-post-bl)
            (key-place 0 3 web-post-tl))
-     (hull (place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
+     (hull (case-place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
            (thumb-place 0 1 web-post-tr-clearance)
            (key-place 0 3 web-post-tl))
-     (hull (place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
+     (hull (case-place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
            (thumb-place 0 1 web-post-tr-clearance)
            (thumb-place -1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back)))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
-       (place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
-       (place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
+       (case-place left-wall-column 0 (translate [0.5 -0.75 0.5] wall-sphere-bottom-back))
+       (case-place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
      (curtain [0 0 -100]
-       (place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back))
-       (place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
+       (case-place left-wall-column 1 (translate [0.5 0 0.5] wall-sphere-bottom-back))
+       (case-place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back)))
      (curtain [0 0 -100]
-       (place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back))
-       (place left-wall-column 1.6666  (translate [0.5 0 0.5] wall-sphere-bottom-front)))
+       (case-place left-wall-column 2 (translate [0.5 0 0.5] wall-sphere-bottom-back))
+       (case-place left-wall-column 1.6666  (translate [0.5 0 0.5] wall-sphere-bottom-front)))
      )))
 
 (def thumb-back-wall
@@ -834,29 +830,28 @@
      )))
 
 (def thumb-left-wall
-  (let [step wall-step
-        place thumb-place]
+  (let [step wall-step]
     (union
      (apply union
             (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
               (union
-                (hull (place thumb-left-wall-column x wall-sphere-top-front)
-                      (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
-                      (place thumb-left-wall-column x wall-sphere-bottom-front)
-                      (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))
+                (hull (thumb-place thumb-left-wall-column x wall-sphere-top-front)
+                      (thumb-place thumb-left-wall-column (+ x step) wall-sphere-top-front)
+                      (thumb-place thumb-left-wall-column x wall-sphere-bottom-front)
+                      (thumb-place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))
                 ; Curtains (from bottom edge of walls to z=0):
                 (curtain [0 0 -100]
-                         (place thumb-left-wall-column x wall-sphere-top-front)
-                         (place thumb-left-wall-column (+ x step) wall-sphere-top-front))
+                         (thumb-place thumb-left-wall-column x wall-sphere-top-front)
+                         (thumb-place thumb-left-wall-column (+ x step) wall-sphere-top-front))
                 )))
-     (hull (place thumb-left-wall-column 1.95 wall-sphere-top-front)
-           (place thumb-left-wall-column 1.95 wall-sphere-bottom-front)
-           (place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
-           (place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back))
+     (hull (thumb-place thumb-left-wall-column 1.95 wall-sphere-top-front)
+           (thumb-place thumb-left-wall-column 1.95 wall-sphere-bottom-front)
+           (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
+           (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
-              (place thumb-left-wall-column 1.95 wall-sphere-top-front)
-              (place thumb-left-wall-column thumb-back-y wall-sphere-top-back))
+              (thumb-place thumb-left-wall-column 1.95 wall-sphere-top-front)
+              (thumb-place thumb-left-wall-column thumb-back-y wall-sphere-top-back))
 
      (hull
       (thumb-place thumb-left-wall-column thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
@@ -886,7 +881,6 @@
 (def thumb-front-wall
   (let [step wall-step ;;0.1
         wall-sphere-top-fronttep 0.05 ;;0.05
-        place thumb-place
         plate-height (/ (- sa-double-length mount-height) 2)
         thumb-tl (->> web-post-tl
                       (translate [0 plate-height 0]))
@@ -899,26 +893,26 @@
     (union
      (apply union
             (for [x (range-inclusive thumb-right-wall-column (- (+ 5/2 0.05) step) step)]
-              (hull (place x thumb-front-row wall-sphere-top-front)
-                    (place (+ x step) thumb-front-row wall-sphere-top-front)
-                    (place x thumb-front-row wall-sphere-bottom-front)
-                    (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
+              (hull (thumb-place x thumb-front-row wall-sphere-top-front)
+                    (thumb-place (+ x step) thumb-front-row wall-sphere-top-front)
+                    (thumb-place x thumb-front-row wall-sphere-bottom-front)
+                    (thumb-place (+ x step) thumb-front-row wall-sphere-bottom-front))))
 
-     (hull (place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
-           (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 2 -1 web-post-bl)
-           (place 2 -1 web-post-br))
+     (hull (thumb-place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
+           (thumb-place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+           (thumb-place 2 -1 web-post-bl)
+           (thumb-place 2 -1 web-post-br))
 
-     (hull (translate [0 0 -0.5] (place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front)))
-           (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 0 -1/2 thumb-br))
-     (hull (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-br)
-           (place 2 -1 web-post-br))
+     (hull (translate [0 0 -0.5] (thumb-place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front)))
+           (thumb-place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+           (thumb-place 0 -1/2 thumb-bl)
+           (thumb-place 0 -1/2 thumb-br))
+     (hull (thumb-place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+           (thumb-place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+           (thumb-place 0 -1/2 thumb-bl)
+           (thumb-place 1 -1/2 thumb-bl)
+           (thumb-place 1 -1/2 thumb-br)
+           (thumb-place 2 -1 web-post-br))
      ; Curtains (from bottom edge of walls to z=0):
      (curtain [0 0 -100]
        (translate [0 0 -0.5] (thumb-place thumb-left-wall-column (+ -1 0.07) wall-sphere-bottom-front))
@@ -934,7 +928,6 @@
 
 (def thumb-right-wall
   (let [step wall-step
-        place thumb-place
         plate-height (/ (- sa-double-length mount-height) 2)
         thumb-tr (->> web-post-tr
                       (translate [0 plate-height 0]))
@@ -943,15 +936,15 @@
     (union
      (apply union
             (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
-              (hull (place thumb-right-wall-column x wall-sphere-top-front)
-                    (place thumb-right-wall-column (+ x step) wall-sphere-top-front)
-                    (place thumb-right-wall-column x wall-sphere-bottom-front)
-                    (place thumb-right-wall-column (+ x step) wall-sphere-bottom-front))
+              (hull (thumb-place thumb-right-wall-column x wall-sphere-top-front)
+                    (thumb-place thumb-right-wall-column (+ x step) wall-sphere-top-front)
+                    (thumb-place thumb-right-wall-column x wall-sphere-bottom-front)
+                    (thumb-place thumb-right-wall-column (+ x step) wall-sphere-bottom-front))
               ))
-     (hull (place thumb-right-wall-column 1.95 wall-sphere-top-front)
-           (place thumb-right-wall-column 1.95 wall-sphere-bottom-front)
-           (place thumb-right-wall-column thumb-back-y wall-sphere-top-back)
-           (place thumb-right-wall-column thumb-back-y wall-sphere-bottom-back))
+     (hull (thumb-place thumb-right-wall-column 1.95 wall-sphere-top-front)
+           (thumb-place thumb-right-wall-column 1.95 wall-sphere-bottom-front)
+           (thumb-place thumb-right-wall-column thumb-back-y wall-sphere-top-back)
+           (thumb-place thumb-right-wall-column thumb-back-y wall-sphere-bottom-back))
 
      (hull
       (thumb-place thumb-right-wall-column thumb-back-y (translate [-1 -1 1] wall-sphere-bottom-back))
