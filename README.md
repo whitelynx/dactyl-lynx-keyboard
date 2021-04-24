@@ -57,6 +57,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
 ### Bill of Materials
 * 2x microcontrollers - some combination of the following (see QMK docs for what combinations make sense)
     * ATmega-based:
+        * [Arduino Micro][] - _recommended_
         * [SparkFun Pro Micro][] or possibly [SparkFun Qwiic Pro Micro - USB-C][]
         * [Arduino Pro Mini][]
     * ARM-based: [(see QMK documentation!)][]
@@ -80,9 +81,10 @@ Pregenerated STL files are available in the [things/](things/) directory.
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
 
+[Arduino Micro]: https://www.arduino.cc/en/pmwiki.php?n=Main/ArduinoBoardMicro
 [SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
 [SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
-[Arduino Pro Mini]: https://store.arduino.cc/usa/arduino-pro-mini
+[Arduino Pro Mini]: https://www.arduino.cc/en/pmwiki.php?n=Main/ArduinoBoardProMini
 [(see QMK documentation!)]: https://beta.docs.qmk.fm/using-qmk/hardware-features/feature_split_keyboard
 [Black Pill]: https://github.com/WeActTC/MiniF4-STM32F4x1
 [Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
