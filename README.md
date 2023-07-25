@@ -25,7 +25,7 @@ This is my fork of [the original Dactyl][]. I've changed a few things:
 * Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Use [QMK's Raw HID support][].
 
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
-[QMK's Raw HID support]: https://beta.docs.qmk.fm/using-qmk/software-features/feature_rawhid
+[QMK's Raw HID support]: https://docs.qmk.fm/#/feature_rawhid
 
 
 ## Assembly
@@ -85,7 +85,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
 [SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
 [SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
 [Arduino Pro Mini]: https://www.arduino.cc/en/pmwiki.php?n=Main/ArduinoBoardProMini
-[(see QMK documentation!)]: https://beta.docs.qmk.fm/using-qmk/hardware-features/feature_split_keyboard
+[(see QMK documentation!)]: https://docs.qmk.fm/#/feature_split_keyboard
 [Black Pill]: https://github.com/WeActTC/MiniF4-STM32F4x1
 [Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
 [QMK Proton C]: https://qmk.fm/proton-c/
