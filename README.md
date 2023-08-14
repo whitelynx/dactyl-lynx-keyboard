@@ -81,12 +81,12 @@ Pregenerated STL files are available in the [things/](things/) directory.
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
 
-[Arduino Micro]: https://www.arduino.cc/en/pmwiki.php?n=Main/ArduinoBoardMicro
+[Arduino Micro]: https://store.arduino.cc/products/arduino-micro
 [SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
 [SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
-[Arduino Pro Mini]: https://www.arduino.cc/en/pmwiki.php?n=Main/ArduinoBoardProMini
+[Arduino Pro Mini]: https://docs.arduino.cc/retired/boards/arduino-pro-mini
 [(see QMK documentation!)]: https://docs.qmk.fm/#/feature_split_keyboard
-[Black Pill]: https://github.com/WeActTC/MiniF4-STM32F4x1
+[Black Pill]: https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1
 [Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
 [QMK Proton C]: https://qmk.fm/proton-c/
 [PJRC Teensy]: https://www.pjrc.com/teensy/
