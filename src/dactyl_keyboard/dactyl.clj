@@ -71,20 +71,27 @@
                 (mirror [0 1 0])))))
 
 (def cherry-backplate
-  (rotate backplate-orientation [0 0 1]
-    (difference
-      (cube (+ keyswitch-width 3) (+ keyswitch-height 3) backplate-thickness)
-      (binding [*fs* 0.5]
-        (union
-          (cylinder 1.9939 (+ backplate-thickness 1))
-          (translate [5.08 0 0] (cylinder 0.8509 (+ backplate-thickness 1)))
-          (translate [-5.08 0 0] (cylinder 0.8509 (+ backplate-thickness 1)))
-          (translate [-3.81 2.54 0] (cylinder 1.5 (+ backplate-thickness 1)))
-          (translate [2.54 5.08 0] (cylinder 1.5 (+ backplate-thickness 1)))
-          (translate [1.27 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
-          (translate [-1.27 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
-          (translate [3.81 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
-          (translate [-3.81 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1))))))))
+  (translate [0 0 (- plate-thickness keyswitch-depth (/ backplate-thickness 2))]
+             (rotate backplate-orientation [0 0 1]
+                     (difference
+                       (cube (+ keyswitch-width 3) (+ keyswitch-height 3) backplate-thickness)
+                       (binding [*fs* 0.5]
+                         (union
+                           (cylinder 1.9939 (+ backplate-thickness 1))
+                           (translate [5.08 0 0] (cylinder 0.8509 (+ backplate-thickness 1)))
+                           (translate [-5.08 0 0] (cylinder 0.8509 (+ backplate-thickness 1)))
+                           (translate [-3.81 2.54 0] (cylinder 1.5 (+ backplate-thickness 1)))
+                           (translate [2.54 5.08 0] (cylinder 1.5 (+ backplate-thickness 1)))
+                           (translate [1.27 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
+                           (translate [-1.27 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
+                           (translate [3.81 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))
+                           (translate [-3.81 -5.08 0] (cylinder 0.4953 (+ backplate-thickness 1)))))))))
+
+(def cherry-backplate-clearance-distance 3.5)
+(def cherry-backplate-clearance
+  (translate [0 (/ 7.5 -2) (- plate-thickness keyswitch-depth backplate-thickness (/ cherry-backplate-clearance-distance 2))]
+             (rotate backplate-orientation [0 0 1]
+                       (cube 16.5 7.5 cherry-backplate-clearance-distance))))
 
 (def cherry-socket-walls
   (let [height (- keyswitch-depth plate-thickness)
@@ -110,7 +117,7 @@
 (def cherry-plate-with-key-mount-and-backplate
   (union
     cherry-plate-with-key-mount
-    (translate [0 0 (- plate-thickness keyswitch-depth (/ backplate-thickness 2))] cherry-backplate)))
+    cherry-backplate))
 
 ; Set this to your chosen key mount design
 (def single-plate cherry-plate-with-key-mount-and-backplate)
@@ -316,7 +323,7 @@
 
 (defn thumb-2x-column [shape]
   (union (thumb-place 0 -1/2 shape)
-         (thumb-place 0 1 shape)))
+         (thumb-place 0 1 cherry-single-plate)))
 
 (defn thumb-2x+1-column [shape]
   (union (thumb-place 1 -1/2 shape)
