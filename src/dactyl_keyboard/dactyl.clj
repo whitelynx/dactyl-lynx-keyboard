@@ -113,7 +113,7 @@
     (translate [0 0 (- plate-thickness keyswitch-depth (/ backplate-thickness 2))] cherry-backplate)))
 
 ; Set this to your chosen key mount design
-(def single-plate cherry-plate-with-key-mount)
+(def single-plate cherry-plate-with-key-mount-and-backplate)
 
 
 ;;;;;;;;;;;;;;;;
