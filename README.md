@@ -56,14 +56,14 @@ Pregenerated STL files are available in the [things/](things/) directory.
 
 ### Bill of Materials
 * 2x microcontrollers - some combination of the following (see QMK docs for what combinations make sense)
-    * ATmega-based:
-        * [Arduino Micro][] - _recommended_
-        * [SparkFun Pro Micro][] or possibly [SparkFun Qwiic Pro Micro - USB-C][]
-        * [Arduino Pro Mini][]
     * ARM-based: [(see QMK documentation!)][]
-        * [Black Pill][]
+        * [Black Pill][] - _recommended_
         * [Blue Pill][]
         * [QMK Proton C][]
+    * ATmega-based:
+        * [Arduino Micro][]
+        * [SparkFun Pro Micro][] or possibly [SparkFun Qwiic Pro Micro - USB-C][]
+        * [Arduino Pro Mini][]
     * Other:
         * [PJRC Teensy][] _(Caveat: not sure *which* Teensy is actually supported by the board settings we have)_
 * 2x 4+-conductor jacks and matching cable to connect the two sides using I2C; one of:
@@ -81,14 +81,14 @@ Pregenerated STL files are available in the [things/](things/) directory.
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
 
-[Arduino Micro]: https://store.arduino.cc/products/arduino-micro
-[SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
-[SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
-[Arduino Pro Mini]: https://docs.arduino.cc/retired/boards/arduino-pro-mini
 [(see QMK documentation!)]: https://docs.qmk.fm/#/feature_split_keyboard
 [Black Pill]: https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1
 [Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
 [QMK Proton C]: https://qmk.fm/proton-c/
+[Arduino Micro]: https://store.arduino.cc/products/arduino-micro
+[SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
+[SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
+[Arduino Pro Mini]: https://docs.arduino.cc/retired/boards/arduino-pro-mini
 [PJRC Teensy]: https://www.pjrc.com/teensy/
 [MX-style key switches]: https://mechanicalkeyboards.com/switches/index.php
 
@@ -99,6 +99,6 @@ A [very rough guide for the brave is here](guide/README.org#wiring) - It will be
 
 ## License
 
-Copyright © 2015-2021 Matthew Adereth and David H. Bronke
+Copyright © 2015-2023 Matthew Adereth and David H. Bronke
 
 The source code for generating the models (everything excluding the [things/](things/) and [resources/](resources/) directories) is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).  The generated models and PCB designs are distributed under the [Creative Commons Attribution-ShareAlike License Version 4.0](LICENSE-models).
