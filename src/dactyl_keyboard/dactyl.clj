@@ -1062,9 +1062,9 @@
                      (translate [0 0 (+ (/ trackpoint-stem-length 2) trackpoint-ball-radius)] (sphere trackpoint-ball-radius))
                      ))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Boards and Connectors ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;; Connectors ;;
+;;;;;;;;;;;;;;;;
 
 (def trrs-diameter 7.85)
 (def trrs-radius (/ trrs-diameter 2))
@@ -1131,7 +1131,6 @@
 
 (def usb-c-plug-dimensions [12.4 6.3 25])
 (def usb-c-jack-dimensions [9.2 3.4 7.6])
-(def board-clearance-height 20) ; The amount of clearance above the board to allow for pin headers and connectors
 
 ; Or, rather, "the shape of a USB-C plug or jack" - the hull of two similar cylinders
 (defn elongated-cylinder [[width height length]]
@@ -1144,6 +1143,11 @@
 (def usb-c-plug (color [0.1 0.1 0.1] (elongated-cylinder usb-c-plug-dimensions)))
 (def usb-c-jack (elongated-cylinder usb-c-jack-dimensions))
 
+;;;;;;;;;;;;
+;; Boards ;;
+;;;;;;;;;;;;
+
+(def board-clearance-height 20) ; The amount of clearance above the board to allow for pin headers and connectors
 
 (defn board-shape-bare [[x y z]]
   (translate [0 (- (/ y -2) 2) (/ z 2)] (color [0.14 0.2 0.1] (cube x y z))))
@@ -1155,20 +1159,21 @@
   (board-shape-bare [x y (+ z board-clearance-height)]))
 
 (def mount-post-height 5)
+(def mount-post-cylinder-radius (* 0.75 2.54))
+(def mount-hole-radius (/ 1.6 2))
 
 (def mount-post
-  (let [hole-radius (/ 1.6 2)
-        block-width 10
+  (let [block-width 10
         block-length 10]
     (difference
       (union
         (binding [*fs* 1] (translate [0 0 (/ mount-post-height -2)]
-                                     (cylinder (* 0.75 2.54) mount-post-height)))
-        (translate [0 (+ (/ block-length -2) hole-radius) (/ mount-post-height -2)]
+                                     (cylinder mount-post-cylinder-radius mount-post-height)))
+        (translate [0 (+ (/ block-length -2) mount-hole-radius) (/ mount-post-height -2)]
                    (cube block-width block-length mount-post-height))
         )
       (binding [*fs* 0.5] (translate [0 0 (/ mount-post-height -2)]
-                                     (cylinder hole-radius (+ mount-post-height 1)))))))
+                                     (cylinder mount-hole-radius (+ mount-post-height 1)))))))
 
 (defn board-mount-bare [[x y z]]
   (difference
@@ -1212,29 +1217,37 @@
                  (cube 2.5 3 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
 
-(defn board-mount-with-usb-c-alt [[x y z] & {:keys [usb-y-offset] :or {usb-y-offset 0}}]
-  (let [x-mount-post-offset (/ (+
+(defn board-mount-with-usb-c-alt [[x y z] & {:keys [usb-y-offset board-cutout] :or {usb-y-offset 0 board-cutout (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)}}]
+  (let [x-front-mount-post-offset (/ (+
                           (first usb-c-jack-dimensions) ; USB-C jack width
                           0.4                           ; Extra clearance
                           2.5                           ; Mounting post width
-                          ) 2)]
+                          ) 2)
+        x-rear-mount-post-offset (- (/ x 2) mount-post-cylinder-radius)]
     (difference
       (union
-        (translate [x-mount-post-offset (- (- y) 0.75) 0] mount-post)
-        (translate [(- x-mount-post-offset) (- (- y) 0.75) 0] mount-post)
-        (translate [x-mount-post-offset 0.5 (- z (/ mount-post-height 2))]
+        ; rear (screw-in) posts
+        (translate [x-rear-mount-post-offset (- (- y) 0.75) 0] mount-post)
+        (translate [(- x-rear-mount-post-offset) (- (- y) 0.75) 0] mount-post)
+        (translate [0 (+ (- -0.75 y) (+ -5 mount-hole-radius)) (/ mount-post-height -2)]
+                   (cube 10 10 mount-post-height))
+        ; front (notched cube) posts
+        (translate [x-front-mount-post-offset 0.5 (- z (/ mount-post-height 2))]
                    (cube 2.5 3 (+ mount-post-height (* 2 z))))
-        (translate [(- x-mount-post-offset) 0.5 (- z (/ mount-post-height 2))]
+        (translate [(- x-front-mount-post-offset) 0.5 (- z (/ mount-post-height 2))]
                    (cube 2.5 3 (+ mount-post-height (* 2 z)))))
-      (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset))))
+      board-cutout)))
 
 (defn mount-post-extra-support [[x y z]]
-  (let [hole-radius (/ 1.6 2)
-        block-width 30
+  (let [block-width 30
         block-length 10]
     (translate [0 (- (- y) 0.75) 0]
-               (translate [(/ block-width -2) (+ (/ block-length -2) hole-radius) (/ mount-post-height -2)]
+               (translate [(/ block-width -2) (+ (/ block-length -2) mount-hole-radius) (/ mount-post-height -2)]
                           (cube block-width block-length mount-post-height)))))
+
+(defn board-isp-clearance [[x y z]]
+  (translate [0 (- (- y) 1.5) -1.45]
+             (color [0.2 0.2 0.2] (cube 11 20 3))))
 
 
 ; I know the Teensy and Pro Micro aren't USB-C, but it's an approximation that should suffice for Micro USB as well.
@@ -1270,9 +1283,15 @@
 
 (def board-black-pill [22.3 56.15 1.65])
 (def board-shape-black-pill (board-shape-with-usb-c board-black-pill :usb-y-offset 1.25))
-(def board-cutout-black-pill (board-cutout-with-usb-c board-black-pill :usb-y-offset 1.25))
-(def board-clearance-black-pill (board-clearance-with-usb-c board-black-pill :usb-y-offset 1.25))
-(def board-mount-black-pill (board-mount-with-usb-c-alt board-black-pill :usb-y-offset 1.25))
+(def board-cutout-black-pill (union
+                               (board-cutout-with-usb-c board-black-pill :usb-y-offset 1.25)
+                               (board-isp-clearance board-black-pill)
+                               ))
+(def board-clearance-black-pill (union
+                               (board-clearance-with-usb-c board-black-pill :usb-y-offset 1.25)
+                               (board-isp-clearance board-black-pill)
+                               ))
+(def board-mount-black-pill (board-mount-with-usb-c-alt board-black-pill :usb-y-offset 1.25 :board-cutout board-cutout-black-pill))
 
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
