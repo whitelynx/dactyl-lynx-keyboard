@@ -1251,11 +1251,14 @@
       board-cutout)))
 
 (defn mount-post-extra-support [[x y z]]
-  (let [block-width 30
+  (let [block-width 10
         block-length 10]
     (translate [0 (- (- y) 0.75) 0]
-               (translate [(/ block-width -2) (+ (/ block-length -2) mount-hole-radius) (/ mount-post-height -2)]
-                          (cube block-width block-length mount-post-height)))))
+               (union
+                 (translate [0 (+ (/ block-length -2) mount-hole-radius) (/ mount-post-height -2)]
+                            (cube block-width block-length mount-post-height))
+                 (translate [-15 (+ (/ block-length -2) mount-hole-radius) (/ mount-post-height -2)]
+                            (cube block-width block-length mount-post-height))))))
 
 (defn board-isp-clearance [[x y z]]
   (translate [0 (- (- y) 1.5) -1.45]
@@ -1315,7 +1318,7 @@
 (def board-clearance-pro-mini (board-clearance-bare board-pro-mini))
 (def board-mount-pro-mini (board-mount-bare board-pro-mini))
 
-(def board-position [-36.7 56.5 15])
+(def board-position [-36.7 56.67 15])
 
 (defn placed-board [shape]
   (->> shape
