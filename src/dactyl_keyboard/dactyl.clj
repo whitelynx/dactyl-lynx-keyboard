@@ -116,10 +116,11 @@
 (def single-plate cherry-plate-with-key-mount-and-backplate)
 
 
-;;;;;;;;;;;;;;;;
-;; SA Keycaps ;;
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;
+;; Keycaps ;;
+;;;;;;;;;;;;;
 
+;; "SA" (actually something akin to SA row 3, but with flat tops)
 (def sa-length 18.25)
 (def sa-double-length 37.5)
 (def sa-cap {1 (let [bl2 (/ 18.5 2)
@@ -337,10 +338,10 @@
         top-plate (->> (cube mount-width plate-height web-thickness)
                        (translate [0 (/ (+ plate-height mount-height) 2)
                                    (- plate-thickness (/ web-thickness 2))]))
-        stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
+        stabilizer-cutout (union (->> (cube 14.2 3.5 (+ web-thickness 0.1))
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
                                       (color [1 0 0 1/2]))
-                                 (->> (cube 16 3.5 web-thickness)
+                                 (->> (cube 16 3.5 (+ web-thickness 0.1))
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
                                       (color [1 0 0 1/2])))
         top-plate (difference top-plate stabilizer-cutout)]
