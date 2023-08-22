@@ -214,13 +214,13 @@
          (rotate (/ π 10) [0 1 0])
          (translate [0 0 22]))))
 
-(def key-holes
+(defn key-holes [do_mirror] {:pre [(or (= do_mirror true) (= do_mirror false))]}
   (apply union
          (for [column columns
                row rows
                :when (or (not= column 0)
                          (not= row 4))]
-           (->> single-plate
+           (->> (if do_mirror (mirror [-1 0 0] single-plate) single-plate)
                 (key-place column row)))))
 
 (def caps
@@ -481,10 +481,10 @@
       ;      (thumb-place 0 1 web-edge-br))
       ))))
 
-(def thumb
+(defn thumb [do_mirror] {:pre [(or (= do_mirror true) (= do_mirror false))]}
   (union
    thumb-connectors
-   (thumb-layout single-plate)
+   (thumb-layout (if do_mirror (mirror [-1 0 0] single-plate) single-plate))
    (thumb-place 0 -1/2 double-plates)
    (thumb-place 1 -1/2 double-plates)))
 
@@ -1356,9 +1356,9 @@
 
 (def dactyl-top-right
   (difference
-   (union key-holes
+   (union (key-holes false)
           connectors
-          thumb
+          (thumb false)
           new-case-trimmed
           (placed-board
             (difference
@@ -1370,6 +1370,7 @@
           trackpoint-mount-placed
           foot-supports)
    mini-din-hole-just-circle
+   (thumb-place 1 -1/2 cherry-backplate-clearance)
    trackpoint-holes-placed
    (placed-board board-clearance)))
 
@@ -1385,9 +1386,9 @@
 (def dactyl-top-left
   (mirror [-1 0 0]
           (difference
-           (union key-holes
+           (union (key-holes true)
                   connectors
-                  thumb
+                  (thumb true)
                   new-case-trimmed
                   (placed-board
                     (difference
@@ -1398,6 +1399,7 @@
                     (->> (cube 1000 1000 100) (translate [0 0 -50])))
                   foot-supports)
            mini-din-hole-just-circle
+           (thumb-place 1 -1/2 cherry-backplate-clearance)
            (placed-board board-clearance))))
 
 (def dactyl-top-left-preview
@@ -1524,7 +1526,7 @@
       (write-scad cherry-backplate))
 
 (spit "things/key-holes.scad"
-      (write-scad (union connectors key-holes)))
+      (write-scad (union connectors (key-holes false))))
 
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
