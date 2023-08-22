@@ -1218,11 +1218,15 @@
                  (cube 2.5 3 (+ mount-post-height (* 2 z)))))
     (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)))
 
-(defn board-mount-with-usb-c-alt [[x y z] & {:keys [usb-y-offset board-cutout] :or {usb-y-offset 0 board-cutout (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)}}]
+(defn board-mount-with-usb-c-alt [[x y z] & {:keys [usb-y-offset board-cutout front-mounting-post-width front-mounting-post-clearance]
+                                             :or {usb-y-offset 0
+                                                  board-cutout (board-cutout-with-usb-c [x y z] :usb-y-offset usb-y-offset)
+                                                  front-mounting-post-width 2.5
+                                                  front-mounting-post-clearance 0.4}}]
   (let [x-front-mount-post-offset (/ (+
                           (first usb-c-jack-dimensions) ; USB-C jack width
-                          0.4                           ; Extra clearance
-                          2.5                           ; Mounting post width
+                          front-mounting-post-clearance
+                          front-mounting-post-width
                           ) 2)
         x-rear-mount-post-offset (- (/ x 2) mount-post-cylinder-radius)]
     (difference
@@ -1234,9 +1238,9 @@
                    (cube 10 10 mount-post-height))
         ; front (notched cube) posts
         (translate [x-front-mount-post-offset 0.5 (- z (/ mount-post-height 2))]
-                   (cube 2.5 3 (+ mount-post-height (* 2 z))))
+                   (cube front-mounting-post-width 3 (+ mount-post-height (* 2 z))))
         (translate [(- x-front-mount-post-offset) 0.5 (- z (/ mount-post-height 2))]
-                   (cube 2.5 3 (+ mount-post-height (* 2 z)))))
+                   (cube front-mounting-post-width 3 (+ mount-post-height (* 2 z)))))
       board-cutout)))
 
 (defn mount-post-extra-support [[x y z]]
@@ -1282,7 +1286,7 @@
 (def board-clearance-blue-pill (board-clearance-with-usb-c board-blue-pill :usb-y-offset 0.75))
 (def board-mount-blue-pill (board-mount-with-usb-c board-blue-pill :usb-y-offset 0.75))
 
-(def board-black-pill [22.3 56.15 1.65])
+(def board-black-pill [20.8 53 1.6])
 (def board-shape-black-pill (board-shape-with-usb-c board-black-pill :usb-y-offset 1.25))
 (def board-cutout-black-pill (union
                                (board-cutout-with-usb-c board-black-pill :usb-y-offset 1.25)
@@ -1292,7 +1296,11 @@
                                (board-clearance-with-usb-c board-black-pill :usb-y-offset 1.25)
                                (board-isp-clearance board-black-pill)
                                ))
-(def board-mount-black-pill (board-mount-with-usb-c-alt board-black-pill :usb-y-offset 1.25 :board-cutout board-cutout-black-pill))
+(def board-mount-black-pill (board-mount-with-usb-c-alt board-black-pill
+                                                        :usb-y-offset 1.25
+                                                        :board-cutout board-cutout-black-pill
+                                                        :front-mounting-post-width 1.6
+                                                        :front-mounting-post-clearance 0.3))
 
 (def board-pro-mini [18 33.1 1.6])
 (def board-shape-pro-mini (board-shape-bare board-pro-mini))
