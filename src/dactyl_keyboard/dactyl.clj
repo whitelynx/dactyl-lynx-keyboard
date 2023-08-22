@@ -1291,6 +1291,12 @@
        (rotate (/ π -28) [0 0 1])
        (translate board-position)))
 
+(def board board-black-pill)
+(def board-shape board-shape-black-pill)
+(def board-cutout board-cutout-black-pill)
+(def board-clearance board-clearance-black-pill)
+(def board-mount board-mount-black-pill)
+
 ;;;;;;;;;;;;;;;;;
 ;; Rubber Feet ;;
 ;;;;;;;;;;;;;;;;;
@@ -1328,16 +1334,16 @@
           new-case-trimmed
           (placed-board
             (difference
-              board-mount-micro
+              board-mount
               (translate [0 10 0] (cube 20 20 20))))
           (difference
-            (placed-board (mount-post-extra-support board-micro))
+            (placed-board (mount-post-extra-support board))
             (->> (cube 1000 1000 100) (translate [0 0 -50])))
           trackpoint-mount-placed
           foot-supports)
    mini-din-hole-just-circle
    trackpoint-holes-placed
-   (placed-board board-clearance-micro)))
+   (placed-board board-clearance)))
 
 (def dactyl-top-right-preview
   (union
@@ -1346,7 +1352,7 @@
     thumbcaps
     mini-din-panel-mount-jack
     trackpoint-shape
-    (placed-board board-shape-micro)))
+    (placed-board board-shape)))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
@@ -1357,14 +1363,14 @@
                   new-case-trimmed
                   (placed-board
                     (difference
-                      board-mount-micro
+                      board-mount
                       (translate [0 10 0] (cube 20 20 20))))
                   (difference
-                    (placed-board (mount-post-extra-support board-micro))
+                    (placed-board (mount-post-extra-support board))
                     (->> (cube 1000 1000 100) (translate [0 0 -50])))
                   foot-supports)
            mini-din-hole-just-circle
-           (placed-board board-clearance-micro))))
+           (placed-board board-clearance))))
 
 (def dactyl-top-left-preview
   (union
@@ -1374,7 +1380,7 @@
               caps
               thumbcaps
               mini-din-panel-mount-jack
-              (placed-board board-shape-micro)))))
+              (placed-board board-shape)))))
 
 (defn place-trackpoint-mouse-trackpoint [shape]
   (translate [0 0 10] (rotate [(* π -0.5) 0 0] (translate [0 0 31.5] shape))))
