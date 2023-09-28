@@ -1,0 +1,15 @@
+[flake8]
+
+max-line-length = 120
+
+doctests = True
+
+ignore =
+	E126, # continuation line over-indented for hanging indent
+	E265, # block comment should start with '# '
+	W503  # line break before binary operator
+
+exclude =
+	.git
+
+# vim: ft=cfg
