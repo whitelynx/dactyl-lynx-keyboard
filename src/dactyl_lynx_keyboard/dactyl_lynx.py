@@ -54,19 +54,23 @@ class Layout:
         self.keyswitch_width = keyswitch_width
 
         self.cap_top_height = plate_thickness + self.sa_profile_key_height
-        self.row_radius = (
-            (
-                ((mount_length + 0.5) / 2)
-                / (math.sin(self.rad_per_row / 2))
-            ) + self.cap_top_height)
-        self.column_radius = (
-            (
-                ((mount_width + 2.0) / 2)
-                / (math.sin(self.rad_per_col / 2))
-            ) + self.cap_top_height)
 
         self.web_post_size = 0.1
         self.web_thickness = keyswitch_depth
+
+    @property
+    def row_radius(self):
+        return (
+            ((mount_length + 0.5) / 2)
+            / (math.sin(self.rad_per_row / 2))
+        ) + self.cap_top_height
+
+    @property
+    def column_radius(self):
+        return (
+            ((mount_width + 2.0) / 2)
+            / (math.sin(self.rad_per_col / 2))
+        ) + self.cap_top_height
 
     def generate_positions(self):
         """Override this to change the list of locations within the layout.
@@ -106,6 +110,22 @@ class Layout:
         """
         return shape
 
+    def row_angle(self, row):
+        """Calculate the X rotation angle for the given row.
+
+        :param row: the row number to rotate for
+        :type row: number
+        """
+        return math.degrees(self.rad_per_row * -row)
+
+    def column_angle(self, column):
+        """Calculate the Y rotation angle for the given column.
+
+        :param column: the row number to rotate for
+        :type column: number
+        """
+        return math.degrees(self.rad_per_col * -column)
+
     def key_place(self, column, row, shape):
         """Place a key (or other shape) in the layout.
 
@@ -118,7 +138,7 @@ class Layout:
         :param shape: the shape to place
         """
         row = self.row_adjust(row)
-        row_angle = math.degrees(self.rad_per_row * (2 - row))
+        row_angle = self.row_angle(row)
 
         row_placed_shape = shape \
             .translate((0, 0, -self.row_radius)) \
@@ -126,7 +146,7 @@ class Layout:
             .translate((0, 0, self.row_radius))
 
         column = self.column_adjust(column)
-        column_angle = math.degrees(self.rad_per_col * (2 - column))
+        column_angle = self.column_angle(column)
 
         column_placed_shape = row_placed_shape \
             .translate((0, 0, -self.column_radius)) \
@@ -169,7 +189,7 @@ class Layout:
     def caps(self):
         return self.place_all(sa_cap(1))
 
-    def web_corner(self, column, row, left, top):
+    def web_corner(self, column, row, left, top, column_span=1, row_span=1):
         """Return a tiny block encompassing the given corner of the given key position, for
         building the "web" between the keys.
 
@@ -181,6 +201,10 @@ class Layout:
         :type left: bool
         :param top: whether to create the block on the top side (True) or the bottom side (False)
         :type top: bool
+        :param column_span: the number of columns occupied by the key
+        :type column_span: number
+        :param row_span: the number of rows occupied by the key
+        :type row_span: number
 
         Example:
         web_corner(1, 1, left=True, top=True) will create the block at the position marked
@@ -196,8 +220,8 @@ class Layout:
         post = cube((self.web_post_size, self.web_post_size, self.web_thickness), center=True) \
             .translate((0, 0, plate_thickness - (self.web_thickness / 2)))
 
-        x_move_amount = (self.keyswitch_width - self.web_post_size) / 2 + 1.45
-        y_move_amount = (self.keyswitch_length - self.web_post_size) / 2 + 1.45
+        x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + 1.45
+        y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + 1.45
 
         return self.key_place(
             column,
@@ -340,6 +364,22 @@ class FingerWellLayout(Layout):
         else:
             return column
 
+    def row_angle(self, row):
+        """Calculate the X rotation angle for the given row.
+
+        :param row: the row number to rotate for
+        :type row: number
+        """
+        return math.degrees(self.rad_per_row * (2 - row))
+
+    def column_angle(self, column):
+        """Calculate the Y rotation angle for the given column.
+
+        :param column: the row number to rotate for
+        :type column: number
+        """
+        return math.degrees(self.rad_per_col * (2 - column))
+
     def placement_adjust(self, column, row, shape):
         """Adjust the position of the given key/location in the layout.
 
@@ -396,12 +436,16 @@ class ThumbWellLayout(Layout):
     def __init__(self, columns=3, rows=3):
         super(ThumbWellLayout, self).__init__(columns=columns, rows=rows)
 
+        # Cupping amounts, in radians per row/column
+        self.rad_per_row = math.pi / 12
+        self.rad_per_col = math.pi / 17
+
     def generate_positions(self):
         """Generate the list of locations within the layout.
         """
         return (
             # (column, row)
-            (0, -1/2),
+            (0, -1/2), # 2u key
             (0, 1),
             (1, -1),
             (1, 0),
@@ -453,6 +497,36 @@ class ThumbWellLayout(Layout):
                         (0, -1/2),
                     )
                 ),
+                [
+                    hull()(
+                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
+                        self.web_corner(0, 1, left=False, top=True),
+                        self.web_corner(1, 1, left=True, top=True),
+                        self.web_corner(1, 0, left=True, top=False),
+                    ),
+                    hull()(
+                        self.web_corner(0, -1/2, left=True, top=False, row_span=2),
+                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
+                        self.web_corner(0, 1, left=False, top=True),
+                        self.web_corner(0, 1, left=True, top=True),
+                    ),
+                    hull()(
+                        self.web_corner(0, -1/2, left=False, top=True, row_span=2),
+                        self.web_corner(1, -1, left=True, top=True),
+                        self.web_corner(1, -1, left=True, top=False),
+                    ),
+                    hull()(
+                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
+                        self.web_corner(0, -1/2, left=False, top=True, row_span=2),
+                        self.web_corner(1, -1, left=True, top=False),
+                        self.web_corner(1, 0, left=True, top=True),
+                    ),
+                    hull()(
+                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
+                        self.web_corner(1, 0, left=True, top=False),
+                        self.web_corner(1, 0, left=True, top=True),
+                    ),
+                ],
             )
         )
 
@@ -575,8 +649,49 @@ if __name__ == "__main__":
         )
     )
 
+    def switch_socket(column, row):
+        shape = mx_plate_with_backplate()
+        if isinstance(row, float) and not row.is_integer():
+            plate_height = (sa_double_length - mount_length + 3.2) / 2
+            # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
+            stabilizer_mount = cube(
+                mount_width,
+                plate_height,
+                thumb_layout.web_thickness,
+                center=True
+            ).translate(
+                0,
+                (plate_height + mount_length) / 2,
+                plate_thickness - thumb_layout.web_thickness / 2
+            )
+            shape = (
+                shape
+                + stabilizer_mount
+                + stabilizer_mount.mirror(0, 1, 0)
+            )
+        elif isinstance(column, float) and not column.is_integer():
+            plate_width = (sa_double_length - mount_width + 3.2) / 2
+            # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
+            stabilizer_mount = cube(
+                plate_width,
+                mount_length,
+                thumb_layout.web_thickness,
+                center=True
+            ).translate(
+                (plate_width + mount_width) / 2,
+                0,
+                plate_thickness - thumb_layout.web_thickness / 2
+            )
+            shape = (
+                shape
+                + stabilizer_mount
+                + stabilizer_mount.mirror(0, 1, 0)
+            )
+
+        return shape
+
     thumb_assembly = (
-        thumb_layout.place_all(mx_plate_with_backplate())
+        thumb_layout.place_all(switch_socket)
         + thumb_layout.web_all()
     )
 
