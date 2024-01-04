@@ -67,7 +67,7 @@ Pregenerated STL files are available in the [things/](things/) directory.
         * [STM32F4x1 Black Pill][]
         * [STM32 Blue Pill][]
         * [QMK Proton C][]
-* 2x 4+-conductor jacks and matching cable to connect the two sides using I2C; one of:
+* 2x 4+-conductor jacks and matching cable to connect the two sides using full-duplex serial; one of:
     * 4-pin mini-DIN (A.K.A. S-Video) - _recommended_
     * TRRS audio jacks - _not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!_
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
