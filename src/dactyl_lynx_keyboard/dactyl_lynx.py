@@ -6,7 +6,8 @@ from functools import reduce
 from itertools import chain
 from os.path import abspath, dirname, join
 
-from solid2 import OpenSCADObject, cube, hull
+from solid2 import cube, hull
+from solid2.core.object_base import OpenSCADObject
 from solid2.extensions.bosl2 import screws
 
 from spkb.switch_plate import (
