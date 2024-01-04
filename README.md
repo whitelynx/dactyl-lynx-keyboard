@@ -1,29 +1,34 @@
 # The Dactyl Lynx Keyboard
 The Dactyl Lynx is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
-This is my fork of [the original Dactyl][]. I've changed a few things:
+This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
+* Rewrote the generating code in [Python][] instead of Clojure, using [SolidPython2][] and [spkb][].
 * Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][] and the way my thumbs move)
 * Steeper tenting angle
 * Ergodox-compatible keycaps! (it doesn't use _all_ of the Ergodox keys, but the keys it has should all be able to be sourced from [Ergodox keycap sets][] - effectively the same as [the Phat Dactyl][])
-* A simpler one-piece chassis
+* A new adjustable skeletal design (which will probably change once I solidify the physical placement of the wells, but I'll likely keep around as an option)
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
-* Added a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
+[Python]: https://www.python.org/
+[SolidPython2]: https://github.com/jeff-dh/SolidPython/tree/master-2.0.0-beta-dev
+[spkb]: https://github.com/whitelynx/spkb
 [the Dactyl-ManuForm]: https://github.com/tshort/dactyl-keyboard
 [Ergodox keycap sets]: https://www.reddit.com/r/ergodox/comments/gu4cbm/every_site_for_ergodox_keycaps_that_are_currently/
 [the Phat Dactyl]: https://github.com/adereth/dactyl-keyboard/pull/48
 [Kailh hot-swap sockets]: https://www.kailhswitch.com/mechanical-keyboard-switches/box-switches/hot-swapping-pcb-socket.html
-[TrackPoint module]: https://github.com/alonswartz/trackpoint
 
 ![Preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
 
 
 ## Future plans
+* Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY) - I already implemented this in the Clojure version, but I haven't yet ported it to the Python version
 * Adding mouse buttons (and maybe a scroll wheel?) next to the right-hand thumb cluster
 * Adding a thumbstick to the left side?
 * Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Use [QMK's Raw HID support][].
+* Adding support for ALPS or Choc switches instead of MX-style switches, along with appropriate hot-swap sockets (this will be mostly implemented in [spkb][] first)
 
+[TrackPoint module]: https://github.com/alonswartz/trackpoint
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
 [QMK's Raw HID support]: https://docs.qmk.fm/#/feature_rawhid
 
@@ -34,7 +39,7 @@ This is my fork of [the original Dactyl][]. I've changed a few things:
 
 #### Prerequisites
 
-* [Python](https://www.python.org/) version 3.11 or newer
+* [Python][] version 3.11 or newer
 * [pipenv](https://pipenv.pypa.io/en/latest/)
 
 #### Installing dependencies
