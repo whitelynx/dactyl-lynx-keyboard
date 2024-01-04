@@ -438,7 +438,9 @@ class ThumbWellLayout(Layout):
 
         # Cupping amounts, in radians per row/column
         self.rad_per_row = math.pi / 12
-        self.rad_per_col = math.pi / 17
+        self.rad_per_col = math.pi / 8
+
+        self.placement_transform = (-58, -72, 6)
 
     def generate_positions(self):
         """Generate the list of locations within the layout.
@@ -462,10 +464,12 @@ class ThumbWellLayout(Layout):
         """
         return shape \
             .translate((mount_width, 0, 0)) \
+            .rotate(math.degrees(math.pi / 2.8), (0, 1, 0)) \
             .rotate(math.degrees(math.pi * 9/32), (0, 0, 1)) \
-            .rotate(math.degrees(math.pi / 12), (1, 1, 0)) \
+            .rotate(math.degrees(math.pi / 14), (1, 1, 0)) \
             .rotate(math.degrees(math.pi / (-11/6)), (-1, 1, 0)) \
-            .translate((-37, -42, 48))
+            .rotate(math.degrees(math.pi / -20), (0, 1, 0)) \
+            .translate(self.placement_transform)
 
     def web_all(self):
         """Return the complete "web" between all key positions in this layout.
@@ -540,18 +544,18 @@ if __name__ == "__main__":
         - screws.screw_hole("M6x1", length=10.01, thread=True, bevel=True, blunt_start=True, _fn=32)
     )
 
-    def transform_nut1(shape):
+    def transform_finger_nut1(shape):
         return shape \
             .rotate(20, (1, 0, 0)) \
             .translate((64, 50, 35))
 
-    def transform_nut2(shape):
+    def transform_finger_nut2(shape):
         return shape \
             .rotate(-15, (1, 0, 0)) \
             .rotate(-5, (0, 1, 0)) \
             .translate((78, -49, 28))
 
-    def transform_nut3(shape):
+    def transform_finger_nut3(shape):
         return shape \
             .rotate(15, (0, 1, 0)) \
             .translate((-52, 0, 45))
@@ -567,9 +571,9 @@ if __name__ == "__main__":
         finger_layout.place_all(mx_plate_with_backplate())
         + finger_layout.web_all()
 
-        + transform_nut1(tenting_nut)
+        + transform_finger_nut1(tenting_nut)
         + hull()(
-            transform_nut1(
+            transform_finger_nut1(
                 cube((10, 0.1, 10), center=True)
                 .translate((0, -5, 0))
             ),
@@ -577,7 +581,7 @@ if __name__ == "__main__":
             finger_layout.web_corner(5, 0, left=False, top=True),
         )
         + hull()(
-            transform_nut1(
+            transform_finger_nut1(
                 cube((0.1, 10, 10), center=True)
                 .translate((-5, 0, 0))
             ),
@@ -585,9 +589,9 @@ if __name__ == "__main__":
             finger_layout.web_corner(4, 0, left=False, top=True),
         )
 
-        + transform_nut2(tenting_nut)
+        + transform_finger_nut2(tenting_nut)
         + hull()(
-            transform_nut2(
+            transform_finger_nut2(
                 cube((0.1, 10, 10), center=True)
                 .translate((-5, 0, 0))
             ),
@@ -595,7 +599,7 @@ if __name__ == "__main__":
             finger_layout.web_corner(5, 4, left=False, top=False),
         )
         + hull()(
-            transform_nut2(
+            transform_finger_nut2(
                 cube((10, 0.1, 10), center=True)
                 .translate((0, 5, 0))
             ),
@@ -603,9 +607,9 @@ if __name__ == "__main__":
             finger_layout.web_corner(5, 4, left=False, top=True),
         )
 
-        + transform_nut3(tenting_nut)
+        + transform_finger_nut3(tenting_nut)
         + hull()(
-            transform_nut3(
+            transform_finger_nut3(
                 cube((10, 0.1, 10), center=True)
                 .translate((0, 5, 0))
             ),
@@ -613,7 +617,7 @@ if __name__ == "__main__":
             finger_layout.web_corner(0, 2, left=True, top=True),
         )
         + hull()(
-            transform_nut3(
+            transform_finger_nut3(
                 cube((0.1, 10, 10), center=True)
                 .translate((5, 0, 0))
             ),
@@ -621,7 +625,7 @@ if __name__ == "__main__":
             finger_layout.web_corner(0, 2, left=True, top=False),
         )
         + hull()(
-            transform_nut3(
+            transform_finger_nut3(
                 cube((10, 0.1, 10), center=True)
                 .translate((0, -5, 0))
             ),
@@ -690,9 +694,50 @@ if __name__ == "__main__":
 
         return shape
 
+    def transform_thumb_nut1(shape):
+        return shape \
+            .rotate(-10, (1, 0, 0)) \
+            .rotate(5, (0, 1, 0)) \
+            .rotate(68, (0, 0, 1)) \
+            .translate((-33, -97, 15))
+
+    def transform_thumb_nut2(shape):
+        return shape \
+            .rotate(10, (1, 0, 0)) \
+            .rotate(68, (0, 0, 1)) \
+            .translate((-90, -42, 10))
+
     thumb_assembly = (
         thumb_layout.place_all(switch_socket)
         + thumb_layout.web_all()
+
+        + transform_thumb_nut1(tenting_nut)
+        + hull()(
+            transform_thumb_nut1(
+                cube((10, 0.1, 10), center=True)
+                .translate((0, 5, 0))
+            ),
+            thumb_layout.web_corner(0, 1, left=True, top=False),
+            thumb_layout.web_corner(0, 1, left=True, top=True),
+        )
+        + hull()(
+            transform_thumb_nut1(
+                cube((0.1, 10, 10), center=True)
+                .translate((5, 0, 0))
+            ),
+            thumb_layout.web_corner(0, 1, left=False, top=False),
+            thumb_layout.web_corner(0, 1, left=True, top=False),
+        )
+
+        + transform_thumb_nut2(tenting_nut)
+        + hull()(
+            transform_thumb_nut2(
+                cube((10, 0.1, 10), center=True)
+                .translate((0, -5, 0))
+            ),
+            thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
+            thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
+        )
     )
 
     finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-finger.scad"
