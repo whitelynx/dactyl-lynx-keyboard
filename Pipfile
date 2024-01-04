@@ -1,0 +1,11 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+solidpython2 = "==2.*"
+spkb = {git = "git+https://github.com/whitelynx/spkb.git"}
+
+[dev-packages]
+flake8 = "*"
