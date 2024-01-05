@@ -18,7 +18,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 [the Phat Dactyl]: https://github.com/adereth/dactyl-keyboard/pull/48
 [Kailh hot-swap sockets]: https://www.kailhswitch.com/mechanical-keyboard-switches/box-switches/hot-swapping-pcb-socket.html
 
-![Preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
+![Skeleton prototype](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/skeleton-prototype.jpg)
 
 
 ## Future plans
@@ -112,6 +112,8 @@ The source code for generating the models (everything excluding the [things/](th
 
 
 # Old Clojure-based Instructions Below #
+
+![Old preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
 
 ## Assembly
 
