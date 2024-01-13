@@ -536,125 +536,59 @@ class ThumbWellLayout(Layout):
         )
 
 
-if __name__ == "__main__":
-    finger_layout = FingerWellLayout(columns=6, rows=5, use_1_5u_keys=False)
-    thumb_layout = ThumbWellLayout()
+class KeyboardAssembly:
+    def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False):
+        self.use_color = use_color
 
-    tenting_nut = (
-        cube((10, 10, 10), center=True)
-        - screws.screw_hole("M6x1", length=10.01, thread=True, bevel=True, blunt_start=True, _fn=32)
-    )
+        self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys)
+        self.thumb_layout = ThumbWellLayout()
 
-    def transform_finger_nut1(shape):
+        # TODO: Add the screen to the left side finger well
+        self.screen_size = (27.75, 39.25)
+        self.screen_hole_centers = (22.5, 34.05)
+
+        self.tenting_nut = (
+            cube((10, 10, 10), center=True)
+            - screws.screw_hole("M6x1", length=10.01, thread=True, bevel=True, blunt_start=True, _fn=32)
+        )
+
+    def transform_finger_nut1(self, shape):
         return shape \
             .rotate(20, (1, 0, 0)) \
             .translate((64, 50, 35))
 
-    def transform_finger_nut2(shape):
+    def transform_finger_nut2(self, shape):
         return shape \
             .rotate(-15, (1, 0, 0)) \
             .rotate(-5, (0, 1, 0)) \
             .translate((78, -49, 28))
 
-    def transform_finger_nut3(shape):
+    def transform_finger_nut3(self, shape):
         return shape \
             .rotate(15, (0, 1, 0)) \
             .translate((-52, 0, 45))
 
-    def transform_board(shape):
+    def transform_board(self, shape):
         return shape \
             .rotate(90, (0, 0, 1)) \
             .rotate(-65, (1, 0, 0)) \
             .rotate(24, (0, 1, 0)) \
             .translate((-34, 53, 52))
 
-    finger_assembly = (
-        finger_layout.place_all(mx_plate_with_backplate())
-        + finger_layout.web_all()
+    def transform_thumb_nut1(self, shape):
+        return shape \
+            .rotate(-10, (1, 0, 0)) \
+            .rotate(5, (0, 1, 0)) \
+            .rotate(68, (0, 0, 1)) \
+            .translate((-33, -97, 15))
 
-        + transform_finger_nut1(tenting_nut)
-        + hull()(
-            transform_finger_nut1(
-                cube((10, 0.1, 10), center=True)
-                .translate((0, -5, 0))
-            ),
-            finger_layout.web_corner(5, 0, left=True, top=True),
-            finger_layout.web_corner(5, 0, left=False, top=True),
-        )
-        + hull()(
-            transform_finger_nut1(
-                cube((0.1, 10, 10), center=True)
-                .translate((-5, 0, 0))
-            ),
-            finger_layout.web_corner(5, 0, left=True, top=True),
-            finger_layout.web_corner(4, 0, left=False, top=True),
-        )
+    def transform_thumb_nut2(self, shape):
+        return shape \
+            .rotate(10, (1, 0, 0)) \
+            .rotate(68, (0, 0, 1)) \
+            .translate((-90, -42, 10))
 
-        + transform_finger_nut2(tenting_nut)
-        + hull()(
-            transform_finger_nut2(
-                cube((0.1, 10, 10), center=True)
-                .translate((-5, 0, 0))
-            ),
-            finger_layout.web_corner(5, 4, left=False, top=True),
-            finger_layout.web_corner(5, 4, left=False, top=False),
-        )
-        + hull()(
-            transform_finger_nut2(
-                cube((10, 0.1, 10), center=True)
-                .translate((0, 5, 0))
-            ),
-            finger_layout.web_corner(5, 3, left=False, top=False),
-            finger_layout.web_corner(5, 4, left=False, top=True),
-        )
-
-        + transform_finger_nut3(tenting_nut)
-        + hull()(
-            transform_finger_nut3(
-                cube((10, 0.1, 10), center=True)
-                .translate((0, 5, 0))
-            ),
-            finger_layout.web_corner(0, 1, left=True, top=False),
-            finger_layout.web_corner(0, 2, left=True, top=True),
-        )
-        + hull()(
-            transform_finger_nut3(
-                cube((0.1, 10, 10), center=True)
-                .translate((5, 0, 0))
-            ),
-            finger_layout.web_corner(0, 2, left=True, top=True),
-            finger_layout.web_corner(0, 2, left=True, top=False),
-        )
-        + hull()(
-            transform_finger_nut3(
-                cube((10, 0.1, 10), center=True)
-                .translate((0, -5, 0))
-            ),
-            finger_layout.web_corner(0, 2, left=True, top=False),
-            finger_layout.web_corner(0, 3, left=True, top=True),
-        )
-
-        + transform_board(stm32_blackpill.render(distance_from_surface=8))
-        + hull()(
-            transform_board(
-                cube((60, 120, 8), center=True)
-                & stm32_blackpill.back_mounting_posts(distance_from_surface=8)
-            ),
-            finger_layout.web_corner(3, 0, left=True, top=True),
-            finger_layout.web_corner(3, 0, left=False, top=True),
-            finger_layout.web_corner(2, 0, left=False, top=True),
-        )
-        + hull()(
-            transform_board(
-                cube((60, 120, 6), center=True)
-                & stm32_blackpill.front_mounting_posts(distance_from_surface=8)
-            ),
-            finger_layout.web_corner(0, 0, left=True, top=True),
-            finger_layout.web_corner(0, 0, left=False, top=True),
-        )
-    )
-
-    def switch_socket(column, row):
+    def switch_socket(self, column, row):
         shape = mx_plate_with_backplate()
         if isinstance(row, float) and not row.is_integer():
             plate_height = (sa_double_length - mount_length + 3.2) / 2
@@ -662,12 +596,12 @@ if __name__ == "__main__":
             stabilizer_mount = cube(
                 mount_width,
                 plate_height,
-                thumb_layout.web_thickness,
+                self.thumb_layout.web_thickness,
                 center=True
             ).translate(
                 0,
                 (plate_height + mount_length) / 2,
-                plate_thickness - thumb_layout.web_thickness / 2
+                plate_thickness - self.thumb_layout.web_thickness / 2
             )
             shape = (
                 shape
@@ -680,12 +614,12 @@ if __name__ == "__main__":
             stabilizer_mount = cube(
                 plate_width,
                 mount_length,
-                thumb_layout.web_thickness,
+                self.thumb_layout.web_thickness,
                 center=True
             ).translate(
                 (plate_width + mount_width) / 2,
                 0,
-                plate_thickness - thumb_layout.web_thickness / 2
+                plate_thickness - self.thumb_layout.web_thickness / 2
             )
             shape = (
                 shape
@@ -695,65 +629,166 @@ if __name__ == "__main__":
 
         return shape
 
-    def transform_thumb_nut1(shape):
-        return shape \
-            .rotate(-10, (1, 0, 0)) \
-            .rotate(5, (0, 1, 0)) \
-            .rotate(68, (0, 0, 1)) \
-            .translate((-33, -97, 15))
+    def finger_part(self):
+        shape = (
+            self.finger_layout.place_all(mx_plate_with_backplate())
+            + self.finger_layout.web_all()
 
-    def transform_thumb_nut2(shape):
-        return shape \
-            .rotate(10, (1, 0, 0)) \
-            .rotate(68, (0, 0, 1)) \
-            .translate((-90, -42, 10))
+            + self.transform_finger_nut1(self.tenting_nut)
+            + hull()(
+                self.transform_finger_nut1(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, -5, 0))
+                ),
+                self.finger_layout.web_corner(5, 0, left=True, top=True),
+                self.finger_layout.web_corner(5, 0, left=False, top=True),
+            )
+            + hull()(
+                self.transform_finger_nut1(
+                    cube((0.1, 10, 10), center=True)
+                    .translate((-5, 0, 0))
+                ),
+                self.finger_layout.web_corner(5, 0, left=True, top=True),
+                self.finger_layout.web_corner(4, 0, left=False, top=True),
+            )
 
-    thumb_assembly = (
-        thumb_layout.place_all(switch_socket)
-        + thumb_layout.web_all()
+            + self.transform_finger_nut2(self.tenting_nut)
+            + hull()(
+                self.transform_finger_nut2(
+                    cube((0.1, 10, 10), center=True)
+                    .translate((-5, 0, 0))
+                ),
+                self.finger_layout.web_corner(5, 4, left=False, top=True),
+                self.finger_layout.web_corner(5, 4, left=False, top=False),
+            )
+            + hull()(
+                self.transform_finger_nut2(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, 5, 0))
+                ),
+                self.finger_layout.web_corner(5, 3, left=False, top=False),
+                self.finger_layout.web_corner(5, 4, left=False, top=True),
+            )
 
-        + transform_thumb_nut1(tenting_nut)
-        + hull()(
-            transform_thumb_nut1(
-                cube((10, 0.1, 10), center=True)
-                .translate((0, 5, 0))
-            ),
-            thumb_layout.web_corner(0, 1, left=True, top=False),
-            thumb_layout.web_corner(0, 1, left=True, top=True),
+            + self.transform_finger_nut3(self.tenting_nut)
+            + hull()(
+                self.transform_finger_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, 5, 0))
+                ),
+                self.finger_layout.web_corner(0, 1, left=True, top=False),
+                self.finger_layout.web_corner(0, 2, left=True, top=True),
+            )
+            + hull()(
+                self.transform_finger_nut3(
+                    cube((0.1, 10, 10), center=True)
+                    .translate((5, 0, 0))
+                ),
+                self.finger_layout.web_corner(0, 2, left=True, top=True),
+                self.finger_layout.web_corner(0, 2, left=True, top=False),
+            )
+            + hull()(
+                self.transform_finger_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, -5, 0))
+                ),
+                self.finger_layout.web_corner(0, 2, left=True, top=False),
+                self.finger_layout.web_corner(0, 3, left=True, top=True),
+            )
+
+            + self.transform_board(stm32_blackpill.render(distance_from_surface=8))
+            + hull()(
+                self.transform_board(
+                    cube((60, 120, 8), center=True)
+                    & stm32_blackpill.back_mounting_posts(distance_from_surface=8)
+                ),
+                self.finger_layout.web_corner(3, 0, left=True, top=True),
+                self.finger_layout.web_corner(3, 0, left=False, top=True),
+                self.finger_layout.web_corner(2, 0, left=False, top=True),
+            )
+            + hull()(
+                self.transform_board(
+                    cube((60, 120, 6), center=True)
+                    & stm32_blackpill.front_mounting_posts(distance_from_surface=8)
+                ),
+                self.finger_layout.web_corner(0, 0, left=True, top=True),
+                self.finger_layout.web_corner(0, 0, left=False, top=True),
+            )
         )
-        + hull()(
-            transform_thumb_nut1(
-                cube((0.1, 10, 10), center=True)
-                .translate((5, 0, 0))
-            ),
-            thumb_layout.web_corner(0, 1, left=False, top=False),
-            thumb_layout.web_corner(0, 1, left=True, top=False),
+
+        if self.use_color:
+            return shape.color((0.1, 0.1, 0.1))
+
+        return shape
+
+    def thumb_part(self):
+        shape = (
+            self.thumb_layout.place_all(self.switch_socket)
+            + self.thumb_layout.web_all()
+
+            + self.transform_thumb_nut1(self.tenting_nut)
+            + hull()(
+                self.transform_thumb_nut1(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, 5, 0))
+                ),
+                self.thumb_layout.web_corner(0, 1, left=True, top=False),
+                self.thumb_layout.web_corner(0, 1, left=True, top=True),
+            )
+            + hull()(
+                self.transform_thumb_nut1(
+                    cube((0.1, 10, 10), center=True)
+                    .translate((5, 0, 0))
+                ),
+                self.thumb_layout.web_corner(0, 1, left=False, top=False),
+                self.thumb_layout.web_corner(0, 1, left=True, top=False),
+            )
+
+            + self.transform_thumb_nut2(self.tenting_nut)
+            + hull()(
+                self.transform_thumb_nut2(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, -5, 0))
+                ),
+                self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
+                self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
+            )
         )
 
-        + transform_thumb_nut2(tenting_nut)
-        + hull()(
-            transform_thumb_nut2(
-                cube((10, 0.1, 10), center=True)
-                .translate((0, -5, 0))
-            ),
-            thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
-            thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
+        if self.use_color:
+            return shape.color((0.1, 0.1, 0.1))
+
+        return shape
+
+    def connector(self):
+        return (
+            self.transform_finger_nut3(
+                self.tenting_nut.down(10)
+            )
         )
-    )
+
+
+if __name__ == "__main__":
+    assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=True)
+
+    finger_part = assembly.finger_part()
+    thumb_part = assembly.thumb_part()
+    connector = assembly.connector()
 
     finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-finger.scad"
     print(f"Writing finger output to {finger_filepath} . . .")
-    finger_assembly.save_as_scad(finger_filepath)
+    finger_part.save_as_scad(finger_filepath)
 
     thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-thumb.scad"
     print(f"Writing thumb output to {thumb_filepath} . . .")
-    thumb_assembly.save_as_scad(thumb_filepath)
+    thumb_part.save_as_scad(thumb_filepath)
 
     combined_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5.scad"
     print(f"Writing combined output to {combined_filepath} . . .")
     (
-        finger_assembly
-        + thumb_assembly
+        finger_part
+        + thumb_part
+        + connector
     ).save_as_scad(combined_filepath)
 
     import sys
