@@ -552,6 +552,13 @@ class KeyboardAssembly:
             - screws.screw_hole("M6x1", length=10.01, thread=True, bevel=True, blunt_start=True, _fn=32)
         )
 
+        self.tenting_nut_unthreaded = (
+            cube((10, 10, 10), center=True)
+            - screws.screw_hole("M6x1", length=10.01, thread=False, bevel=True, blunt_start=True, _fn=32)
+        )
+
+        self.left_side = False
+
     def transform_finger_nut1(self, shape):
         return shape \
             .rotate(20, (1, 0, 0)) \
@@ -587,6 +594,13 @@ class KeyboardAssembly:
             .rotate(10, (1, 0, 0)) \
             .rotate(68, (0, 0, 1)) \
             .translate((-90, -42, 10))
+
+    def transform_thumb_nut3(self, shape):
+        return shape \
+            .rotate(-20, (1, 0, 0)) \
+            .rotate(-20, (0, 0, 1)) \
+            .rotate(-18, (0, 1, 0)) \
+            .translate((-61, -15, 38.25))
 
     def switch_socket(self, column, row):
         shape = mx_plate_with_backplate()
@@ -627,11 +641,13 @@ class KeyboardAssembly:
                 + stabilizer_mount.mirror(0, 1, 0)
             )
 
+        if self.left_side:
+            return shape.mirror((1, 0, 0))
         return shape
 
     def finger_part(self):
         shape = (
-            self.finger_layout.place_all(mx_plate_with_backplate())
+            self.finger_layout.place_all(self.switch_socket)
             + self.finger_layout.web_all()
 
             + self.transform_finger_nut1(self.tenting_nut)
@@ -753,6 +769,28 @@ class KeyboardAssembly:
                 self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
                 self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
             )
+
+            + self.transform_thumb_nut3(self.tenting_nut)
+            + hull()(
+                self.transform_thumb_nut3(
+                    cube((10, 0.1, 8), center=True)
+                    .translate((0, -5, 0))
+                ),
+                self.thumb_layout.web_corner(2, -1, left=True, top=True),
+                self.thumb_layout.web_corner(2, -1, left=True, top=False),
+                self.thumb_layout.web_corner(1, -1, left=False, top=False),
+                self.thumb_layout.web_corner(1, -1, left=False, top=True),
+            )
+            + hull()(
+                self.transform_thumb_nut3(
+                    cube((0.1, 10, 8), center=True)
+                    .translate((5, 0, 0))
+                ),
+                self.thumb_layout.web_corner(2, 0, left=True, top=True),
+                self.thumb_layout.web_corner(2, -1, left=True, top=False),
+                self.thumb_layout.web_corner(1, -1, left=False, top=False),
+                self.thumb_layout.web_corner(1, 0, left=False, top=True),
+            )
         )
 
         if self.use_color:
@@ -763,32 +801,92 @@ class KeyboardAssembly:
     def connector(self):
         return (
             self.transform_finger_nut3(
-                self.tenting_nut.down(10)
+                self.tenting_nut_unthreaded.down(10)
+            )
+            + self.transform_thumb_nut3(
+                self.tenting_nut_unthreaded.down(10)
+            )
+            + hull()(
+                self.transform_finger_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, -5, -10))
+                ),
+                self.transform_thumb_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, 5, -10))
+                ),
             )
         )
 
 
 if __name__ == "__main__":
-    assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=True)
+    #assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=True)
+    assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=False)
 
-    finger_part = assembly.finger_part()
-    thumb_part = assembly.thumb_part()
-    connector = assembly.connector()
+    def switch_cap(column, row):
+        shape = sa_cap(1)
+        if isinstance(row, float) and not row.is_integer():
+            shape = sa_cap(2)
+        elif isinstance(column, float) and not column.is_integer():
+            shape = sa_cap(2).rotate((0, 0, 90))
+        return shape
 
-    finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-finger.scad"
-    print(f"Writing finger output to {finger_filepath} . . .")
-    finger_part.save_as_scad(finger_filepath)
+    right_finger_part = assembly.finger_part()
+    right_thumb_part = assembly.thumb_part()
+    right_connector = assembly.connector()
+    right_keycaps = (
+        assembly.finger_layout.place_all(switch_cap)
+        + assembly.thumb_layout.place_all(switch_cap)
+    )
 
-    thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-thumb.scad"
-    print(f"Writing thumb output to {thumb_filepath} . . .")
-    thumb_part.save_as_scad(thumb_filepath)
+    assembly.left_side = True
+    left_finger_part = assembly.finger_part().mirror((1, 0, 0))
+    left_thumb_part = assembly.thumb_part().mirror((1, 0, 0))
+    left_connector = assembly.connector().mirror((1, 0, 0))
+    left_keycaps = (
+        assembly.finger_layout.place_all(switch_cap)
+        + assembly.thumb_layout.place_all(switch_cap)
+    ).mirror((1, 0, 0))
+
+    right_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger.scad"
+    print(f"Writing right finger output to {right_finger_filepath} . . .")
+    right_finger_part.save_as_scad(right_finger_filepath)
+
+    right_thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-thumb.scad"
+    print(f"Writing right thumb output to {right_thumb_filepath} . . .")
+    right_thumb_part.save_as_scad(right_thumb_filepath)
+
+    right_connector_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-connector.scad"
+    print(f"Writing right connector output to {right_connector_filepath} . . .")
+    right_connector.save_as_scad(right_connector_filepath)
+
+    left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
+    print(f"Writing left finger output to {left_finger_filepath} . . .")
+    left_finger_part.save_as_scad(left_finger_filepath)
+
+    left_thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-thumb.scad"
+    print(f"Writing left thumb output to {left_thumb_filepath} . . .")
+    left_thumb_part.save_as_scad(left_thumb_filepath)
+
+    left_connector_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-connector.scad"
+    print(f"Writing left connector output to {left_connector_filepath} . . .")
+    left_connector.save_as_scad(left_connector_filepath)
 
     combined_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5.scad"
     print(f"Writing combined output to {combined_filepath} . . .")
     (
-        finger_part
-        + thumb_part
-        + connector
+        (
+            right_finger_part.color((0.1, 0.1, 0.1))
+            + right_thumb_part.color((0.1, 0.1, 0.1))
+            + right_connector.color((0.4, 0.1, 0.1))
+            + right_keycaps.color((1.0, 0.98, 0.95))
+        ).translate((100, 0, 0))
+        + (
+            left_finger_part.color((0.1, 0.1, 0.1))
+            + left_thumb_part.color((0.1, 0.1, 0.1))
+            + left_connector.color((0.4, 0.1, 0.1))
+            + left_keycaps.color((1.0, 0.98, 0.95))
+        ).translate((-100, 0, 0))
     ).save_as_scad(combined_filepath)
 
     import sys
