@@ -470,6 +470,7 @@ class ThumbWellLayout(Layout):
             .rotate(math.degrees(math.pi / 14), (1, 1, 0)) \
             .rotate(math.degrees(math.pi / (-11/6)), (-1, 1, 0)) \
             .rotate(math.degrees(math.pi / -20), (0, 1, 0)) \
+            .rotate(10, (1, 1, 1)) \
             .translate(self.placement_transform)
 
     def web_all(self):
@@ -587,20 +588,26 @@ class KeyboardAssembly:
             .rotate(-10, (1, 0, 0)) \
             .rotate(5, (0, 1, 0)) \
             .rotate(68, (0, 0, 1)) \
-            .translate((-33, -97, 15))
+            .translate((25, -25, 9)) \
+            .rotate(10, (1, 1, 1)) \
+            .translate(self.thumb_layout.placement_transform)
 
     def transform_thumb_nut2(self, shape):
         return shape \
             .rotate(10, (1, 0, 0)) \
             .rotate(68, (0, 0, 1)) \
-            .translate((-90, -42, 10))
+            .translate((-32, 30, 4)) \
+            .rotate(10, (1, 1, 1)) \
+            .translate(self.thumb_layout.placement_transform)
 
     def transform_thumb_nut3(self, shape):
         return shape \
             .rotate(-20, (1, 0, 0)) \
             .rotate(-20, (0, 0, 1)) \
             .rotate(-18, (0, 1, 0)) \
-            .translate((-61, -15, 38.25))
+            .translate((-3, 57, 32.25)) \
+            .rotate(10, (1, 1, 1)) \
+            .translate(self.thumb_layout.placement_transform)
 
     def switch_socket(self, column, row):
         shape = mx_plate_with_backplate()
