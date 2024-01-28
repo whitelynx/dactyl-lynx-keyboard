@@ -537,6 +537,84 @@ class ThumbWellLayout(Layout):
         )
 
 
+class LCDMount:
+    def __init__(self):
+        self.lcdSize = (27.8, 39.3, 1.2)          # (X, Y, Z)
+        self.lcdMountingHoleCenters = (22.5, 34)  # (X, Y)
+        self.marginWidth = (0.5, 1.1)             # (X, Y)
+        self.frameThickness = (4, 3)              # (X/Y, Z)
+        self.cornerSize = 3.75
+
+    def place(self, shape):
+        return (
+            shape
+            .rotate(20, (1, 0, 0))
+            .translate((-36, 38, 50))
+        )
+
+    def frame(self):
+        cornerBlockSize = self.cornerSize + self.frameThickness[0] / 2
+        cornerBlockThickness = self.frameThickness[1] - self.lcdSize[2]
+
+        cornerBlockOffset = (  # X/Y, Z
+            (self.cornerSize - cornerBlockSize) / 2,
+            (self.frameThickness[1] - cornerBlockThickness) / 2
+        )
+
+        corner = (
+            cube((cornerBlockSize, cornerBlockSize, cornerBlockThickness), center=True)
+            .translate((cornerBlockOffset[0], cornerBlockOffset[0], 0))
+            - screws.screw_hole("M2x1", length=cornerBlockThickness + 0.01, thread=False,
+                                bevel=True, blunt_start=True, _fn=32)
+        ).translate((0, 0, cornerBlockOffset[1]))
+
+        return self.place(
+            cube((
+                self.lcdSize[0] + (self.frameThickness[0] - self.marginWidth[0]) * 2,
+                self.lcdSize[1] + (self.frameThickness[0] - self.marginWidth[1]) * 2,
+                self.frameThickness[1]
+            ), center=True)
+            - cube((
+                self.lcdSize[0] - self.marginWidth[0] * 2,
+                self.lcdSize[1] - self.marginWidth[1] * 2,
+                self.frameThickness[1] + 1
+            ), center=True)
+            - cube((
+                self.lcdSize[0],
+                self.lcdSize[1],
+                self.frameThickness[1]
+            ), center=True)
+            .translate((0, 0, -self.frameThickness[1] + self.lcdSize[2]))
+
+            + corner
+            .translate((-self.lcdMountingHoleCenters[0] / 2, -self.lcdMountingHoleCenters[1] / 2, 0))
+
+            + corner
+            .rotate((0, 0, 90))
+            .translate((self.lcdMountingHoleCenters[0] / 2, -self.lcdMountingHoleCenters[1] / 2, 0))
+
+            + corner
+            .rotate((0, 0, 180))
+            .translate((self.lcdMountingHoleCenters[0] / 2, self.lcdMountingHoleCenters[1] / 2, 0))
+
+            + corner
+            .rotate((0, 0, 270))
+            .translate((-self.lcdMountingHoleCenters[0] / 2, self.lcdMountingHoleCenters[1] / 2, 0))
+        )
+
+    def mount(self, target):
+        return hull()(
+            self.place(
+                cube((
+                    self.lcdSize[0] + (self.frameThickness[0] - self.marginWidth[0]) * 2,
+                    0.01,
+                    self.frameThickness[1]
+                ), center=True)
+                .translate((0, -self.lcdSize[1] / 2 - (self.frameThickness[0] - self.marginWidth[1]), 0))
+            ),
+            target,
+        )
+
 class KeyboardAssembly:
     def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False):
         self.use_color = use_color
@@ -829,6 +907,7 @@ class KeyboardAssembly:
 if __name__ == "__main__":
     #assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=True)
     assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=False)
+    lcdMount = LCDMount()
 
     def switch_cap(column, row):
         shape = sa_cap(1)
@@ -855,6 +934,23 @@ if __name__ == "__main__":
         + assembly.thumb_layout.place_all(switch_cap)
     ).mirror((1, 0, 0))
 
+    assembled_lcd_mount = (
+        lcdMount.frame()
+        + lcdMount.mount(
+            assembly.transform_finger_nut3(
+                cube((10, 0.1, 9), center=True)
+                .translate((0, 5, -20))
+            )
+            .mirror((1, 0, 0))
+            .translate((-100, 0, 0))
+        )
+        + assembly.transform_finger_nut3(
+            assembly.tenting_nut_unthreaded.down(20)
+        )
+        .mirror((1, 0, 0))
+        .translate((-100, 0, 0))
+    )
+
     right_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger.scad"
     print(f"Writing right finger output to {right_finger_filepath} . . .")
     right_finger_part.save_as_scad(right_finger_filepath)
@@ -879,6 +975,10 @@ if __name__ == "__main__":
     print(f"Writing left connector output to {left_connector_filepath} . . .")
     left_connector.save_as_scad(left_connector_filepath)
 
+    lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
+    print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
+    assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
+
     combined_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5.scad"
     print(f"Writing combined output to {combined_filepath} . . .")
     (
@@ -894,6 +994,7 @@ if __name__ == "__main__":
             + left_connector.color((0.4, 0.1, 0.1))
             + left_keycaps.color((1.0, 0.98, 0.95))
         ).translate((-100, 0, 0))
+        + assembled_lcd_mount.color((0.1, 0.3, 0.1))
     ).save_as_scad(combined_filepath)
 
     import sys
