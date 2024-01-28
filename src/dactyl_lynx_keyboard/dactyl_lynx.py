@@ -638,6 +638,8 @@ class KeyboardAssembly:
 
         self.left_side = False
 
+        self.bottom_thumb_nuts = False
+
     def transform_finger_nut1(self, shape):
         return shape \
             .rotate(20, (1, 0, 0)) \
@@ -827,33 +829,35 @@ class KeyboardAssembly:
             self.thumb_layout.place_all(self.switch_socket)
             + self.thumb_layout.web_all()
 
-            + self.transform_thumb_nut1(self.tenting_nut)
-            + hull()(
-                self.transform_thumb_nut1(
-                    cube((10, 0.1, 10), center=True)
-                    .translate((0, 5, 0))
-                ),
-                self.thumb_layout.web_corner(0, 1, left=True, top=False),
-                self.thumb_layout.web_corner(0, 1, left=True, top=True),
-            )
-            + hull()(
-                self.transform_thumb_nut1(
-                    cube((0.1, 10, 10), center=True)
-                    .translate((5, 0, 0))
-                ),
-                self.thumb_layout.web_corner(0, 1, left=False, top=False),
-                self.thumb_layout.web_corner(0, 1, left=True, top=False),
-            )
+            + (
+                self.transform_thumb_nut1(self.tenting_nut)
+                + hull()(
+                    self.transform_thumb_nut1(
+                        cube((10, 0.1, 10), center=True)
+                        .translate((0, 5, 0))
+                    ),
+                    self.thumb_layout.web_corner(0, 1, left=True, top=False),
+                    self.thumb_layout.web_corner(0, 1, left=True, top=True),
+                )
+                + hull()(
+                    self.transform_thumb_nut1(
+                        cube((0.1, 10, 10), center=True)
+                        .translate((5, 0, 0))
+                    ),
+                    self.thumb_layout.web_corner(0, 1, left=False, top=False),
+                    self.thumb_layout.web_corner(0, 1, left=True, top=False),
+                )
 
-            + self.transform_thumb_nut2(self.tenting_nut)
-            + hull()(
-                self.transform_thumb_nut2(
-                    cube((10, 0.1, 10), center=True)
-                    .translate((0, -5, 0))
-                ),
-                self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
-                self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
-            )
+                + self.transform_thumb_nut2(self.tenting_nut)
+                + hull()(
+                    self.transform_thumb_nut2(
+                        cube((10, 0.1, 10), center=True)
+                        .translate((0, -5, 0))
+                    ),
+                    self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
+                    self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
+                )
+            ) if self.bottom_thumb_nuts else nothing
 
             + self.transform_thumb_nut3(self.tenting_nut)
             + hull()(
