@@ -5,7 +5,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * Rewrote the generating code in [Python][] instead of Clojure, using [SolidPython2][] and [spkb][].
 * Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][] and the way my thumbs move; see also Viktor Eikman's [DMOTE][] and [Concertina][] keyboards)
 * Steeper tenting angle
-* Ergodox-compatible keycaps! (it doesn't use _all_ of the Ergodox keys, but the keys it has should all be able to be sourced from [Ergodox keycap sets][] - effectively the same as [the Phat Dactyl][])
+* 1U or 2U keycaps - easy to source
 * A new adjustable skeletal design (which will probably change once I solidify the physical placement of the wells, but I'll likely keep around as an option)
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
 
@@ -16,11 +16,9 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 [the Dactyl-ManuForm]: https://github.com/tshort/dactyl-keyboard
 [DMOTE]: https://viktor.eikman.se/article/the-dmote/
 [Concertina]: https://viktor.eikman.se/article/the-concertina/
-[Ergodox keycap sets]: https://www.reddit.com/r/ergodox/comments/gu4cbm/every_site_for_ergodox_keycaps_that_are_currently/
-[the Phat Dactyl]: https://github.com/adereth/dactyl-keyboard/pull/48
 [Kailh hot-swap sockets]: https://www.kailhswitch.com/mechanical-keyboard-switches/box-switches/hot-swapping-pcb-socket.html
 
-![Skeleton prototype](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/skeleton-prototype.jpg)
+![Skeleton prototype](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/skeleton-prototype.jpg)
 
 
 ## Future plans
@@ -116,7 +114,7 @@ The source code for generating the models (everything excluding the [things/](th
 
 # Old Clojure-based Instructions Below #
 
-![Old preview render](https://raw.githubusercontent.com/whitelynx/dactyl-keyboard/master/resources/preview.png)
+![Old preview render](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/preview.png)
 
 ## Assembly
 
