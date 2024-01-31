@@ -66,15 +66,15 @@ Pregenerated STL files are available in the [things/](things/) directory.
 
 
 ### Bill of Materials
-* 2x microcontrollers - one of the following (see QMK docs for what combinations make sense)
-    * ARM-based: [(see QMK documentation!)][]
-        * [RP2040 TYPE-C 16MB][] - _recommended_
-        * [Raspberry Pi Pico][]
-        * [STM32F4x1 Black Pill][]
-        * [STM32 Blue Pill][]
-        * [QMK Proton C][]
+* 2x microcontrollers - one of the following ([see QMK docs][] for what combinations make sense)
+    * [RP2040 TYPE-C 16MB][] - _recommended_
+    * [Raspberry Pi Pico][]
+    * [STM32F4x1 Black Pill][]
+    * [STM32 Blue Pill][]
+    * [QMK Proton C][]
 * 2x 4+-conductor jacks and matching cable to connect the two sides using full-duplex serial; one of:
     * 4-pin mini-DIN (A.K.A. S-Video) - _recommended_
+    * 4P4C, 6P4C, or similar modular connector (A.K.A. RJ11 or [telephone plug][]) - _recommended_
     * TRRS audio jacks - _not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!_
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
 * 70x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
@@ -84,21 +84,17 @@ Pregenerated STL files are available in the [things/](things/) directory.
     * 56x 1u keycaps
     * 10x 1.5u keycaps
     * 4x 2u keycaps
-* A USB-C _(or USB Micro-B, depending on your microcontroller)_ to USB A cable to plug in your keyboard
+* A USB-C _(or USB Micro-B, depending on your microcontroller)_ cable to plug in your keyboard
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
 
-[(see QMK documentation!)]: https://docs.qmk.fm/#/feature_split_keyboard
+[see QMK docs]: https://docs.qmk.fm/#/feature_split_keyboard
 [RP2040 TYPE-C 16MB]: https://www.aliexpress.com/item/1005003928558306.html?spm=a2g0o.order_list.order_list_main.23.42c018022ZKVRW
 [Raspberry Pi Pico]: https://www.raspberrypi.com/products/raspberry-pi-pico/
 [STM32F4x1 Black Pill]: https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1
 [STM32 Blue Pill]: http://www.hiletgo.com/ProductDetail/2169541.html
 [QMK Proton C]: https://qmk.fm/proton-c/
-[Arduino Micro]: https://store.arduino.cc/products/arduino-micro
-[SparkFun Pro Micro]: https://www.sparkfun.com/products/12640
-[SparkFun Qwiic Pro Micro - USB-C]: https://www.sparkfun.com/products/15795
-[Arduino Pro Mini]: https://docs.arduino.cc/retired/boards/arduino-pro-mini
-[PJRC Teensy]: https://www.pjrc.com/teensy/
+[telephone plug]: https://en.wikipedia.org/wiki/Telephone_jack_and_plug
 [MX-style key switches]: https://mechanicalkeyboards.com/switches/index.php
 
 
