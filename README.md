@@ -77,13 +77,12 @@ Pregenerated STL files are available in the [things/](things/) directory.
     * 4P4C, 6P4C, or similar modular connector (A.K.A. RJ11 or [telephone plug][]) - _recommended_
     * TRRS audio jacks - _not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!_
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
-* 70x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
-* 70x signal diodes _(1N4148 or similar works well)_
-* 70x [Kailh hot-swap sockets][] _(optional - you can replace all mentions of `mx_plate_with_backplate` with `mx_plate` in <src/dactyl_lynx_keyboard/dactyl_lynx.py> if you want to solder directly to the switches; eventually this will be a command-line option)_
-* A set of 70+ keycaps - ErgoDox keycap sets work well, and symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
-    * 56x 1u keycaps
-    * 10x 1.5u keycaps
-    * 4x 2u keycaps
+* 74x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
+* 74x signal diodes _(1N4148 or similar works well)_
+* 74x [Kailh hot-swap sockets][] _(optional - you can replace all mentions of `mx_plate_with_backplate` with `mx_plate` in <src/dactyl_lynx_keyboard/dactyl_lynx.py> if you want to solder directly to the switches; eventually this will be a command-line option)_
+* A set of 74+ keycaps - symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
+    * 72x 1u keycaps
+    * 2x 2u keycaps
 * A USB-C _(or USB Micro-B, depending on your microcontroller)_ cable to plug in your keyboard
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
@@ -96,6 +95,14 @@ Pregenerated STL files are available in the [things/](things/) directory.
 [QMK Proton C]: https://qmk.fm/proton-c/
 [telephone plug]: https://en.wikipedia.org/wiki/Telephone_jack_and_plug
 [MX-style key switches]: https://mechanicalkeyboards.com/switches/index.php
+
+
+### Firmware
+
+See [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch][] for instructions on building and flashing the firmware.
+
+
+[the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch]: https://github.com/whitelynx/qmk_firmware/tree/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx
 
 
 ## License
