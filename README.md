@@ -25,13 +25,14 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY) - I already implemented this in the Clojure version, but I haven't yet ported it to the Python version
 * Adding mouse buttons and a scroll ball from an [Apple Mighty Mouse][] next to the right-hand thumb cluster
 * Adding a thumbstick to the left side?
-* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Use [QMK's Raw HID support][].
+* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Use [QMK's Raw HID support][] or maybe [Vial][]. (though Vial has a limitation of 4 layers)
 * Adding support for ALPS or Choc switches instead of MX-style switches, along with appropriate hot-swap sockets (this will be mostly implemented in [spkb][] first)
 
 [TrackPoint module]: https://github.com/alonswartz/trackpoint
 [Apple Mighty Mouse]: https://en.wikipedia.org/wiki/Apple_Mighty_Mouse
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
 [QMK's Raw HID support]: https://docs.qmk.fm/#/feature_rawhid
+[Vial]: https://get.vial.today/
 
 
 ## Assembly
@@ -95,6 +96,36 @@ Pregenerated STL files are available in the [things/](things/) directory.
 [QMK Proton C]: https://qmk.fm/proton-c/
 [telephone plug]: https://en.wikipedia.org/wiki/Telephone_jack_and_plug
 [MX-style key switches]: https://mechanicalkeyboards.com/switches/index.php
+
+
+### Wiring
+
+This is by no means a comprehensive guide to wiring a keyboard, but here's the approach I chose when building my first Dactyl Lynx:
+
+* use COL2ROW diode orientation
+* solder diode leads together for the rows
+* use insulated hookup wire for the columns
+* connect each column and row of a side to a different color of wire: (aside from some repetition because I ran out of colors)
+    * Columns:
+        * 0: brown
+        * 1: black
+        * 2: white
+        * 3: grey
+        * 4: purple
+        * 5: blue
+    * Rows:
+        * 0: brown
+        * 1: red
+        * 2: orange
+        * 3: yellow
+        * 4: green
+        * 5: green (thumb)
+        * 6: yellow (thumb)
+
+Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][].
+
+
+[the key matrix in my `whitelynx/dactyl_lynx` QMK branch]: https://github.com/whitelynx/qmk_firmware/blob/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx/info.json
 
 
 ### Firmware
