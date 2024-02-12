@@ -74,8 +74,8 @@ Pregenerated STL files are available in the [things/](things/) directory.
     * [STM32 Blue Pill][]
     * [QMK Proton C][]
 * 2x 4+-conductor jacks and matching cable to connect the two sides using full-duplex serial; one of:
-    * 4-pin mini-DIN (A.K.A. S-Video) - _recommended_
-    * 4P4C, 6P4C, or similar modular connector (A.K.A. RJ11 or [telephone plug][]) - _recommended_
+    * 4-pin mini-DIN (A.K.A. S-Video) - _recommended; if accidentally tugged on, it will cleanly disconnect without shorting anything and without pulling the other side of your keyboard off the desk_
+    * 4P4C, 6P4C, or similar modular connector (A.K.A. RJ11 or [telephone plug][])
     * TRRS audio jacks - _not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!_
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
 * 74x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
@@ -105,22 +105,26 @@ This is by no means a comprehensive guide to wiring a keyboard, but here's the a
 * use COL2ROW diode orientation
 * solder diode leads together for the rows
 * use insulated hookup wire for the columns
+* pick a pinout for wiring the 4-pin mini-DIN connectors: 
+    ![4-pin mini-DIN pinout](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/4-pin-mini-din-pinout.png)
 * connect each column and row of a side to a different color of wire: (aside from some repetition because I ran out of colors)
-    * Columns:
-        * 0: brown
-        * 1: black
-        * 2: white
-        * 3: grey
-        * 4: purple
-        * 5: blue
-    * Rows:
-        * 0: brown
-        * 1: red
-        * 2: orange
-        * 3: yellow
-        * 4: green
-        * 5: green (thumb)
-        * 6: yellow (thumb)
+|      Position | Left Side  | Right Side |
+|--------------:|------------|------------|
+|      Column 0 | brown      | brown      |
+|      Column 1 | red        | black      |
+|      Column 2 | orange     | white      |
+|      Column 3 | yellow     | grey       |
+|      Column 4 | green      | purple     |
+|      Column 5 | blue       | blue       |
+|         Row 0 | red        | brown      |
+|         Row 1 | orange     | red        |
+|         Row 2 | yellow     | orange     |
+|         Row 3 | green      | yellow     |
+|         Row 4 | blue       | green      |
+| Row 5 (thumb) | purple     | green      |
+| Row 6 (thumb) | grey       | yellow     |
+
+_Note: the right side's color scheme should probably not be used; it's definitely more haphazard because it was done ad-hoc._
 
 Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][].
 
