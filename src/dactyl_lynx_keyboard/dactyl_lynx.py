@@ -615,6 +615,7 @@ class LCDMount:
             target,
         )
 
+
 class KeyboardAssembly:
     def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False):
         self.use_color = use_color
@@ -622,7 +623,6 @@ class KeyboardAssembly:
         self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys)
         self.thumb_layout = ThumbWellLayout()
 
-        # TODO: Add the screen to the left side finger well
         self.screen_size = (27.75, 39.25)
         self.screen_hole_centers = (22.5, 34.05)
 
@@ -830,34 +830,36 @@ class KeyboardAssembly:
             + self.thumb_layout.web_all()
 
             + (
-                self.transform_thumb_nut1(self.tenting_nut)
-                + hull()(
-                    self.transform_thumb_nut1(
-                        cube((10, 0.1, 10), center=True)
-                        .translate((0, 5, 0))
-                    ),
-                    self.thumb_layout.web_corner(0, 1, left=True, top=False),
-                    self.thumb_layout.web_corner(0, 1, left=True, top=True),
-                )
-                + hull()(
-                    self.transform_thumb_nut1(
-                        cube((0.1, 10, 10), center=True)
-                        .translate((5, 0, 0))
-                    ),
-                    self.thumb_layout.web_corner(0, 1, left=False, top=False),
-                    self.thumb_layout.web_corner(0, 1, left=True, top=False),
-                )
+                (
+                    self.transform_thumb_nut1(self.tenting_nut)
+                    + hull()(
+                        self.transform_thumb_nut1(
+                            cube((10, 0.1, 10), center=True)
+                            .translate((0, 5, 0))
+                        ),
+                        self.thumb_layout.web_corner(0, 1, left=True, top=False),
+                        self.thumb_layout.web_corner(0, 1, left=True, top=True),
+                    )
+                    + hull()(
+                        self.transform_thumb_nut1(
+                            cube((0.1, 10, 10), center=True)
+                            .translate((5, 0, 0))
+                        ),
+                        self.thumb_layout.web_corner(0, 1, left=False, top=False),
+                        self.thumb_layout.web_corner(0, 1, left=True, top=False),
+                    )
 
-                + self.transform_thumb_nut2(self.tenting_nut)
-                + hull()(
-                    self.transform_thumb_nut2(
-                        cube((10, 0.1, 10), center=True)
-                        .translate((0, -5, 0))
-                    ),
-                    self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
-                    self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
-                )
-            ) if self.bottom_thumb_nuts else nothing
+                    + self.transform_thumb_nut2(self.tenting_nut)
+                    + hull()(
+                        self.transform_thumb_nut2(
+                            cube((10, 0.1, 10), center=True)
+                            .translate((0, -5, 0))
+                        ),
+                        self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
+                        self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
+                    )
+                ) if self.bottom_thumb_nuts else nothing
+            )
 
             + self.transform_thumb_nut3(self.tenting_nut)
             + hull()(
