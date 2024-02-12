@@ -458,6 +458,22 @@ class ThumbWellLayout(Layout):
             (2, 1),
         )
 
+    def placement_adjust(self, column, row, shape):
+        """Adjust the position of the given key/location in the layout.
+
+        :param column: the column to place the key in
+        :type column: number
+
+        :param row: the row to place the key in
+        :type row: number
+
+        :param shape: the shape to place
+        """
+        if (isinstance(row, float) and not row.is_integer()) or (isinstance(column, float) and not column.is_integer()):
+            return shape.translate((0, 0, 1))
+        else:
+            return shape
+
     def layout_place(self, shape):
         """Place the layout.
 
