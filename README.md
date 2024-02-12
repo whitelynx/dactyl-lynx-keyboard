@@ -1,4 +1,5 @@
 # The Dactyl Lynx Keyboard
+
 The Dactyl Lynx is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
 This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
@@ -22,6 +23,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 
 
 ## Future plans
+
 * Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY) - I already implemented this in the Clojure version, but I haven't yet ported it to the Python version
 * Adding mouse buttons and a scroll ball from an [Apple Mighty Mouse][] next to the right-hand thumb cluster
 * Adding a thumbstick to the left side?
@@ -63,10 +65,13 @@ pipenv run python src/dactyl_lynx_keyboard/dactyl_lynx.py --help
 
 
 ### Printing
-Pregenerated STL files are available in the [things/](things/) directory.
+
+~~Pregenerated STL files are available in the [things/](things/) directory.~~
+For now, you're better off generating the model directly instead of using any of the existing files in the `things/` directory.
 
 
 ### Bill of Materials
+
 * 2x microcontrollers - one of the following ([see QMK docs][] for what combinations make sense)
     * [RP2040 TYPE-C 16MB][] - _recommended_
     * [Raspberry Pi Pico][]
