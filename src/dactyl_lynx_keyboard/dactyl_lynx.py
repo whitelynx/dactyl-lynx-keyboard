@@ -393,9 +393,9 @@ class FingerWellLayout(Layout):
         :param shape: the shape to place
         """
         if column == 2:
-            return shape.translate((0, 2.82, -3.0))
+            return shape.translate((0, 6.82, -4.0))
         elif column >= 4:
-            return shape.translate((0, -5.8, 5.64))
+            return shape.translate((0, -11.8, 7.64))
         else:
             return shape
 
@@ -441,7 +441,7 @@ class ThumbWellLayout(Layout):
         self.rad_per_row = math.pi / 12
         self.rad_per_col = math.pi / 8
 
-        self.placement_transform = (-53, -72, 6)
+        self.placement_transform = (-54, -72, 6)
 
     def generate_positions(self):
         """Generate the list of locations within the layout.
@@ -659,9 +659,9 @@ class KeyboardAssembly:
     def transform_board(self, shape):
         return shape \
             .rotate(90, (0, 0, 1)) \
-            .rotate(-65, (1, 0, 0)) \
-            .rotate(24, (0, 1, 0)) \
-            .translate((-34, 53, 52))
+            .rotate(-120, (1, 0, 0)) \
+            .rotate(19, (0, 1, 0)) \
+            .translate((-34, 59, 55))
 
     def transform_thumb_nut1(self, shape):
         return shape \
