@@ -441,7 +441,7 @@ class ThumbWellLayout(Layout):
         self.rad_per_row = math.pi / 12
         self.rad_per_col = math.pi / 8
 
-        self.placement_transform = (-58, -72, 6)
+        self.placement_transform = (-53, -72, 6)
 
     def generate_positions(self):
         """Generate the list of locations within the layout.
