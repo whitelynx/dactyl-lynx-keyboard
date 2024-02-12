@@ -638,7 +638,7 @@ class KeyboardAssembly:
 
         self.left_side = False
 
-        self.bottom_thumb_nuts = False
+        self.bottom_thumb_nuts = True
 
     def transform_finger_nut1(self, shape):
         return shape \
@@ -667,8 +667,8 @@ class KeyboardAssembly:
         return shape \
             .rotate(-10, (1, 0, 0)) \
             .rotate(5, (0, 1, 0)) \
-            .rotate(68, (0, 0, 1)) \
-            .translate((25, -25, 9)) \
+            .rotate(48, (0, 0, 1)) \
+            .translate((20, -25, 9)) \
             .rotate(10, (1, 1, 1)) \
             .translate(self.thumb_layout.placement_transform)
 
@@ -685,7 +685,7 @@ class KeyboardAssembly:
             .rotate(-20, (1, 0, 0)) \
             .rotate(-20, (0, 0, 1)) \
             .rotate(-18, (0, 1, 0)) \
-            .translate((-3, 57, 32.25)) \
+            .translate((-3, 57, 32)) \
             .rotate(10, (1, 1, 1)) \
             .translate(self.thumb_layout.placement_transform)
 
@@ -849,15 +849,15 @@ class KeyboardAssembly:
                         self.thumb_layout.web_corner(0, 1, left=True, top=False),
                     )
 
-                    + self.transform_thumb_nut2(self.tenting_nut)
-                    + hull()(
-                        self.transform_thumb_nut2(
-                            cube((10, 0.1, 10), center=True)
-                            .translate((0, -5, 0))
-                        ),
-                        self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
-                        self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
-                    )
+                    # + self.transform_thumb_nut2(self.tenting_nut)
+                    # + hull()(
+                    #     self.transform_thumb_nut2(
+                    #         cube((10, 0.1, 10), center=True)
+                    #         .translate((0, -5, 0))
+                    #     ),
+                    #     self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
+                    #     self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
+                    # )
                 ) if self.bottom_thumb_nuts else nothing
             )
 
