@@ -22,7 +22,7 @@ from spkb.switch_plate import (
 )
 from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length, sa_cap
-from spkb.utils import nothing
+from spkb.utils import cylinder_outer, nothing
 
 
 class Layout:
@@ -632,12 +632,27 @@ class LCDMount:
         )
 
 
+class MiniDINConnectorMount:
+    def __init__(self):
+        self.connectorRadius = 11.4 / 2
+        self.frameWidth = 4
+        self.frameThickness = 1.25
+
+    def frame(self):
+        return cylinder_outer(self.connectorRadius + self.frameWidth, self.frameThickness)
+
+    def hole(self):
+        return cylinder_outer(self.connectorRadius, self.frameThickness * 8, center=True)
+
+
 class KeyboardAssembly:
     def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False):
         self.use_color = use_color
 
         self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys)
         self.thumb_layout = ThumbWellLayout()
+
+        self.connector_mount = MiniDINConnectorMount()
 
         self.screen_size = (27.75, 39.25)
         self.screen_hole_centers = (22.5, 34.05)
@@ -676,8 +691,14 @@ class KeyboardAssembly:
         return shape \
             .rotate(90, (0, 0, 1)) \
             .rotate(-120, (1, 0, 0)) \
-            .rotate(19, (0, 1, 0)) \
-            .translate((-34, 59, 55))
+            .rotate(17, (0, 1, 0)) \
+            .translate((-39, 61, 56))
+
+    def transform_connector_mount(self, shape):
+        return shape \
+            .rotate(-47, (0, 1, 0)) \
+            .rotate(12, (0, 0, 1)) \
+            .translate((-45.5, 50, 47))
 
     def transform_thumb_nut1(self, shape):
         return shape \
@@ -821,9 +842,8 @@ class KeyboardAssembly:
                     cube((60, 120, 8), center=True)
                     & stm32_blackpill.back_mounting_posts(distance_from_surface=8)
                 ),
-                self.finger_layout.web_corner(3, 0, left=True, top=True),
-                self.finger_layout.web_corner(3, 0, left=False, top=True),
                 self.finger_layout.web_corner(2, 0, left=False, top=True),
+                self.finger_layout.web_corner(2, 0, left=True, top=True),
             )
             + hull()(
                 self.transform_board(
@@ -833,6 +853,13 @@ class KeyboardAssembly:
                 self.finger_layout.web_corner(0, 0, left=True, top=True),
                 self.finger_layout.web_corner(0, 0, left=False, top=True),
             )
+
+            + hull() (
+                self.transform_connector_mount(self.connector_mount.frame()),
+                self.finger_layout.web_corner(0, 0, left=True, top=False),
+                self.finger_layout.web_corner(0, 0, left=True, top=True),
+            )
+            - self.transform_connector_mount(self.connector_mount.hole())
         )
 
         if self.use_color:
