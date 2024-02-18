@@ -113,21 +113,21 @@ This is by no means a comprehensive guide to wiring a keyboard, but here's the a
 * pick a pinout for wiring the 4-pin mini-DIN connectors: 
     ![4-pin mini-DIN pinout](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/4-pin-mini-din-pinout.png)
 * connect each column and row of a side to a different color of wire: (aside from some repetition because I ran out of colors)
-  |      Position | Left Side  | Right Side |
-  |--------------:|------------|------------|
-  |      Column 0 | brown      | brown      |
-  |      Column 1 | red        | black      |
-  |      Column 2 | orange     | white      |
-  |      Column 3 | yellow     | grey       |
-  |      Column 4 | green      | purple     |
-  |      Column 5 | blue       | blue       |
-  |         Row 0 | red        | brown      |
-  |         Row 1 | orange     | red        |
-  |         Row 2 | yellow     | orange     |
-  |         Row 3 | green      | yellow     |
-  |         Row 4 | blue       | green      |
-  | Row 5 (thumb) | purple     | green      |
-  | Row 6 (thumb) | grey       | yellow     |
+  |      Position | Left Side  | Right Side | Pin |
+  |--------------:|------------|------------|-----|
+  |      Column 0 | brown      | brown      | 2   |
+  |      Column 1 | red        | black      | 3   |
+  |      Column 2 | orange     | white      | 4   |
+  |      Column 3 | yellow     | grey       | 5   |
+  |      Column 4 | green      | purple     | 6   |
+  |      Column 5 | blue       | blue       | 7   |
+  |         Row 0 | red        | brown      | 8   |
+  |         Row 1 | orange     | red        | 9   |
+  |         Row 2 | yellow     | orange     | 10  |
+  |         Row 3 | green      | yellow     | 11  |
+  |         Row 4 | blue       | green      | 12  |
+  | Row 5 (thumb) | purple     | green      | 13  |
+  | Row 6 (thumb) | grey       | yellow     | 14  |
 
   _Note: the right side's color scheme should probably not be used; it's definitely more haphazard because it was done ad-hoc._
 
