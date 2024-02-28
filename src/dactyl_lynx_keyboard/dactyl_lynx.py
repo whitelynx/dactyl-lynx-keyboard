@@ -406,6 +406,7 @@ class FingerWellLayout(Layout):
         """
         return shape \
             .rotate(math.degrees(math.pi / 10), (0, 1, 0)) \
+            .rotate(math.degrees(math.pi / 10), (1, 0, 0)) \
             .translate((0, 0, 22))
 
     def web_all(self):
@@ -638,8 +639,11 @@ class MiniDINConnectorMount:
         self.frameWidth = 4
         self.frameThickness = 1.25
 
+    def outerRadius(self):
+        return self.connectorRadius + self.frameWidth
+
     def frame(self):
-        return cylinder_outer(self.connectorRadius + self.frameWidth, self.frameThickness)
+        return cylinder_outer(self.outerRadius(), self.frameThickness)
 
     def hole(self):
         return cylinder_outer(self.connectorRadius, self.frameThickness * 8, center=True)
@@ -674,31 +678,39 @@ class KeyboardAssembly:
     def transform_finger_nut1(self, shape):
         return shape \
             .rotate(20, (1, 0, 0)) \
-            .translate((64, 50, 35))
+            .translate((64, 45, 45))
 
     def transform_finger_nut2(self, shape):
         return shape \
             .rotate(-15, (1, 0, 0)) \
             .rotate(-5, (0, 1, 0)) \
-            .translate((78, -49, 28))
+            .translate((78, -49, 10))
 
     def transform_finger_nut3(self, shape):
         return shape \
             .rotate(15, (0, 1, 0)) \
-            .translate((-52, 0, 45))
+            .rotate(9, (1, 0, 0)) \
+            .translate((-52, 16, 49))
 
     def transform_board(self, shape):
         return shape \
             .rotate(90, (0, 0, 1)) \
             .rotate(-120, (1, 0, 0)) \
             .rotate(17, (0, 1, 0)) \
-            .translate((-39, 61, 56))
+            .translate((-39, 55, 73))
 
     def transform_connector_mount(self, shape):
-        return shape \
-            .rotate(-47, (0, 1, 0)) \
-            .rotate(12, (0, 0, 1)) \
-            .translate((-45.5, 50, 47))
+        return self.finger_layout.key_place(
+            0,
+            0,
+            shape
+            .rotate(-90, (0, 1, 0))
+            .translate((
+                (self.finger_layout.keyswitch_width + self.connector_mount.frameThickness) / -2 - 1,
+                0,
+                -self.connector_mount.outerRadius() - 2
+            ))
+        )
 
     def transform_thumb_nut1(self, shape):
         return shape \
@@ -816,24 +828,24 @@ class KeyboardAssembly:
                     cube((10, 0.1, 10), center=True)
                     .translate((0, 5, 0))
                 ),
-                self.finger_layout.web_corner(0, 1, left=True, top=False),
-                self.finger_layout.web_corner(0, 2, left=True, top=True),
+                self.finger_layout.web_corner(0, 0, left=True, top=False),
+                self.finger_layout.web_corner(0, 1, left=True, top=True),
             )
             + hull()(
                 self.transform_finger_nut3(
                     cube((0.1, 10, 10), center=True)
                     .translate((5, 0, 0))
                 ),
-                self.finger_layout.web_corner(0, 2, left=True, top=True),
-                self.finger_layout.web_corner(0, 2, left=True, top=False),
+                self.finger_layout.web_corner(0, 1, left=True, top=True),
+                self.finger_layout.web_corner(0, 1, left=True, top=False),
             )
             + hull()(
                 self.transform_finger_nut3(
                     cube((10, 0.1, 10), center=True)
                     .translate((0, -5, 0))
                 ),
-                self.finger_layout.web_corner(0, 2, left=True, top=False),
-                self.finger_layout.web_corner(0, 3, left=True, top=True),
+                self.finger_layout.web_corner(0, 1, left=True, top=False),
+                self.finger_layout.web_corner(0, 2, left=True, top=True),
             )
 
             + self.transform_board(stm32_blackpill.render(distance_from_surface=8))
