@@ -130,6 +130,7 @@ This is by no means a comprehensive guide to wiring a keyboard, but here's the a
   | Row 6 (thumb) | grey       | yellow     | 14  |
 
   _Note: the right side's color scheme should probably not be used; it's definitely more haphazard because it was done ad-hoc._
+  _Note 2: the top columns cable on the left side finger well is wired in reverse; brown goes to column 5 instead of column 0, and so is on pin 7 instead of 2. The cable connecting to the thumb well is correctly wired, so the colors switch at the column connections._
 
 Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][].
 
