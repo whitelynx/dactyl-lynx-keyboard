@@ -448,8 +448,8 @@ class ThumbWellLayout(Layout):
         """
         return (
             # (column, row)
-            (0, -1/2), # 2u key
-            (0, 1),
+            (0, -1),
+            (0, 1/2), # 2u key
             (1, -1),
             (1, 0),
             (1, 1),
@@ -499,7 +499,7 @@ class ThumbWellLayout(Layout):
                     self.web_top_left_of(column, row)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > -1 and (column, row) not in (
-                        (1, 1),
+                        (1, -1),
                         (1, 0),
                     )
                 ),
@@ -508,43 +508,43 @@ class ThumbWellLayout(Layout):
                     for (column, row) in self.generate_positions()
                     if column > 0 and (column, row) not in (
                         (1, 0),
-                        (1, -1),
+                        (1, 1),
                     )
                 ),
                 (
                     self.web_above(column, row)
                     for (column, row) in self.generate_positions()
                     if row > -1 and (column, row) not in (
-                        (0, 1),
-                        (0, -1/2),
+                        (0, 1/2),
+                        (0, -1),
                     )
                 ),
                 [
                     hull()(
-                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
-                        self.web_corner(0, 1, left=False, top=True),
-                        self.web_corner(1, 1, left=True, top=True),
-                        self.web_corner(1, 0, left=True, top=False),
-                    ),
-                    hull()(
-                        self.web_corner(0, -1/2, left=True, top=False, row_span=2),
-                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
-                        self.web_corner(0, 1, left=False, top=True),
-                        self.web_corner(0, 1, left=True, top=True),
-                    ),
-                    hull()(
-                        self.web_corner(0, -1/2, left=False, top=True, row_span=2),
-                        self.web_corner(1, -1, left=True, top=True),
-                        self.web_corner(1, -1, left=True, top=False),
-                    ),
-                    hull()(
-                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
-                        self.web_corner(0, -1/2, left=False, top=True, row_span=2),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
+                        self.web_corner(0, -1, left=False, top=False),
                         self.web_corner(1, -1, left=True, top=False),
                         self.web_corner(1, 0, left=True, top=True),
                     ),
                     hull()(
-                        self.web_corner(0, -1/2, left=False, top=False, row_span=2),
+                        self.web_corner(0, -1, left=True, top=False),
+                        self.web_corner(0, -1, left=False, top=False),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
+                        self.web_corner(0, 1/2, left=True, top=True, row_span=2),
+                    ),
+                    hull()(
+                        self.web_corner(0, 1/2, left=False, top=False, row_span=2),
+                        self.web_corner(1, 1, left=True, top=True),
+                        self.web_corner(1, 1, left=True, top=False),
+                    ),
+                    hull()(
+                        self.web_corner(0, 1/2, left=False, top=False, row_span=2),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
+                        self.web_corner(1, 0, left=True, top=False),
+                        self.web_corner(1, 1, left=True, top=True),
+                    ),
+                    hull()(
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
                         self.web_corner(1, 0, left=True, top=False),
                         self.web_corner(1, 0, left=True, top=True),
                     ),
@@ -669,7 +669,7 @@ class KeyboardAssembly:
 
         self.left_side = False
 
-        self.bottom_thumb_nuts = True
+        self.bottom_thumb_nuts = False
 
     def transform_finger_nut1(self, shape):
         return shape \
