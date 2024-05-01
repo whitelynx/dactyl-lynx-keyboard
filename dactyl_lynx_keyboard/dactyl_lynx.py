@@ -697,7 +697,7 @@ class KeyboardAssembly:
             .rotate(90, (0, 0, 1)) \
             .rotate(-120, (1, 0, 0)) \
             .rotate(17, (0, 1, 0)) \
-            .translate((-39, 55, 73))
+            .translate((-19, 53, 70))
 
     def transform_connector_mount(self, shape):
         return self.finger_layout.key_place(
@@ -854,16 +854,16 @@ class KeyboardAssembly:
                     cube((60, 120, 8), center=True)
                     & stm32_blackpill.back_mounting_posts(distance_from_surface=8)
                 ),
-                self.finger_layout.web_corner(2, 0, left=False, top=True),
-                self.finger_layout.web_corner(2, 0, left=True, top=True),
+                self.finger_layout.web_corner(3, 0, left=False, top=True),
+                self.finger_layout.web_corner(3, 0, left=True, top=True),
             )
             + hull()(
                 self.transform_board(
                     cube((60, 120, 6), center=True)
                     & stm32_blackpill.front_mounting_posts(distance_from_surface=8)
                 ),
-                self.finger_layout.web_corner(0, 0, left=True, top=True),
-                self.finger_layout.web_corner(0, 0, left=False, top=True),
+                self.finger_layout.web_corner(1, 0, left=True, top=True),
+                self.finger_layout.web_corner(1, 0, left=False, top=True),
             )
 
             + hull() (
