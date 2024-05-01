@@ -6,7 +6,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * Rewrote the generating code in [Python][] instead of Clojure, using [SolidPython2][] and [spkb][].
 * Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][] and the way my thumbs move; see also Viktor Eikman's [DMOTE][] and [Concertina][] keyboards)
 * Steeper tenting angle
-* 1U or 2U keycaps - easy to source
+* 1U or 2U keycaps - easy to source (look for ortholinear keycap sets, or possibly Ergodox sets with a few extra keycaps)
 * A new adjustable skeletal design (which will probably change once I solidify the physical placement of the wells, but I'll likely keep around as an option)
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
 
