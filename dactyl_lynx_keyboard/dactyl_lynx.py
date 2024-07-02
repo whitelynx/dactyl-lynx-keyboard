@@ -636,17 +636,26 @@ class LCDMount:
 class MiniDINConnectorMount:
     def __init__(self):
         self.connectorRadius = 11.4 / 2
-        self.frameWidth = 4
-        self.frameThickness = 1.25
+        self.innerFrameWidth = 2
+        self.innerFrameThickness = 1.25
+        self.outerFrameWidth = 3
+        self.outerFrameThickness = 4
 
     def outerRadius(self):
-        return self.connectorRadius + self.frameWidth
+        return self.connectorRadius + self.innerFrameWidth + self.outerFrameWidth
 
     def frame(self):
-        return cylinder_outer(self.outerRadius(), self.frameThickness)
+        return (
+            cylinder_outer(self.outerRadius(), self.outerFrameThickness)
+        )
 
     def hole(self):
-        return cylinder_outer(self.connectorRadius, self.frameThickness * 8, center=True)
+        return (
+            cylinder_outer(self.outerRadius() - self.outerFrameWidth, self.outerFrameThickness * 8, center=True)
+            - cylinder_outer(self.outerRadius(), self.innerFrameThickness)
+            .translate((0, 0, self.outerFrameWidth / 2))
+            + cylinder_outer(self.connectorRadius, self.innerFrameThickness * 8, center=True)
+        )
 
 
 class KeyboardAssembly:
@@ -706,7 +715,7 @@ class KeyboardAssembly:
             shape
             .rotate(-90, (0, 1, 0))
             .translate((
-                (self.finger_layout.keyswitch_width + self.connector_mount.frameThickness) / -2 - 1,
+                (self.finger_layout.keyswitch_width + self.connector_mount.outerFrameThickness) / -2 - 1,
                 0,
                 -self.connector_mount.outerRadius() - 2
             ))
@@ -870,6 +879,10 @@ class KeyboardAssembly:
                 self.transform_connector_mount(self.connector_mount.frame()),
                 self.finger_layout.web_corner(0, 0, left=True, top=False),
                 self.finger_layout.web_corner(0, 0, left=True, top=True),
+                self.transform_finger_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, 5, 0))
+                ),
             )
             - self.transform_connector_mount(self.connector_mount.hole())
         )
