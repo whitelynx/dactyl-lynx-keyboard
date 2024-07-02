@@ -566,7 +566,7 @@ class LCDMount:
         return (
             shape
             .rotate(20, (1, 0, 0))
-            .translate((-36, 38, 50))
+            .translate((-25, 48, 50))
         )
 
     def frame(self):
