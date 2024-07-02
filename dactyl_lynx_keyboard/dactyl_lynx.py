@@ -866,6 +866,10 @@ class KeyboardAssembly:
                 self.finger_layout.web_corner(3, 0, left=False, top=True),
                 self.finger_layout.web_corner(3, 0, left=True, top=True),
             )
+            - self.transform_board(
+                cube((4, 6, 20), center=True)
+                .translate((6, -46, 0))
+            )
             + hull()(
                 self.transform_board(
                     cube((60, 120, 6), center=True)
@@ -873,6 +877,25 @@ class KeyboardAssembly:
                 ),
                 self.finger_layout.web_corner(1, 0, left=True, top=True),
                 self.finger_layout.web_corner(1, 0, left=False, top=True),
+            )
+            + self.transform_board(
+                hull()(
+                    cube((60, 120, 2), center=True)
+                    & stm32_blackpill.back_mounting_posts(distance_from_surface=8),
+                    cube((60, 120, 2), center=True)
+                    & stm32_blackpill.front_mounting_posts(distance_from_surface=8)
+                )
+                + cube((11, 3, 13), center=True)
+                .translate((0, 3 / 2, 13 / 2))
+                - stm32_blackpill.board_profile(distance_from_surface=8)
+
+                # Holes for buttons on RP2040 TYPE-C 16MB
+                - cube((4, 6, 20), center=True)
+                .translate((-5 if self.left_side else 5, -22, 0))
+                - cube((4, 6, 20), center=True)
+                .translate((-6, -46, 0))
+                - cube((4, 6, 20), center=True)
+                .translate((6, -46, 0))
             )
 
             + hull() (
