@@ -1000,6 +1000,30 @@ class KeyboardAssembly:
             )
         )
 
+    def single_piece(self):
+        return (
+            self.finger_part()
+            + hull()(
+                self.transform_finger_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, -5, 0))
+                ),
+                self.transform_thumb_nut3(
+                    cube((10, 0.1, 10), center=True)
+                    .translate((0, 5, 0))
+                ),
+            )
+            + hull()(
+                self.transform_thumb_nut3(
+                    cube((0.1, 10, 10), center=True)
+                    .translate((5, 0, 0))
+                ),
+                self.finger_layout.web_corner(0, 2, left=True, top=False),
+                self.finger_layout.web_corner(0, 3, left=True, top=True),
+            )
+            + self.thumb_part()
+        )
+
 
 if __name__ == "__main__":
     #assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=True)
@@ -1021,6 +1045,7 @@ if __name__ == "__main__":
         assembly.finger_layout.place_all(switch_cap)
         + assembly.thumb_layout.place_all(switch_cap)
     )
+    right_single_piece = assembly.single_piece()
 
     assembly.left_side = True
     left_finger_part = assembly.finger_part().mirror((1, 0, 0))
@@ -1030,19 +1055,20 @@ if __name__ == "__main__":
         assembly.finger_layout.place_all(switch_cap)
         + assembly.thumb_layout.place_all(switch_cap)
     ).mirror((1, 0, 0))
+    left_single_piece = assembly.single_piece().mirror((1, 0, 0))
 
     assembled_lcd_mount = (
         lcdMount.frame()
         + lcdMount.mount(
             assembly.transform_finger_nut3(
                 cube((10, 0.1, 9), center=True)
-                .translate((0, 5, -20))
+                .translate((0, 5, -10))
             )
             .mirror((1, 0, 0))
             .translate((-100, 0, 0))
         )
         + assembly.transform_finger_nut3(
-            assembly.tenting_nut_unthreaded.down(20)
+            assembly.tenting_nut_unthreaded.down(10)
         )
         .mirror((1, 0, 0))
         .translate((-100, 0, 0))
@@ -1060,6 +1086,10 @@ if __name__ == "__main__":
     print(f"Writing right connector output to {right_connector_filepath} . . .")
     right_connector.save_as_scad(right_connector_filepath)
 
+    right_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-single-piece.scad"
+    print(f"Writing right single_piece output to {right_single_piece_filepath} . . .")
+    right_single_piece.save_as_scad(right_single_piece_filepath)
+
     left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
     print(f"Writing left finger output to {left_finger_filepath} . . .")
     left_finger_part.save_as_scad(left_finger_filepath)
@@ -1072,6 +1102,10 @@ if __name__ == "__main__":
     print(f"Writing left connector output to {left_connector_filepath} . . .")
     left_connector.save_as_scad(left_connector_filepath)
 
+    left_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-single-piece.scad"
+    print(f"Writing left single_piece output to {left_single_piece_filepath} . . .")
+    left_single_piece.save_as_scad(left_single_piece_filepath)
+
     lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
     print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
     assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
@@ -1080,16 +1114,19 @@ if __name__ == "__main__":
     print(f"Writing combined output to {combined_filepath} . . .")
     (
         (
-            right_finger_part.color((0.1, 0.1, 0.1))
-            + right_thumb_part.color((0.1, 0.1, 0.1))
-            + right_connector.color((0.4, 0.1, 0.1))
-            + right_keycaps.color((1.0, 0.98, 0.95))
+            #right_finger_part.color((0.1, 0.1, 0.9))
+            #+ right_thumb_part.color((0.1, 0.1, 0.1))
+            #+ right_connector.color((0.4, 0.1, 0.1))
+            right_single_piece.color((0.1, 0.1, 0.9))
+            #+ assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_holes()).color((1, 0, 1), alpha=0.25)
+            #+ right_keycaps.color((1.0, 0.98, 0.95))
         ).translate((100, 0, 0))
         + (
-            left_finger_part.color((0.1, 0.1, 0.1))
-            + left_thumb_part.color((0.1, 0.1, 0.1))
-            + left_connector.color((0.4, 0.1, 0.1))
-            + left_keycaps.color((1.0, 0.98, 0.95))
+            #left_finger_part.color((0.1, 0.1, 0.9))
+            #+ left_thumb_part.color((0.1, 0.1, 0.1))
+            #+ left_connector.color((0.4, 0.1, 0.1))
+            left_single_piece.color((0.1, 0.1, 0.9))
+            #+ left_keycaps.color((1.0, 0.98, 0.95))
         ).translate((-100, 0, 0))
         + assembled_lcd_mount.color((0.1, 0.3, 0.1))
     ).save_as_scad(combined_filepath)
