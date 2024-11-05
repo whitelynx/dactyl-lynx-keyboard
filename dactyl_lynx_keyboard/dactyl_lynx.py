@@ -22,6 +22,7 @@ from spkb.switch_plate import (
 )
 from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length, sa_cap
+from spkb.single_key_pcb import single_key_board
 from spkb.utils import cylinder_outer, nothing
 
 
@@ -1051,6 +1052,8 @@ if __name__ == "__main__":
     )
     lcdMount = LCDMount()
 
+    pcb_board = single_key_board()
+
     def switch_cap(column, row):
         shape = sa_cap(1)
         if isinstance(row, float) and not row.is_integer():
@@ -1066,8 +1069,14 @@ if __name__ == "__main__":
         assembly.finger_layout.place_all(switch_cap)
         + assembly.thumb_layout.place_all(switch_cap)
     )
+    right_pcbs = (
+        assembly.finger_layout.place_all(pcb_board)
+        + assembly.thumb_layout.place_all(pcb_board)
+    )
     right_single_piece = assembly.single_piece()
 
+    # TODO: We probably shouldn't need to explicitly call .mirror((1, 0, 0)) here...
+    # Maybe wrap the assembly methods to automatically do this?
     assembly.left_side = True
     left_finger_part = assembly.finger_part().mirror((1, 0, 0))
     left_thumb_part = assembly.thumb_part().mirror((1, 0, 0))
@@ -1075,6 +1084,10 @@ if __name__ == "__main__":
     left_keycaps = (
         assembly.finger_layout.place_all(switch_cap)
         + assembly.thumb_layout.place_all(switch_cap)
+    ).mirror((1, 0, 0))
+    left_pcbs = (
+        assembly.finger_layout.place_all(pcb_board)
+        + assembly.thumb_layout.place_all(pcb_board)
     ).mirror((1, 0, 0))
     left_single_piece = assembly.single_piece().mirror((1, 0, 0))
 
@@ -1141,6 +1154,7 @@ if __name__ == "__main__":
             right_single_piece.color((0.1, 0.1, 0.9))
             #+ assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_holes()).color((1, 0, 1), alpha=0.25)
             #+ right_keycaps.color((1.0, 0.98, 0.95))
+            + right_pcbs.color((0, 0.4, 0))
         ).translate((100, 0, 0))
         + (
             #left_finger_part.color((0.1, 0.1, 0.9))
@@ -1148,6 +1162,7 @@ if __name__ == "__main__":
             #+ left_connector.color((0.4, 0.1, 0.1))
             left_single_piece.color((0.1, 0.1, 0.9))
             #+ left_keycaps.color((1.0, 0.98, 0.95))
+            + left_pcbs.color((0, 0.4, 0))
         ).translate((-100, 0, 0))
         + assembled_lcd_mount.color((0.1, 0.3, 0.1))
     ).save_as_scad(combined_filepath)
