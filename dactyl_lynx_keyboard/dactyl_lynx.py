@@ -26,7 +26,7 @@ from spkb.utils import cylinder_outer, nothing
 
 
 class Layout:
-    def __init__(self, columns=6, rows=5):
+    def __init__(self, columns=6, rows=5, wall_thickness=1.5):
         """Create a layout manager.
 
         :param columns: the number of columns in the layout
@@ -34,6 +34,9 @@ class Layout:
 
         :param rows: the number of rows in the layout
         :type rows: int
+
+        :param wall_thickness: the wall thickness of the chosen socket shape
+        :type wall_thickness: float
         """
 
         self.rows = rows
@@ -58,6 +61,8 @@ class Layout:
 
         self.web_post_size = 0.1
         self.web_thickness = keyswitch_depth
+
+        self.wall_thickness = wall_thickness
 
     @property
     def row_radius(self):
@@ -221,8 +226,8 @@ class Layout:
         post = cube((self.web_post_size, self.web_post_size, self.web_thickness), center=True) \
             .translate((0, 0, plate_thickness - (self.web_thickness / 2)))
 
-        x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + 1.45
-        y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + 1.45
+        x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness
+        y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness
 
         return self.key_place(
             column,
@@ -338,8 +343,8 @@ class Layout:
 
 
 class FingerWellLayout(Layout):
-    def __init__(self, columns=6, rows=5, use_1_5u_keys=True):
-        super(FingerWellLayout, self).__init__(columns=columns, rows=rows)
+    def __init__(self, columns=6, rows=5, use_1_5u_keys=True, wall_thickness=1.5):
+        super(FingerWellLayout, self).__init__(columns=columns, rows=rows, wall_thickness=wall_thickness)
 
         self.use_1_5u_keys = use_1_5u_keys
 
@@ -435,8 +440,8 @@ class FingerWellLayout(Layout):
 
 
 class ThumbWellLayout(Layout):
-    def __init__(self, columns=3, rows=3):
-        super(ThumbWellLayout, self).__init__(columns=columns, rows=rows)
+    def __init__(self, columns=3, rows=3, wall_thickness=1.5):
+        super(ThumbWellLayout, self).__init__(columns=columns, rows=rows, wall_thickness=wall_thickness)
 
         # Cupping amounts, in radians per row/column
         self.rad_per_row = math.pi / 12
@@ -659,12 +664,13 @@ class MiniDINConnectorMount:
 
 
 class KeyboardAssembly:
-    def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False, socket_shape=mx_plate_with_backplate):
+    def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False, socket_shape=mx_plate_with_backplate, wall_thickness=1.5):
         self.use_color = use_color
         self.socket_shape = socket_shape
+        self.wall_thickness = wall_thickness
 
-        self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys)
-        self.thumb_layout = ThumbWellLayout()
+        self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys, wall_thickness=wall_thickness)
+        self.thumb_layout = ThumbWellLayout(wall_thickness=wall_thickness)
 
         self.connector_mount = MiniDINConnectorMount()
 
@@ -751,16 +757,16 @@ class KeyboardAssembly:
     def switch_socket(self, column, row):
         shape = self.socket_shape()
         if isinstance(row, float) and not row.is_integer():
-            plate_height = (sa_double_length - mount_length + 3.2) / 2
+            plate_height = (sa_double_length - self.finger_layout.keyswitch_length + 0.4) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
             stabilizer_mount = cube(
-                mount_width,
+                self.finger_layout.keyswitch_width + self.wall_thickness * 2,
                 plate_height,
                 self.thumb_layout.web_thickness,
                 center=True
             ).translate(
                 0,
-                (plate_height + mount_length) / 2,
+                (plate_height + self.finger_layout.keyswitch_length) / 2 + self.wall_thickness,
                 plate_thickness - self.thumb_layout.web_thickness / 2
             )
             shape = (
@@ -769,15 +775,15 @@ class KeyboardAssembly:
                 + stabilizer_mount.mirror(0, 1, 0)
             )
         elif isinstance(column, float) and not column.is_integer():
-            plate_width = (sa_double_length - mount_width + 3.2) / 2
+            plate_width = (sa_double_length - self.finger_layout.keyswitch_width + 0.4) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
             stabilizer_mount = cube(
                 plate_width,
-                mount_length,
+                self.finger_layout.keyswitch_length + self.wall_thickness * 2,
                 self.thumb_layout.web_thickness,
                 center=True
             ).translate(
-                (plate_width + mount_width) / 2,
+                (plate_width + self.finger_layout.keyswitch_width) / 2 + self.wall_thickness,
                 0,
                 plate_thickness - self.thumb_layout.web_thickness / 2
             )
@@ -1032,7 +1038,16 @@ if __name__ == "__main__":
         rows=5,
         use_1_5u_keys=False,
         use_color=False,
+
+        # The default socket shape has a backplate supporting an MX hotswap socket, 5-pin switches, and a 2-pin or
+        # 4-pin LED.
+
+        # To remove backplates from keyswitch sockets:
+        #socket_shape=mx_plate,
+
+        # To use a single-key PCB:
         socket_shape=mx_plate_with_board_mount,
+        wall_thickness=2.625,  # The wall_thickness of the board mount socket (2.625)
     )
     lcdMount = LCDMount()
 

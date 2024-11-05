@@ -85,7 +85,7 @@ For now, you're better off generating the model directly instead of using any of
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
 * 74x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
 * 74x signal diodes _(1N4148 or similar works well)_
-* 74x [Kailh hot-swap sockets][] _(optional - you can replace all mentions of `mx_plate_with_backplate` with `mx_plate` in `dactyl_lynx_keyboard/dactyl_lynx.py` if you want to solder directly to the switches, or with `mx_plate_with_board_mount` to use either my [MX single keyswitch hot swap board][] or my [Choc single keyswitch hot swap board][]; eventually these will be a command-line option)_
+* 74x [Kailh hot-swap sockets][] _(optional - you can pass `socket_shape=mx_plate` to the `KeyboardAssembly` constructor in `dactyl_lynx_keyboard/dactyl_lynx.py` if you want to solder directly to the switches, or pass `socket_shape=mx_plate_with_board_mount` to use either my [MX single keyswitch hot swap board][] or my [Choc single keyswitch hot swap board][]; eventually these will be a command-line option)_
 * A set of 74+ keycaps - symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
     * 72x 1u keycaps
     * 2x 2u keycaps
