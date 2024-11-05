@@ -17,8 +17,8 @@ from spkb.switch_plate import (
     keyswitch_width,
     keyswitch_depth,
     plate_thickness,
-    mx_plate,
     mx_plate_with_backplate,
+    mx_plate_with_board_mount,
 )
 from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length, sa_cap
