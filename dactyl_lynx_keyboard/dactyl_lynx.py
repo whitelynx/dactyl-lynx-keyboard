@@ -659,8 +659,9 @@ class MiniDINConnectorMount:
 
 
 class KeyboardAssembly:
-    def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False):
+    def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False, socket_shape=mx_plate_with_backplate):
         self.use_color = use_color
+        self.socket_shape = socket_shape
 
         self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys)
         self.thumb_layout = ThumbWellLayout()
@@ -748,7 +749,7 @@ class KeyboardAssembly:
             .translate(self.thumb_layout.placement_transform)
 
     def switch_socket(self, column, row):
-        shape = mx_plate_with_backplate()
+        shape = self.socket_shape()
         if isinstance(row, float) and not row.is_integer():
             plate_height = (sa_double_length - mount_length + 3.2) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
@@ -1026,8 +1027,13 @@ class KeyboardAssembly:
 
 
 if __name__ == "__main__":
-    #assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=True)
-    assembly = KeyboardAssembly(columns=6, rows=5, use_1_5u_keys=False, use_color=False)
+    assembly = KeyboardAssembly(
+        columns=6,
+        rows=5,
+        use_1_5u_keys=False,
+        use_color=False,
+        socket_shape=mx_plate_with_board_mount,
+    )
     lcdMount = LCDMount()
 
     def switch_cap(column, row):
