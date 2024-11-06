@@ -707,7 +707,7 @@ class KeyboardAssembly:
         return shape \
             .rotate(15, (0, 1, 0)) \
             .rotate(9, (1, 0, 0)) \
-            .translate((-52, 16, 49))
+            .translate((-54, 16, 49))
 
     def transform_board(self, shape):
         return shape \
@@ -723,7 +723,7 @@ class KeyboardAssembly:
             shape
             .rotate(-90, (0, 1, 0))
             .translate((
-                (self.finger_layout.keyswitch_width + self.connector_mount.outerFrameThickness) / -2 - 1,
+                (self.finger_layout.keyswitch_width + self.connector_mount.outerFrameThickness) / -2 - 1.5,
                 0,
                 -self.connector_mount.outerRadius() - 2
             ))
@@ -748,10 +748,10 @@ class KeyboardAssembly:
 
     def transform_thumb_nut3(self, shape):
         return shape \
-            .rotate(-20, (1, 0, 0)) \
+            .rotate(-15, (1, 0, 0)) \
             .rotate(-20, (0, 0, 1)) \
-            .rotate(-18, (0, 1, 0)) \
-            .translate((-3, 57, 32)) \
+            .rotate(-10, (0, 1, 0)) \
+            .translate((-3, 57, 33.2)) \
             .rotate(10, (1, 1, 1)) \
             .translate(self.thumb_layout.placement_transform)
 
@@ -963,7 +963,7 @@ class KeyboardAssembly:
             + self.transform_thumb_nut3(self.tenting_nut)
             + hull()(
                 self.transform_thumb_nut3(
-                    cube((10, 0.1, 8), center=True)
+                    cube((10, 0.1, 7.5), center=True)
                     .translate((0, -5, 0))
                 ),
                 self.thumb_layout.web_corner(2, -1, left=True, top=True),
