@@ -36,6 +36,8 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 [QMK's Raw HID support]: https://docs.qmk.fm/#/feature_rawhid
 [Vial]: https://get.vial.today/
 
+![Preview](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/preview.png)
+
 
 ## Assembly
 
