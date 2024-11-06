@@ -9700,7 +9700,7 @@ difference() {
 						}
 					}
 				}
-				translate(v = [-52, 16, 49]) {
+				translate(v = [-54, 16, 49]) {
 					rotate(a = 9, v = [1, 0, 0]) {
 						rotate(a = 15, v = [0, 1, 0]) {
 							difference() {
@@ -9711,7 +9711,7 @@ difference() {
 					}
 				}
 				hull() {
-					translate(v = [-52, 16, 49]) {
+					translate(v = [-54, 16, 49]) {
 						rotate(a = 9, v = [1, 0, 0]) {
 							rotate(a = 15, v = [0, 1, 0]) {
 								translate(v = [0, 5, 0]) {
@@ -9768,7 +9768,7 @@ difference() {
 					}
 				}
 				hull() {
-					translate(v = [-52, 16, 49]) {
+					translate(v = [-54, 16, 49]) {
 						rotate(a = 9, v = [1, 0, 0]) {
 							rotate(a = 15, v = [0, 1, 0]) {
 								translate(v = [5, 0, 0]) {
@@ -9825,7 +9825,7 @@ difference() {
 					}
 				}
 				hull() {
-					translate(v = [-52, 16, 49]) {
+					translate(v = [-54, 16, 49]) {
 						rotate(a = 9, v = [1, 0, 0]) {
 							rotate(a = 15, v = [0, 1, 0]) {
 								translate(v = [0, -5, 0]) {
@@ -10355,7 +10355,7 @@ difference() {
 									translate(v = [0, 0, 82.73635378597841]) {
 										rotate(a = 29.999999999999996, v = [1, 0, 0]) {
 											translate(v = [0, 0, -82.73635378597841]) {
-												translate(v = [-10.0, 0, -12.7]) {
+												translate(v = [-10.5, 0, -12.7]) {
 													rotate(a = -90, v = [0, 1, 0]) {
 														cylinder($fn = 16, center = false, h = 4, r = 10.909625392829005);
 													}
@@ -10415,7 +10415,7 @@ difference() {
 					}
 				}
 			}
-			translate(v = [-52, 16, 49]) {
+			translate(v = [-54, 16, 49]) {
 				rotate(a = 9, v = [1, 0, 0]) {
 					rotate(a = 15, v = [0, 1, 0]) {
 						translate(v = [0, 5, 0]) {
@@ -10435,7 +10435,7 @@ difference() {
 							translate(v = [0, 0, 82.73635378597841]) {
 								rotate(a = 29.999999999999996, v = [1, 0, 0]) {
 									translate(v = [0, 0, -82.73635378597841]) {
-										translate(v = [-10.0, 0, -12.7]) {
+										translate(v = [-10.5, 0, -12.7]) {
 											rotate(a = -90, v = [0, 1, 0]) {
 												union() {
 													difference() {

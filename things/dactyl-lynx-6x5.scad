@@ -9705,7 +9705,7 @@ union() {
 											}
 										}
 									}
-									translate(v = [-52, 16, 49]) {
+									translate(v = [-54, 16, 49]) {
 										rotate(a = 9, v = [1, 0, 0]) {
 											rotate(a = 15, v = [0, 1, 0]) {
 												difference() {
@@ -9716,7 +9716,7 @@ union() {
 										}
 									}
 									hull() {
-										translate(v = [-52, 16, 49]) {
+										translate(v = [-54, 16, 49]) {
 											rotate(a = 9, v = [1, 0, 0]) {
 												rotate(a = 15, v = [0, 1, 0]) {
 													translate(v = [0, 5, 0]) {
@@ -9773,7 +9773,7 @@ union() {
 										}
 									}
 									hull() {
-										translate(v = [-52, 16, 49]) {
+										translate(v = [-54, 16, 49]) {
 											rotate(a = 9, v = [1, 0, 0]) {
 												rotate(a = 15, v = [0, 1, 0]) {
 													translate(v = [5, 0, 0]) {
@@ -9830,7 +9830,7 @@ union() {
 										}
 									}
 									hull() {
-										translate(v = [-52, 16, 49]) {
+										translate(v = [-54, 16, 49]) {
 											rotate(a = 9, v = [1, 0, 0]) {
 												rotate(a = 15, v = [0, 1, 0]) {
 													translate(v = [0, -5, 0]) {
@@ -10360,7 +10360,7 @@ union() {
 														translate(v = [0, 0, 82.73635378597841]) {
 															rotate(a = 29.999999999999996, v = [1, 0, 0]) {
 																translate(v = [0, 0, -82.73635378597841]) {
-																	translate(v = [-10.0, 0, -12.7]) {
+																	translate(v = [-10.5, 0, -12.7]) {
 																		rotate(a = -90, v = [0, 1, 0]) {
 																			cylinder($fn = 16, center = false, h = 4, r = 10.909625392829005);
 																		}
@@ -10420,7 +10420,7 @@ union() {
 										}
 									}
 								}
-								translate(v = [-52, 16, 49]) {
+								translate(v = [-54, 16, 49]) {
 									rotate(a = 9, v = [1, 0, 0]) {
 										rotate(a = 15, v = [0, 1, 0]) {
 											translate(v = [0, 5, 0]) {
@@ -10440,7 +10440,7 @@ union() {
 												translate(v = [0, 0, 82.73635378597841]) {
 													rotate(a = 29.999999999999996, v = [1, 0, 0]) {
 														translate(v = [0, 0, -82.73635378597841]) {
-															translate(v = [-10.0, 0, -12.7]) {
+															translate(v = [-10.5, 0, -12.7]) {
 																rotate(a = -90, v = [0, 1, 0]) {
 																	union() {
 																		difference() {
@@ -10464,7 +10464,7 @@ union() {
 						}
 					}
 					hull() {
-						translate(v = [-52, 16, 49]) {
+						translate(v = [-54, 16, 49]) {
 							rotate(a = 9, v = [1, 0, 0]) {
 								rotate(a = 15, v = [0, 1, 0]) {
 									translate(v = [0, -5, 0]) {
@@ -10475,10 +10475,10 @@ union() {
 						}
 						translate(v = [-54, -72, 0]) {
 							rotate(a = 10, v = [1, 1, 1]) {
-								translate(v = [-3, 57, 32]) {
-									rotate(a = -18, v = [0, 1, 0]) {
+								translate(v = [-3, 57, 33.2]) {
+									rotate(a = -10, v = [0, 1, 0]) {
 										rotate(a = -20, v = [0, 0, 1]) {
-											rotate(a = -20, v = [1, 0, 0]) {
+											rotate(a = -15, v = [1, 0, 0]) {
 												translate(v = [0, 5, 0]) {
 													cube(center = true, size = [10, 0.1, 10]);
 												}
@@ -10492,10 +10492,10 @@ union() {
 					hull() {
 						translate(v = [-54, -72, 0]) {
 							rotate(a = 10, v = [1, 1, 1]) {
-								translate(v = [-3, 57, 32]) {
-									rotate(a = -18, v = [0, 1, 0]) {
+								translate(v = [-3, 57, 33.2]) {
+									rotate(a = -10, v = [0, 1, 0]) {
 										rotate(a = -20, v = [0, 0, 1]) {
-											rotate(a = -20, v = [1, 0, 0]) {
+											rotate(a = -15, v = [1, 0, 0]) {
 												translate(v = [5, 0, 0]) {
 													cube(center = true, size = [0.1, 10, 10]);
 												}
@@ -13542,10 +13542,10 @@ union() {
 					}
 					translate(v = [-54, -72, 0]) {
 						rotate(a = 10, v = [1, 1, 1]) {
-							translate(v = [-3, 57, 32]) {
-								rotate(a = -18, v = [0, 1, 0]) {
+							translate(v = [-3, 57, 33.2]) {
+								rotate(a = -10, v = [0, 1, 0]) {
 									rotate(a = -20, v = [0, 0, 1]) {
-										rotate(a = -20, v = [1, 0, 0]) {
+										rotate(a = -15, v = [1, 0, 0]) {
 											difference() {
 												cube(center = true, size = [10, 10, 10]);
 												screw_hole($fn = 32, bevel = true, blunt_start = true, length = 10.01, spec = "M6x1", thread = true);
@@ -13559,12 +13559,12 @@ union() {
 					hull() {
 						translate(v = [-54, -72, 0]) {
 							rotate(a = 10, v = [1, 1, 1]) {
-								translate(v = [-3, 57, 32]) {
-									rotate(a = -18, v = [0, 1, 0]) {
+								translate(v = [-3, 57, 33.2]) {
+									rotate(a = -10, v = [0, 1, 0]) {
 										rotate(a = -20, v = [0, 0, 1]) {
-											rotate(a = -20, v = [1, 0, 0]) {
+											rotate(a = -15, v = [1, 0, 0]) {
 												translate(v = [0, -5, 0]) {
-													cube(center = true, size = [10, 0.1, 8]);
+													cube(center = true, size = [10, 0.1, 7.5]);
 												}
 											}
 										}
@@ -13708,10 +13708,10 @@ union() {
 					hull() {
 						translate(v = [-54, -72, 0]) {
 							rotate(a = 10, v = [1, 1, 1]) {
-								translate(v = [-3, 57, 32]) {
-									rotate(a = -18, v = [0, 1, 0]) {
+								translate(v = [-3, 57, 33.2]) {
+									rotate(a = -10, v = [0, 1, 0]) {
 										rotate(a = -20, v = [0, 0, 1]) {
-											rotate(a = -20, v = [1, 0, 0]) {
+											rotate(a = -15, v = [1, 0, 0]) {
 												translate(v = [5, 0, 0]) {
 													cube(center = true, size = [0.1, 10, 8]);
 												}
@@ -26077,7 +26077,7 @@ union() {
 												}
 											}
 										}
-										translate(v = [-52, 16, 49]) {
+										translate(v = [-54, 16, 49]) {
 											rotate(a = 9, v = [1, 0, 0]) {
 												rotate(a = 15, v = [0, 1, 0]) {
 													difference() {
@@ -26088,7 +26088,7 @@ union() {
 											}
 										}
 										hull() {
-											translate(v = [-52, 16, 49]) {
+											translate(v = [-54, 16, 49]) {
 												rotate(a = 9, v = [1, 0, 0]) {
 													rotate(a = 15, v = [0, 1, 0]) {
 														translate(v = [0, 5, 0]) {
@@ -26145,7 +26145,7 @@ union() {
 											}
 										}
 										hull() {
-											translate(v = [-52, 16, 49]) {
+											translate(v = [-54, 16, 49]) {
 												rotate(a = 9, v = [1, 0, 0]) {
 													rotate(a = 15, v = [0, 1, 0]) {
 														translate(v = [5, 0, 0]) {
@@ -26202,7 +26202,7 @@ union() {
 											}
 										}
 										hull() {
-											translate(v = [-52, 16, 49]) {
+											translate(v = [-54, 16, 49]) {
 												rotate(a = 9, v = [1, 0, 0]) {
 													rotate(a = 15, v = [0, 1, 0]) {
 														translate(v = [0, -5, 0]) {
@@ -26732,7 +26732,7 @@ union() {
 															translate(v = [0, 0, 82.73635378597841]) {
 																rotate(a = 29.999999999999996, v = [1, 0, 0]) {
 																	translate(v = [0, 0, -82.73635378597841]) {
-																		translate(v = [-10.0, 0, -12.7]) {
+																		translate(v = [-10.5, 0, -12.7]) {
 																			rotate(a = -90, v = [0, 1, 0]) {
 																				cylinder($fn = 16, center = false, h = 4, r = 10.909625392829005);
 																			}
@@ -26792,7 +26792,7 @@ union() {
 											}
 										}
 									}
-									translate(v = [-52, 16, 49]) {
+									translate(v = [-54, 16, 49]) {
 										rotate(a = 9, v = [1, 0, 0]) {
 											rotate(a = 15, v = [0, 1, 0]) {
 												translate(v = [0, 5, 0]) {
@@ -26812,7 +26812,7 @@ union() {
 													translate(v = [0, 0, 82.73635378597841]) {
 														rotate(a = 29.999999999999996, v = [1, 0, 0]) {
 															translate(v = [0, 0, -82.73635378597841]) {
-																translate(v = [-10.0, 0, -12.7]) {
+																translate(v = [-10.5, 0, -12.7]) {
 																	rotate(a = -90, v = [0, 1, 0]) {
 																		union() {
 																			difference() {
@@ -26836,7 +26836,7 @@ union() {
 							}
 						}
 						hull() {
-							translate(v = [-52, 16, 49]) {
+							translate(v = [-54, 16, 49]) {
 								rotate(a = 9, v = [1, 0, 0]) {
 									rotate(a = 15, v = [0, 1, 0]) {
 										translate(v = [0, -5, 0]) {
@@ -26847,10 +26847,10 @@ union() {
 							}
 							translate(v = [-54, -72, 0]) {
 								rotate(a = 10, v = [1, 1, 1]) {
-									translate(v = [-3, 57, 32]) {
-										rotate(a = -18, v = [0, 1, 0]) {
+									translate(v = [-3, 57, 33.2]) {
+										rotate(a = -10, v = [0, 1, 0]) {
 											rotate(a = -20, v = [0, 0, 1]) {
-												rotate(a = -20, v = [1, 0, 0]) {
+												rotate(a = -15, v = [1, 0, 0]) {
 													translate(v = [0, 5, 0]) {
 														cube(center = true, size = [10, 0.1, 10]);
 													}
@@ -26864,10 +26864,10 @@ union() {
 						hull() {
 							translate(v = [-54, -72, 0]) {
 								rotate(a = 10, v = [1, 1, 1]) {
-									translate(v = [-3, 57, 32]) {
-										rotate(a = -18, v = [0, 1, 0]) {
+									translate(v = [-3, 57, 33.2]) {
+										rotate(a = -10, v = [0, 1, 0]) {
 											rotate(a = -20, v = [0, 0, 1]) {
-												rotate(a = -20, v = [1, 0, 0]) {
+												rotate(a = -15, v = [1, 0, 0]) {
 													translate(v = [5, 0, 0]) {
 														cube(center = true, size = [0.1, 10, 10]);
 													}
@@ -29930,10 +29930,10 @@ union() {
 						}
 						translate(v = [-54, -72, 0]) {
 							rotate(a = 10, v = [1, 1, 1]) {
-								translate(v = [-3, 57, 32]) {
-									rotate(a = -18, v = [0, 1, 0]) {
+								translate(v = [-3, 57, 33.2]) {
+									rotate(a = -10, v = [0, 1, 0]) {
 										rotate(a = -20, v = [0, 0, 1]) {
-											rotate(a = -20, v = [1, 0, 0]) {
+											rotate(a = -15, v = [1, 0, 0]) {
 												difference() {
 													cube(center = true, size = [10, 10, 10]);
 													screw_hole($fn = 32, bevel = true, blunt_start = true, length = 10.01, spec = "M6x1", thread = true);
@@ -29947,12 +29947,12 @@ union() {
 						hull() {
 							translate(v = [-54, -72, 0]) {
 								rotate(a = 10, v = [1, 1, 1]) {
-									translate(v = [-3, 57, 32]) {
-										rotate(a = -18, v = [0, 1, 0]) {
+									translate(v = [-3, 57, 33.2]) {
+										rotate(a = -10, v = [0, 1, 0]) {
 											rotate(a = -20, v = [0, 0, 1]) {
-												rotate(a = -20, v = [1, 0, 0]) {
+												rotate(a = -15, v = [1, 0, 0]) {
 													translate(v = [0, -5, 0]) {
-														cube(center = true, size = [10, 0.1, 8]);
+														cube(center = true, size = [10, 0.1, 7.5]);
 													}
 												}
 											}
@@ -30096,10 +30096,10 @@ union() {
 						hull() {
 							translate(v = [-54, -72, 0]) {
 								rotate(a = 10, v = [1, 1, 1]) {
-									translate(v = [-3, 57, 32]) {
-										rotate(a = -18, v = [0, 1, 0]) {
+									translate(v = [-3, 57, 33.2]) {
+										rotate(a = -10, v = [0, 1, 0]) {
 											rotate(a = -20, v = [0, 0, 1]) {
-												rotate(a = -20, v = [1, 0, 0]) {
+												rotate(a = -15, v = [1, 0, 0]) {
 													translate(v = [5, 0, 0]) {
 														cube(center = true, size = [0.1, 10, 8]);
 													}
@@ -32804,7 +32804,7 @@ union() {
 				}
 				translate(v = [-100, 0, 0]) {
 					mirror(v = [1, 0, 0]) {
-						translate(v = [-52, 16, 49]) {
+						translate(v = [-54, 16, 49]) {
 							rotate(a = 9, v = [1, 0, 0]) {
 								rotate(a = 15, v = [0, 1, 0]) {
 									translate(v = [0, 5, -10]) {
@@ -32818,7 +32818,7 @@ union() {
 			}
 			translate(v = [-100, 0, 0]) {
 				mirror(v = [1, 0, 0]) {
-					translate(v = [-52, 16, 49]) {
+					translate(v = [-54, 16, 49]) {
 						rotate(a = 9, v = [1, 0, 0]) {
 							rotate(a = 15, v = [0, 1, 0]) {
 								translate(v = [0, 0, -10]) {

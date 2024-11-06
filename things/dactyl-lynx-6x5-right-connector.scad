@@ -29,7 +29,7 @@ include </home/whitelynx/.local/share/virtualenvs/dactyl-lynx-keyboard-vn24Ws0r/
 include </home/whitelynx/.local/share/virtualenvs/dactyl-lynx-keyboard-vn24Ws0r/lib/python3.12/site-packages/solid2/extensions/bosl2/BOSL2/screws.scad>;
 
 union() {
-	translate(v = [-52, 16, 49]) {
+	translate(v = [-54, 16, 49]) {
 		rotate(a = 9, v = [1, 0, 0]) {
 			rotate(a = 15, v = [0, 1, 0]) {
 				translate(v = [0, 0, -10]) {
@@ -43,10 +43,10 @@ union() {
 	}
 	translate(v = [-54, -72, 0]) {
 		rotate(a = 10, v = [1, 1, 1]) {
-			translate(v = [-3, 57, 32]) {
-				rotate(a = -18, v = [0, 1, 0]) {
+			translate(v = [-3, 57, 33.2]) {
+				rotate(a = -10, v = [0, 1, 0]) {
 					rotate(a = -20, v = [0, 0, 1]) {
-						rotate(a = -20, v = [1, 0, 0]) {
+						rotate(a = -15, v = [1, 0, 0]) {
 							translate(v = [0, 0, -10]) {
 								difference() {
 									cube(center = true, size = [10, 10, 10]);
@@ -60,7 +60,7 @@ union() {
 		}
 	}
 	hull() {
-		translate(v = [-52, 16, 49]) {
+		translate(v = [-54, 16, 49]) {
 			rotate(a = 9, v = [1, 0, 0]) {
 				rotate(a = 15, v = [0, 1, 0]) {
 					translate(v = [0, -5, -10]) {
@@ -71,10 +71,10 @@ union() {
 		}
 		translate(v = [-54, -72, 0]) {
 			rotate(a = 10, v = [1, 1, 1]) {
-				translate(v = [-3, 57, 32]) {
-					rotate(a = -18, v = [0, 1, 0]) {
+				translate(v = [-3, 57, 33.2]) {
+					rotate(a = -10, v = [0, 1, 0]) {
 						rotate(a = -20, v = [0, 0, 1]) {
-							rotate(a = -20, v = [1, 0, 0]) {
+							rotate(a = -15, v = [1, 0, 0]) {
 								translate(v = [0, 5, -10]) {
 									cube(center = true, size = [10, 0.1, 10]);
 								}
