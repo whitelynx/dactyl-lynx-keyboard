@@ -196,7 +196,7 @@ class Layout:
     def caps(self):
         return self.place_all(sa_cap(1))
 
-    def web_corner(self, column, row, left, top, column_span=1, row_span=1):
+    def web_corner(self, column, row, left, top, column_span=1, row_span=1, z_offset=0, thickness=None):
         """Return a tiny block encompassing the given corner of the given key position, for
         building the "web" between the keys.
 
@@ -212,6 +212,10 @@ class Layout:
         :type column_span: number
         :param row_span: the number of rows occupied by the key
         :type row_span: number
+        :param z_offset: the offset in the Z direction of the corner block (before placing at the key position)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
 
         Example:
         web_corner(1, 1, left=True, top=True) will create the block at the position marked
@@ -224,8 +228,12 @@ class Layout:
         │0,1│ ┃1,1┃
         └───┘ ┗━━━┛
         """
-        post = cube((self.web_post_size, self.web_post_size, self.web_thickness), center=True) \
-            .translate((0, 0, plate_thickness - (self.web_thickness / 2)))
+        if thickness is None:
+            thickness = self.web_thickness
+        post = cube(
+            (self.web_post_size, self.web_post_size, thickness),
+            center=True
+        ).translate((0, 0, plate_thickness - (thickness / 2)))
 
         x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness
         y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness
@@ -236,11 +244,11 @@ class Layout:
             post.translate((
                 -x_move_amount if left else x_move_amount,
                 y_move_amount if top else -y_move_amount,
-                0
+                z_offset
             ))
         )
 
-    def web_left_of(self, column, row):
+    def web_left_of(self, column, row, z_offset=0, thickness=None):
         """Return the "web" between the key at the given row/column and the neighboring one in the
         column to the left.
 
@@ -248,6 +256,10 @@ class Layout:
         :type column: number
         :param row: the row of the key to create the web at
         :type row: number
+        :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
 
         Example:
         web_top_left_of(1, 1) will create the web at the position marked with an X:
@@ -260,13 +272,13 @@ class Layout:
         └───┘┄┗━━━┛
         """
         return hull()(
-            self.web_corner(column, row, left=True, top=True),
-            self.web_corner(column, row, left=True, top=False),
-            self.web_corner(column - 1, row, left=False, top=False),
-            self.web_corner(column - 1, row, left=False, top=True),
+            self.web_corner(column, row, left=True, top=True, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row, left=True, top=False, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column - 1, row, left=False, top=False, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column - 1, row, left=False, top=True, z_offset=z_offset, thickness=thickness),
         )
 
-    def web_above(self, column, row):
+    def web_above(self, column, row, z_offset=0, thickness=None):
         """Return the "web" between the key at the given row/column and the neighboring one in the
         row above.
 
@@ -274,6 +286,10 @@ class Layout:
         :type column: number
         :param row: the row of the key to create the web at
         :type row: number
+        :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
 
         Example:
         web_above(1, 1) will create the web at the position marked with an X:
@@ -286,13 +302,13 @@ class Layout:
         └───┘ ┗━━━┛
         """
         return hull()(
-            self.web_corner(column, row, left=True, top=True),
-            self.web_corner(column, row, left=False, top=True),
-            self.web_corner(column, row - 1, left=False, top=False),
-            self.web_corner(column, row - 1, left=True, top=False),
+            self.web_corner(column, row, left=True, top=True, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row, left=False, top=True, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row - 1, left=False, top=False, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row - 1, left=True, top=False, z_offset=z_offset, thickness=thickness),
         )
 
-    def web_top_left_of(self, column, row):
+    def web_top_left_of(self, column, row, z_offset=0, thickness=None):
         """Return the "web" between the key at the given row/column and the neighboring ones in the
         column to the left and/or the row above.
 
@@ -300,6 +316,10 @@ class Layout:
         :type column: number
         :param row: the row of the key to create the web at
         :type row: number
+        :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
 
         Example:
         web_top_left_of(1, 1) will create the web at the position marked with an X:
@@ -312,30 +332,35 @@ class Layout:
         └───┘ ┗━━━┛
         """
         return hull()(
-            self.web_corner(column, row, left=True, top=True),
-            self.web_corner(column - 1, row, left=False, top=True),
-            self.web_corner(column - 1, row - 1, left=False, top=False),
-            self.web_corner(column, row - 1, left=True, top=False),
+            self.web_corner(column, row, left=True, top=True, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column - 1, row, left=False, top=True, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column - 1, row - 1, left=False, top=False, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row - 1, left=True, top=False, z_offset=z_offset, thickness=thickness),
         )
 
-    def web_all(self):
+    def web_all(self, z_offset=0, thickness=None):
         """Return the complete "web" between all key positions in this layout.thumb_place_all
+
+        :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
         """
         return reduce(
             operator.add,
             chain(
                 (
-                    self.web_top_left_of(column, row)
+                    self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > 0
                 ),
                 (
-                    self.web_left_of(column, row)
+                    self.web_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0
                 ),
                 (
-                    self.web_above(column, row)
+                    self.web_above(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if row > 0
                 ),
@@ -415,24 +440,29 @@ class FingerWellLayout(Layout):
             .rotate(math.degrees(math.pi / 10), (1, 0, 0)) \
             .translate((0, 0, 22))
 
-    def web_all(self):
+    def web_all(self, z_offset=0, thickness=None):
         """Return the complete "web" between all key positions in this layout.
+
+        :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
         """
         return reduce(
             operator.add,
             chain(
                 (
-                    self.web_top_left_of(column, row)
+                    self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > 0 and (column != 1 or row != 4)
                 ),
                 (
-                    self.web_left_of(column, row)
+                    self.web_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0 and (column != 1 or row != 4)
                 ),
                 (
-                    self.web_above(column, row)
+                    self.web_above(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if row > 0
                 ),
@@ -496,14 +526,19 @@ class ThumbWellLayout(Layout):
             .rotate(15, (1, 1, 1)) \
             .translate(self.placement_transform)
 
-    def web_all(self):
+    def web_all(self, z_offset=0, thickness=None):
         """Return the complete "web" between all key positions in this layout.
+
+        :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
+        :type z_offset: number
+        :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :type thickness: number
         """
         return reduce(
             operator.add,
             chain(
                 (
-                    self.web_top_left_of(column, row)
+                    self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > -1 and (column, row) not in (
                         (1, -1),
@@ -511,7 +546,7 @@ class ThumbWellLayout(Layout):
                     )
                 ),
                 (
-                    self.web_left_of(column, row)
+                    self.web_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0 and (column, row) not in (
                         (1, 0),
@@ -519,7 +554,7 @@ class ThumbWellLayout(Layout):
                     )
                 ),
                 (
-                    self.web_above(column, row)
+                    self.web_above(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if row > -1 and (column, row) not in (
                         (0, 1/2),
@@ -528,32 +563,32 @@ class ThumbWellLayout(Layout):
                 ),
                 [
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
-                        self.web_corner(0, -1, left=False, top=False),
-                        self.web_corner(1, -1, left=True, top=False),
-                        self.web_corner(1, 0, left=True, top=True),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, -1, left=False, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, -1, left=True, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 0, left=True, top=True, z_offset=z_offset, thickness=thickness),
                     ),
                     hull()(
-                        self.web_corner(0, -1, left=True, top=False),
-                        self.web_corner(0, -1, left=False, top=False),
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
-                        self.web_corner(0, 1/2, left=True, top=True, row_span=2),
+                        self.web_corner(0, -1, left=True, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, -1, left=False, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=True, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
                     ),
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=False, row_span=2),
-                        self.web_corner(1, 1, left=True, top=True),
-                        self.web_corner(1, 1, left=True, top=False),
+                        self.web_corner(0, 1/2, left=False, top=False, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 1, left=True, top=True, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 1, left=True, top=False, z_offset=z_offset, thickness=thickness),
                     ),
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=False, row_span=2),
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
-                        self.web_corner(1, 0, left=True, top=False),
-                        self.web_corner(1, 1, left=True, top=True),
+                        self.web_corner(0, 1/2, left=False, top=False, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 0, left=True, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 1, left=True, top=True, z_offset=z_offset, thickness=thickness),
                     ),
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2),
-                        self.web_corner(1, 0, left=True, top=False),
-                        self.web_corner(1, 0, left=True, top=True),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 0, left=True, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(1, 0, left=True, top=True, z_offset=z_offset, thickness=thickness),
                     ),
                 ],
             )
@@ -750,6 +785,9 @@ class KeyboardAssembly:
 
         self.bottom_thumb_nuts = False
 
+        self.back_cover_offset = 11
+        self.back_cover_thickness = 3
+
     def transform_finger_nut1(self, shape):
         return shape \
             .rotate(20, (1, 0, 0)) \
@@ -858,6 +896,38 @@ class KeyboardAssembly:
         if self.left_side:
             return shape.mirror((1, 0, 0))
         return shape
+
+    def switch_back_cover(self, column, row):
+        if isinstance(row, float) and not row.is_integer():
+            return cube(
+                self.finger_layout.keyswitch_width + self.wall_thickness * 2,
+                sa_double_length,
+                self.back_cover_thickness,
+                center=True
+            ).translate(
+                0,
+                0,
+                plate_thickness - self.thumb_layout.web_thickness / 2 - self.back_cover_offset - self.back_cover_thickness / 2
+            )
+
+        elif isinstance(column, float) and not column.is_integer():
+            return cube(
+                sa_double_length,
+                self.finger_layout.keyswitch_length + self.wall_thickness * 2,
+                self.back_cover_thickness,
+                center=True
+            ).translate(
+                0,
+                0,
+                plate_thickness - self.thumb_layout.web_thickness / 2 - self.back_cover_offset - self.back_cover_thickness / 2
+            )
+
+        return cube(
+            self.finger_layout.keyswitch_width + self.wall_thickness * 2,
+            self.finger_layout.keyswitch_length + self.wall_thickness * 2,
+            self.back_cover_thickness,
+            center=True
+        ).translate(0, 0, -self.back_cover_offset - self.back_cover_thickness / 2)
 
     def finger_part(self):
         shape = (
@@ -987,6 +1057,33 @@ class KeyboardAssembly:
             return shape.color((0.1, 0.1, 0.1))
 
         return shape
+
+    def finger_back_cover(self):
+        return (
+            self.finger_layout.place_all(self.switch_back_cover)
+            + self.finger_layout.web_all(
+                z_offset=-self.back_cover_offset - self.back_cover_thickness,
+                thickness=self.back_cover_thickness
+            )
+            + (
+                self.transform_connector_mount(
+                    cylinder_outer(self.connector_mount.outerRadius(), 10 + self.back_cover_thickness, center=True)
+                    .down((10 + self.back_cover_thickness) / 2 + 0.3)
+                )
+                - self.finger_layout.key_place(
+                    0, 0,
+                    cube(
+                        30,
+                        30,
+                        20,
+                        center=True
+                    ).up(10 - self.back_cover_offset)
+                )
+            )
+            - self.transform_connector_mount(
+                cylinder_outer(self.connector_mount.outerRadius() - self.connector_mount.outerFrameWidth, 20, center=True)
+            )
+        )
 
     def thumb_part(self):
         shape = (
@@ -1128,6 +1225,7 @@ if __name__ == "__main__":
         return shape
 
     right_finger_part = assembly.finger_part()
+    right_finger_back_cover = assembly.finger_back_cover()
     right_thumb_part = assembly.thumb_part()
     right_connector = assembly.connector()
     right_keycaps = (
@@ -1144,6 +1242,7 @@ if __name__ == "__main__":
     # Maybe wrap the assembly methods to automatically do this?
     assembly.left_side = True
     left_finger_part = assembly.finger_part().mirror((1, 0, 0))
+    left_finger_back_cover = assembly.finger_back_cover().mirror((1, 0, 0))
     left_thumb_part = assembly.thumb_part().mirror((1, 0, 0))
     left_connector = assembly.connector().mirror((1, 0, 0))
     left_keycaps = (
@@ -1220,6 +1319,7 @@ if __name__ == "__main__":
             + assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape()).color((1, 0, 1))
             + right_keycaps.color((1.0, 0.98, 0.95))
             + right_pcbs.color((0, 0.4, 0))
+            + right_finger_back_cover.color((0.1, 0.1, 0.1), alpha=0.75)
         ).translate((100, 0, 0))
         + (
             #left_finger_part.color((0.1, 0.1, 0.9))
@@ -1228,6 +1328,7 @@ if __name__ == "__main__":
             left_single_piece.color((0.1, 0.1, 0.1))
             + left_keycaps.color((1.0, 0.98, 0.95))
             + left_pcbs.color((0, 0.4, 0))
+            + left_finger_back_cover.color((0.1, 0.1, 0.1), alpha=0.75)
         ).translate((-100, 0, 0))
         + assembled_lcd_mount.color((0.1, 0.3, 0.1))
     ).save_as_scad(combined_filepath)
