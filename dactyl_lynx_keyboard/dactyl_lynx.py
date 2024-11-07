@@ -1539,6 +1539,10 @@ if __name__ == "__main__":
     print(f"Writing right single_piece output to {right_single_piece_filepath} . . .")
     right_single_piece.save_as_scad(right_single_piece_filepath)
 
+    right_finger_bottom_cover_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover.scad"
+    print(f"Writing right finger_bottom_cover output to {right_finger_bottom_cover_filepath} . . .")
+    right_finger_bottom_cover.save_as_scad(right_finger_bottom_cover_filepath)
+
     left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
     print(f"Writing left finger output to {left_finger_filepath} . . .")
     left_finger_part.save_as_scad(left_finger_filepath)
@@ -1554,6 +1558,10 @@ if __name__ == "__main__":
     left_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-single-piece.scad"
     print(f"Writing left single_piece output to {left_single_piece_filepath} . . .")
     left_single_piece.save_as_scad(left_single_piece_filepath)
+
+    left_finger_bottom_cover_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover.scad"
+    print(f"Writing left finger_bottom_cover output to {left_finger_bottom_cover_filepath} . . .")
+    left_finger_bottom_cover.save_as_scad(left_finger_bottom_cover_filepath)
 
     lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
     print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
