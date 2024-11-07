@@ -6,7 +6,7 @@ from functools import reduce
 from itertools import chain
 from os.path import abspath, dirname, join
 
-from solid2 import cube, hull
+from solid2 import cube, hull, sphere
 from solid2.core.object_base import OpenSCADObject
 from solid2.extensions.bosl2 import screws
 
@@ -750,8 +750,8 @@ class TrackPointMount:
     def trackpoint_shape(self):
         return (
             (
-                cylinder(self.trackpoint_stem_radius, self.trackpoint_stem_length)
-                + sphere(self.trackpoint_ball_radius).translate((0, 0, self.trackpoint_stem_length / 2 + self.trackpoint_ball_radius))
+                cylinder_outer(self.trackpoint_stem_radius, self.trackpoint_stem_length, center=True)
+                + sphere(self.trackpoint_ball_radius, _fn=12).translate((0, 0, self.trackpoint_stem_length / 2))
             ).translate((0, 0, self.trackpoint_stem_length / 2 - self.trackpoint_mount_thickness + self.trackpoint_stem_base_height))
         ).down(2).color((0.8, 0.8, 0.8))
 
