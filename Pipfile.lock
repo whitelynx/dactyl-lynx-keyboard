@@ -40,7 +40,7 @@
         },
         "spkb": {
             "git": "https://github.com/whitelynx/spkb.git",
-            "ref": "a71f8eb38b44c1fa6dc2ba8d4d1f623ba1f31054"
+            "ref": "a674947ca8d9b2b1e96bcc765df32b596dba5977"
         }
     },
     "develop": {
