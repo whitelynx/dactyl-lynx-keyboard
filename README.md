@@ -91,6 +91,7 @@ For now, you're better off generating the model directly instead of using any of
 * A set of 74+ keycaps - symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
     * 72x 1u keycaps
     * 2x 2u keycaps
+* 24x [5mm x 3mm cylindrical magnets][], plus an additional 12 for each set of different bottom cases you want
 * A USB-C _(or USB Micro-B, depending on your microcontroller)_ cable to plug in your keyboard
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
@@ -105,6 +106,7 @@ For now, you're better off generating the model directly instead of using any of
 [MX-style key switches]: https://mechanicalkeyboards.com/switches/index.php
 [MX single keyswitch hot swap board]: https://www.flux.ai/whitelynx/mx-single-keyswitch-hot-swap-board?editor=pcb_3d
 [Choc single keyswitch hot swap board]: https://www.flux.ai/whitelynx/choc-single-keyswitch-hot-swap-board?editor=pcb_3d
+[5mm x 3mm cylindrical magnets]: https://www.aliexpress.com/item/1005005118080851.html
 
 
 ### Wiring
