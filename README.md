@@ -11,7 +11,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
 * Added a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
 * Added support for [my single-keyswitch hot-swap PCBs][]
-* Created a new [RMK][]-based firmware project (RMK is a keyboard firmware system written in [Ruby][], with [Vial][] support)
+* Created a new [RMK][]-based firmware project (RMK is a keyboard firmware system written in [Rust][], with [Vial][] support)
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
 [Python]: https://www.python.org/
