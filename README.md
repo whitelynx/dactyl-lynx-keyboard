@@ -146,8 +146,19 @@ Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][].
 
 ### Firmware
 
-See [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch][] for instructions on building and flashing the firmware.
+I've set up two separate firmwares that can be run on this board. The QMK-based variant is more featureful, but I'm devoting more time to the RMK-based one now.
 
+#### RMK-based (new, more minimal)
+
+See [the dactyl-lynx-rmk repo][] for this firmware. It's based on [RMK][]. (with [Vial][] support, written in [Rust][])
+
+[RMK]: https://github.com/HaoboGu/rmk
+[Vial]: https://get.vial.today
+[Rust]: https://www.rust-lang.org/
+
+#### QMK-based (old, more featureful)
+
+See [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch][] for instructions on building and flashing the firmware.
 
 [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch]: https://github.com/whitelynx/qmk_firmware/tree/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx
 
