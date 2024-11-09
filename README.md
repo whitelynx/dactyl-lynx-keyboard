@@ -11,7 +11,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
 * Added a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
 * Added support for [my single-keyswitch hot-swap PCBs][]
-* Created a new [RMK][]-based firmware project (RMK is a keyboard firmware system written in [Rust][], with [Vial][] support)
+* Created a new [RMK][]-based [firmware project][the dactyl-lynx-rmk repo] (RMK is a keyboard firmware system written in [Rust][], with [Vial][] support)
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
 [Python]: https://www.python.org/
@@ -24,6 +24,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 [TrackPoint module]: https://github.com/alonswartz/trackpoint
 [my single-keyswitch hot-swap PCBs]: https://hackaday.io/project/199185-lynxs-single-keyswitch-hotswap-boards
 [RMK]: https://github.com/HaoboGu/rmk
+[the dactyl-lynx-rmk repo]: https://github.com/whitelynx/dactyl-lynx-rmk
 [Vial]: https://get.vial.today
 [Rust]: https://www.rust-lang.org/
 
@@ -39,7 +40,6 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 
 [Apple Mighty Mouse]: https://en.wikipedia.org/wiki/Apple_Mighty_Mouse
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
-[Vial]: https://get.vial.today/
 
 ![Preview](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/preview.png)
 
