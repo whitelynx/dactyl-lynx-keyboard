@@ -9,6 +9,9 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * 1U or 2U keycaps - easy to source (look for ortholinear keycap sets, or possibly Ergodox sets with a few extra keycaps)
 * A new adjustable skeletal design (which will probably change once I solidify the physical placement of the wells, but I'll likely keep around as an option)
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
+* Added a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
+* Added support for [my single-keyswitch hot-swap PCBs][]
+* Created a new [RMK][]-based firmware project (RMK is a keyboard firmware system written in [Ruby][], with [Vial][] support)
 
 [the original Dactyl]: https://github.com/adereth/dactyl-keyboard
 [Python]: https://www.python.org/
@@ -18,22 +21,24 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 [DMOTE]: https://viktor.eikman.se/article/the-dmote/
 [Concertina]: https://viktor.eikman.se/article/the-concertina/
 [Kailh hot-swap sockets]: https://www.kailhswitch.com/mechanical-keyboard-switches/box-switches/hot-swapping-pcb-socket.html
+[TrackPoint module]: https://github.com/alonswartz/trackpoint
+[my single-keyswitch hot-swap PCBs]: https://hackaday.io/project/199185-lynxs-single-keyswitch-hotswap-boards
+[RMK]: https://github.com/HaoboGu/rmk
+[Vial]: https://get.vial.today
+[Rust]: https://www.rust-lang.org/
 
 ![Skeleton prototype](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/skeleton-prototype.jpg)
 
 
 ## Future plans
 
-* Adding a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY) - I already implemented this in the Clojure version, but I haven't yet ported it to the Python version
 * Adding mouse buttons and a scroll ball from an [Apple Mighty Mouse][] next to the right-hand thumb cluster
 * Adding a thumbstick to the left side?
-* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Use [QMK's Raw HID support][] or maybe [Vial][]. (though Vial has a limitation of 4 layers)
+* Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Maybe use [Vial][]. (~~though Vial has a limitation of 4 layers~~ - it turns out you can force Vial to support more layers! It's still relatively limited, though)
 * Adding support for ALPS or Choc switches instead of MX-style switches, along with appropriate hot-swap sockets (this will be mostly implemented in [spkb][] first)
 
-[TrackPoint module]: https://github.com/alonswartz/trackpoint
 [Apple Mighty Mouse]: https://en.wikipedia.org/wiki/Apple_Mighty_Mouse
 [Orbweaver]: https://www2.razer.com/au-en/gaming-keyboards-keypads/razer-orbweaver-chroma
-[QMK's Raw HID support]: https://docs.qmk.fm/#/feature_rawhid
 [Vial]: https://get.vial.today/
 
 ![Preview](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/preview.png)
@@ -151,10 +156,6 @@ I've set up two separate firmwares that can be run on this board. The QMK-based 
 #### RMK-based (new, more minimal)
 
 See [the dactyl-lynx-rmk repo][] for this firmware. It's based on [RMK][]. (with [Vial][] support, written in [Rust][])
-
-[RMK]: https://github.com/HaoboGu/rmk
-[Vial]: https://get.vial.today
-[Rust]: https://www.rust-lang.org/
 
 #### QMK-based (old, more featureful)
 
