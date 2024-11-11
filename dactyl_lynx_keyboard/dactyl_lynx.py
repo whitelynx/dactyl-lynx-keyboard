@@ -541,8 +541,8 @@ class ThumbWellLayout(Layout):
                     self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > -1 and (column, row) not in (
-                        (1, -1),
                         (1, 0),
+                        (1, 1),
                     )
                 ),
                 (
