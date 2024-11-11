@@ -6,7 +6,7 @@ from functools import reduce
 from itertools import chain, pairwise
 from os.path import abspath, dirname, join
 
-from solid2 import cube, hull, sphere, union
+from solid2 import cube, hull, sphere, text, union
 from solid2.core.object_base import OpenSCADObject
 from solid2.extensions.bosl2 import screws
 
@@ -860,7 +860,7 @@ class KeyboardAssembly:
             .translate(self.thumb_layout.placement_transform)
 
     def switch_socket(self, column, row):
-        shape = self.socket_shape()
+        shape = self.socket_shape(column, row)
         if isinstance(row, float) and not row.is_integer():
             plate_height = (sa_double_length - self.finger_layout.keyswitch_length + 0.4) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
@@ -1447,6 +1447,12 @@ class KeyboardAssembly:
 
 
 if __name__ == "__main__":
+    def tagged_switch_plate(column, row):
+        return (
+            mx_plate_with_board_mount()
+            + text(f'{column},{row}', size=keyswitch_length / 3, halign='center', valign='center')
+        )
+
     assembly = KeyboardAssembly(
         columns=6,
         rows=5,
@@ -1457,10 +1463,11 @@ if __name__ == "__main__":
         # 4-pin LED.
 
         # To remove backplates from keyswitch sockets:
-        #socket_shape=mx_plate,
+        #socket_shape=lambda column, row: mx_plate(),
 
         # To use a single-key PCB:
-        socket_shape=mx_plate_with_board_mount,
+        socket_shape=lambda column, row: mx_plate_with_board_mount(),
+        #socket_shape=tagged_switch_plate,
         wall_thickness=2.625,  # The wall_thickness of the board mount socket (2.625)
     )
     lcdMount = LCDMount()
