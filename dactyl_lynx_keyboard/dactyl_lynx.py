@@ -1443,6 +1443,7 @@ class KeyboardAssembly:
                 self.thumb_layout.web_corner(1, -1, left=False, top=True),
             )
             + self.thumb_part()
+            - self.place_cover_magnets(self.cover_magnet_hole(top_shell=False))
         )
 
 
