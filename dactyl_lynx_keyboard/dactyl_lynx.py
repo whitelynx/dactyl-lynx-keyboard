@@ -1286,9 +1286,6 @@ class KeyboardAssembly:
 
     def finger_bottom_cover(self):
         """Generate the bottom cover.
-
-        :param top_shell: whether this is for the top shell (True) or for the bottom cover (False)
-        :type top_shell: bool
         """
         return (
             self.finger_layout.place_all(self.switch_bottom_cover)
@@ -1337,6 +1334,37 @@ class KeyboardAssembly:
                     z_offset=-self.bottom_cover_offset,
                     thickness=self.bottom_cover_thickness
                 ),
+            )
+        )
+
+    def finger_bottom_cover_feet(self):
+        """Generate feet to union with the bottom cover.
+        """
+        bottom_cover_attachment_spot = cube(
+            self.finger_layout.keyswitch_width + self.wall_thickness * 2,
+            self.finger_layout.keyswitch_length + self.wall_thickness * 2,
+            0.1,
+            center=True
+        ).up(
+            plate_thickness - self.thumb_layout.web_thickness / 2 - self.bottom_cover_offset - self.bottom_cover_thickness / 2
+        )
+
+        return (
+            hull()(
+                self.finger_layout.key_place(0, 1, bottom_cover_attachment_spot),
+                cube(10, 10, 0.1, center=True).translate((-60, 45, 0.05)),
+            )
+            + hull()(
+                self.finger_layout.key_place(0, 3, bottom_cover_attachment_spot),
+                cube(10, 10, 0.1, center=True).translate((-60, -45, 0.05)),
+            )
+            + hull()(
+                self.finger_layout.key_place(5, 0, bottom_cover_attachment_spot),
+                cube(10, 10, 0.1, center=True).translate((70, 45, 0.05)),
+            )
+            + hull()(
+                self.finger_layout.key_place(5, 4, bottom_cover_attachment_spot),
+                cube(10, 10, 0.1, center=True).translate((70, -65, 0.05)),
             )
         )
 
@@ -1485,6 +1513,10 @@ if __name__ == "__main__":
 
     right_finger_part = assembly.finger_part()
     right_finger_bottom_cover = assembly.finger_bottom_cover()
+    right_finger_bottom_cover_with_feet = (
+        right_finger_bottom_cover
+        + assembly.finger_bottom_cover_feet()
+    )
     right_thumb_part = assembly.thumb_part()
     right_connector = assembly.connector()
     right_keycaps = (
@@ -1502,6 +1534,10 @@ if __name__ == "__main__":
     assembly.left_side = True
     left_finger_part = assembly.finger_part().mirror((1, 0, 0))
     left_finger_bottom_cover = assembly.finger_bottom_cover().mirror((1, 0, 0))
+    left_finger_bottom_cover_with_feet = (
+        left_finger_bottom_cover
+        + assembly.finger_bottom_cover_feet().mirror((1, 0, 0))
+    )
     left_thumb_part = assembly.thumb_part().mirror((1, 0, 0))
     left_connector = assembly.connector().mirror((1, 0, 0))
     left_keycaps = (
@@ -1551,6 +1587,10 @@ if __name__ == "__main__":
     print(f"Writing right finger_bottom_cover output to {right_finger_bottom_cover_filepath} . . .")
     right_finger_bottom_cover.save_as_scad(right_finger_bottom_cover_filepath)
 
+    right_finger_bottom_cover_with_feet_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover-with-feet.scad"
+    print(f"Writing right finger_bottom_cover_with_feet output to {right_finger_bottom_cover_with_feet_filepath} . . .")
+    right_finger_bottom_cover_with_feet.save_as_scad(right_finger_bottom_cover_with_feet_filepath)
+
     left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
     print(f"Writing left finger output to {left_finger_filepath} . . .")
     left_finger_part.save_as_scad(left_finger_filepath)
@@ -1571,6 +1611,10 @@ if __name__ == "__main__":
     print(f"Writing left finger_bottom_cover output to {left_finger_bottom_cover_filepath} . . .")
     left_finger_bottom_cover.save_as_scad(left_finger_bottom_cover_filepath)
 
+    left_finger_bottom_cover_with_feet_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover-with-feet.scad"
+    print(f"Writing left finger_bottom_cover_with_feet output to {left_finger_bottom_cover_with_feet_filepath} . . .")
+    left_finger_bottom_cover_with_feet.save_as_scad(left_finger_bottom_cover_with_feet_filepath)
+
     lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
     print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
     assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
@@ -1585,8 +1629,8 @@ if __name__ == "__main__":
             right_single_piece.color((0.1, 0.1, 0.1))
             + assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape())
             + right_keycaps.color((1.0, 0.98, 0.95))
-            + right_pcbs.color((0, 0.4, 0))
-            + right_finger_bottom_cover.color((0.12, 0.12, 0.12)).down(0.01)
+            + right_pcbs.color((0.02, 0.02, 0.02))
+            + right_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
         ).translate((100, 0, 0))
         + (
             #left_finger_part.color((0.1, 0.1, 0.9))
@@ -1594,8 +1638,8 @@ if __name__ == "__main__":
             #+ left_connector.color((0.4, 0.1, 0.1))
             left_single_piece.color((0.1, 0.1, 0.1))
             + left_keycaps.color((1.0, 0.98, 0.95))
-            + left_pcbs.color((0, 0.4, 0))
-            + left_finger_bottom_cover.color((0.12, 0.12, 0.12)).down(0.01)
+            + left_pcbs.color((0.02, 0.02, 0.02))
+            + left_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
         ).translate((-100, 0, 0))
         # + assembled_lcd_mount.color((0.1, 0.3, 0.1))
     ).save_as_scad(combined_filepath)
