@@ -22,6 +22,7 @@ from spkb.switch_plate import (
 )
 from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length, sa_cap
+from spkb.keyswitch import mx_keyswitch
 from spkb.single_key_pcb import single_key_board
 from spkb.utils import cylinder_outer, fudge_radius, nothing
 
@@ -1523,6 +1524,10 @@ if __name__ == "__main__":
         assembly.finger_layout.place_all(switch_cap)
         + assembly.thumb_layout.place_all(switch_cap)
     )
+    right_keyswitches = (
+        assembly.finger_layout.place_all(lambda column, row: mx_keyswitch())
+        + assembly.thumb_layout.place_all(lambda column, row: mx_keyswitch())
+    )
     right_pcbs = (
         assembly.finger_layout.place_all(pcb_board)
         + assembly.thumb_layout.place_all(pcb_board)
@@ -1543,6 +1548,10 @@ if __name__ == "__main__":
     left_keycaps = (
         assembly.finger_layout.place_all(switch_cap)
         + assembly.thumb_layout.place_all(switch_cap)
+    ).mirror((1, 0, 0))
+    left_keyswitches = (
+        assembly.finger_layout.place_all(lambda column, row: mx_keyswitch())
+        + assembly.thumb_layout.place_all(lambda column, row: mx_keyswitch())
     ).mirror((1, 0, 0))
     left_pcbs = (
         assembly.finger_layout.place_all(pcb_board)
@@ -1629,6 +1638,7 @@ if __name__ == "__main__":
             right_single_piece.color((0.1, 0.1, 0.1))
             + assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape())
             + right_keycaps.color((1.0, 0.98, 0.95))
+            + right_keyswitches.color((0.02, 0.02, 0.02))
             + right_pcbs.color((0.02, 0.02, 0.02))
             + right_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
         ).translate((100, 0, 0))
@@ -1638,6 +1648,7 @@ if __name__ == "__main__":
             #+ left_connector.color((0.4, 0.1, 0.1))
             left_single_piece.color((0.1, 0.1, 0.1))
             + left_keycaps.color((1.0, 0.98, 0.95))
+            + left_keyswitches.color((0.02, 0.02, 0.02))
             + left_pcbs.color((0.02, 0.02, 0.02))
             + left_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
         ).translate((-100, 0, 0))
