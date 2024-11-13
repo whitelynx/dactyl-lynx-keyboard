@@ -438,7 +438,7 @@ class FingerWellLayout(Layout):
         return shape \
             .rotate(math.degrees(math.pi / 10), (0, 1, 0)) \
             .rotate(math.degrees(math.pi / 10), (1, 0, 0)) \
-            .translate((0, 0, 22))
+            .translate((0, 0, 26.3))
 
     def web_all(self, z_offset=0, thickness=None):
         """Return the complete "web" between all key positions in this layout.
@@ -478,7 +478,7 @@ class ThumbWellLayout(Layout):
         self.rad_per_row = math.pi / 12
         self.rad_per_col = math.pi / 8
 
-        self.placement_transform = (-54, -72, 0)
+        self.placement_transform = (-54, -72, 4.3)
 
     def generate_positions(self):
         """Generate the list of locations within the layout.
@@ -815,7 +815,7 @@ class KeyboardAssembly:
             .rotate(90, (0, 0, 1)) \
             .rotate(-120, (1, 0, 0)) \
             .rotate(17, (0, 1, 0)) \
-            .translate((-19, 53, 70))
+            .translate((-19, 53, 74.3))
 
     def transform_connector_mount(self, shape):
         return self.finger_layout.key_place(
