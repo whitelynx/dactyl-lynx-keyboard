@@ -73,8 +73,7 @@ pipenv run python src/dactyl_lynx_keyboard/dactyl_lynx.py --help
 
 ### Printing
 
-~~Pregenerated STL files are available in the [things/](things/) directory.~~
-For now, you're better off generating the model directly instead of using any of the existing files in the `things/` directory.
+Pregenerated STL files are available in the [things/](things/) directory.
 
 
 ### Bill of Materials
