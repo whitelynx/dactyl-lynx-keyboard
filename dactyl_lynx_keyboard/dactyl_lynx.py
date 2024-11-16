@@ -1476,13 +1476,14 @@ class KeyboardAssembly:
         )
 
 
-if __name__ == "__main__":
-    def tagged_switch_plate(column, row):
-        return (
-            mx_plate_with_board_mount()
-            + text(f'{column},{row}', size=keyswitch_length / 3, halign='center', valign='center')
-        )
+def tagged_switch_plate(column, row):
+    return (
+        mx_plate_with_board_mount()
+        + text(f'{column},{row}', size=keyswitch_length / 3, halign='center', valign='center')
+    )
 
+
+if __name__ == "__main__":
     assembly = KeyboardAssembly(
         columns=6,
         rows=5,
@@ -1500,9 +1501,12 @@ if __name__ == "__main__":
         #socket_shape=tagged_switch_plate,
         wall_thickness=2.625,  # The wall_thickness of the board mount socket (2.625)
     )
+
     lcdMount = LCDMount()
 
     pcb_board = single_key_board()
+
+    keyswitch = lambda column, row: mx_keyswitch()
 
     def switch_cap(column, row):
         shape = sa_cap(1)
@@ -1525,8 +1529,8 @@ if __name__ == "__main__":
         + assembly.thumb_layout.place_all(switch_cap)
     )
     right_keyswitches = (
-        assembly.finger_layout.place_all(lambda column, row: mx_keyswitch())
-        + assembly.thumb_layout.place_all(lambda column, row: mx_keyswitch())
+        assembly.finger_layout.place_all(keyswitch)
+        + assembly.thumb_layout.place_all(keyswitch)
     )
     right_pcbs = (
         assembly.finger_layout.place_all(pcb_board)
@@ -1550,8 +1554,8 @@ if __name__ == "__main__":
         + assembly.thumb_layout.place_all(switch_cap)
     ).mirror((1, 0, 0))
     left_keyswitches = (
-        assembly.finger_layout.place_all(lambda column, row: mx_keyswitch())
-        + assembly.thumb_layout.place_all(lambda column, row: mx_keyswitch())
+        assembly.finger_layout.place_all(keyswitch)
+        + assembly.thumb_layout.place_all(keyswitch)
     ).mirror((1, 0, 0))
     left_pcbs = (
         assembly.finger_layout.place_all(pcb_board)
