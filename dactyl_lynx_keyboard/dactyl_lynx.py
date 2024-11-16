@@ -1698,7 +1698,7 @@ if __name__ == "__main__":
     sys.exit(0)
 #######
 
-    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser = argparse.ArgumentParser(description="Build a Dactyl Lynx keyboard model.")
     parser.add_argument(
         "finger_columns",
         metavar="COLS",
