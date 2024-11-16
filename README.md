@@ -7,7 +7,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * Rotated thumb clusters to be close to vertical (inspired by [the Dactyl-ManuForm][] and the way my thumbs move; see also Viktor Eikman's [DMOTE][] and [Concertina][] keyboards)
 * Steeper tenting angle
 * 1U or 2U keycaps - easy to source (look for ortholinear keycap sets, or possibly Ergodox sets with a few extra keycaps)
-* A new adjustable skeletal design (which will probably change once I solidify the physical placement of the wells, but I'll likely keep around as an option)
+* Added a magnetically-attached back cover, with different variants (plain, or with feet)
 * Modified keyswitch holes to support [Kailh hot-swap sockets][]
 * Added a [TrackPoint module][] between the `D`, `H`, `B`, and `M` keys (`H`, `J`, `N`, and `M` on QWERTY)
 * Added support for [my single-keyswitch hot-swap PCBs][]
@@ -34,7 +34,8 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 ## Future plans
 
 * Adding mouse buttons and a scroll ball from an [Apple Mighty Mouse][] next to the right-hand thumb cluster
-* Adding a thumbstick to the left side?
+* Adding a thumbstick to the left side
+* Mounting the left thumb cluster on a hinge so it swings out of the way to access the thumbstick; when swung out of the way, it can trigger a microswitch to change to the gaming layout
 * Multiple user-defined key maps that can be uploaded via USB and easily toggled between on the fly (I want this to replace my [Orbweaver][]) - Maybe use [Vial][]. (~~though Vial has a limitation of 4 layers~~ - it turns out you can force Vial to support more layers! It's still relatively limited, though)
 * Adding support for ALPS or Choc switches instead of MX-style switches, along with appropriate hot-swap sockets (this will be mostly implemented in [spkb][] first)
 
@@ -62,12 +63,12 @@ pipenv install
 #### Generating
 
 ```bash
-pipenv run python src/dactyl_lynx_keyboard/dactyl_lynx.py
+pipenv run python dactyl_lynx_keyboard/dactyl_lynx.py
 ```
 
 To view the available options:
 ```bash
-pipenv run python src/dactyl_lynx_keyboard/dactyl_lynx.py --help
+pipenv run python dactyl_lynx_keyboard/dactyl_lynx.py --help
 ```
 
 
