@@ -1632,31 +1632,66 @@ if __name__ == "__main__":
     print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
     assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
 
+    def build_combined_output(separate_pieces=False, parts=()):
+        """Build a combined "assembly" view of the keyboard, with the given parts.
+
+        :param separate_pieces: whether the main body should consist of separate finger and thumb pieces with a connector
+        :type columns: bool
+
+        :param parts: the parts to include in the assembly (choices: 'trackpoint', 'keycaps', 'keyswitches', 'pcbs',
+        'bottom_cover', 'bottom_cover_with_feet', 'lcd_mount')
+        :type parts: list[str]
+        """
+        right_combined = right_single_piece.color((0.1, 0.1, 0.1))
+        if separate_pieces:
+            right_combined = (
+                right_finger_part.color((0.1, 0.1, 0.9))
+                + right_thumb_part.color((0.1, 0.1, 0.1))
+                + right_connector.color((0.4, 0.1, 0.1))
+            )
+        if 'trackpoint' in parts:
+            right_combined += assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape())
+        if 'keycaps' in parts:
+            right_combined += right_keycaps.color((1.0, 0.98, 0.95))
+        if 'keyswitches' in parts:
+            right_combined += right_keyswitches.color((0.02, 0.02, 0.02))
+        if 'pcbs' in parts:
+            right_combined += right_pcbs.color((0.02, 0.02, 0.02))
+        if 'bottom_cover' in parts:
+            right_combined += right_finger_bottom_cover.color((0.12, 0.12, 0.12)).down(0.01)
+        if 'bottom_cover_with_feet' in parts:
+            right_combined += right_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
+        combined = right_combined.right(100)
+
+        left_combined = left_single_piece.color((0.1, 0.1, 0.1))
+        if separate_pieces:
+            left_combined = (
+                left_finger_part.color((0.1, 0.1, 0.9))
+                + left_thumb_part.color((0.1, 0.1, 0.1))
+                + left_connector.color((0.4, 0.1, 0.1))
+            )
+        if 'keycaps' in parts:
+            left_combined += left_keycaps.color((1.0, 0.98, 0.95))
+        if 'keyswitches' in parts:
+            left_combined += left_keyswitches.color((0.02, 0.02, 0.02))
+        if 'pcbs' in parts:
+            left_combined += left_pcbs.color((0.02, 0.02, 0.02))
+        if 'bottom_cover' in parts:
+            left_combined += left_finger_bottom_cover.color((0.12, 0.12, 0.12)).down(0.01)
+        if 'bottom_cover_with_feet' in parts:
+            left_combined += left_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
+        combined += left_combined.left(100)
+
+        if 'lcd_mount' in parts:
+            combined += assembled_lcd_mount.color((0.1, 0.3, 0.1))
+
+        return combined
+
     combined_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5.scad"
     print(f"Writing combined output to {combined_filepath} . . .")
-    (
-        (
-            #right_finger_part.color((0.1, 0.1, 0.9))
-            #+ right_thumb_part.color((0.1, 0.1, 0.1))
-            #+ right_connector.color((0.4, 0.1, 0.1))
-            right_single_piece.color((0.1, 0.1, 0.1))
-            + assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape())
-            + right_keycaps.color((1.0, 0.98, 0.95))
-            + right_keyswitches.color((0.02, 0.02, 0.02))
-            + right_pcbs.color((0.02, 0.02, 0.02))
-            + right_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
-        ).translate((100, 0, 0))
-        + (
-            #left_finger_part.color((0.1, 0.1, 0.9))
-            #+ left_thumb_part.color((0.1, 0.1, 0.1))
-            #+ left_connector.color((0.4, 0.1, 0.1))
-            left_single_piece.color((0.1, 0.1, 0.1))
-            + left_keycaps.color((1.0, 0.98, 0.95))
-            + left_keyswitches.color((0.02, 0.02, 0.02))
-            + left_pcbs.color((0.02, 0.02, 0.02))
-            + left_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
-        ).translate((-100, 0, 0))
-        # + assembled_lcd_mount.color((0.1, 0.3, 0.1))
+    build_combined_output(
+        separate_pieces=False,
+        parts=('trackpoint', 'keycaps', 'keyswitches', 'pcbs', 'bottom_cover_with_feet')
     ).save_as_scad(combined_filepath)
 
     import sys
