@@ -9,3 +9,4 @@ spkb = {git = "git+https://github.com/whitelynx/spkb.git"}
 
 [dev-packages]
 flake8 = "*"
+pyright = "*"
