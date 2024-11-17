@@ -2,9 +2,11 @@
 import argparse
 import math
 import operator
+from collections.abc import Iterable
 from functools import reduce
 from itertools import chain, pairwise
 from os.path import abspath, dirname, join
+from typing import Tuple
 
 from solid2 import cube, hull, sphere, text, union
 from solid2.core.object_base import OpenSCADObject
@@ -80,7 +82,7 @@ class Layout:
             / (math.sin(self.rad_per_col / 2))
         ) + self.cap_top_height
 
-    def generate_positions(self):
+    def generate_positions(self) -> Iterable[Tuple[float, float]]:
         """Override this to change the list of locations within the layout.
         """
         return (
@@ -1013,11 +1015,16 @@ class KeyboardAssembly:
         # Fudge the sphere radius as if it had 12 segments instead of 16, in order to make it line up a bit better with
         # the cylinder. It's still not perfect.
         sphere_radius = fudge_radius(radius, segments=12)
+        sphere_radii = {}
+        if isinstance(sphere_radius, (int, float)):
+            sphere_radii['r'] = sphere_radius
+        elif isinstance(sphere_radius, (tuple, list)):
+            sphere_radii['r1'], sphere_radii['r2'] = sphere_radius
 
         shape = (
             cylinder_outer(radius, self.bottom_cover_magnet_thickness, center=True)
             .up(self.bottom_cover_magnet_thickness / 2)
-            + (sphere(sphere_radius, _fn=16) - cube(radius * 2, radius * 2, radius * 2, center=True).down(radius))
+            + (sphere(_fn=16, **sphere_radii) - cube(radius * 2, radius * 2, radius * 2, center=True).down(radius))
             .up(self.bottom_cover_magnet_thickness)
         )
 
@@ -1054,7 +1061,16 @@ class KeyboardAssembly:
             + self.finger_layout.key_place(column=5, row=0, shape=shape.forward(offset))
         )
 
-    def cover_edge_corner(self, side, column, row, left, top, top_shell, offset_along_edge=0, outer=False):
+    def cover_edge_corner(self,
+                          side: bool,
+                          column: float,
+                          row: float,
+                          left: bool,
+                          top: bool,
+                          top_shell: bool,
+                          offset_along_edge: float = 0,
+                          outer: bool = False,
+                          ):
         """Generate a corner post for generating the edges of the top shell or bottom cover.
 
         :param side: whether to create a block for the left or right edge (True), or for the top or bottom edge (False)
