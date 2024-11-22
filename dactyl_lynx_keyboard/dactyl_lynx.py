@@ -123,58 +123,6 @@ if __name__ == "__main__":
         .translate((-100, 0, 0))
     )
 
-    right_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger.scad"
-    print(f"Writing right finger output to {right_finger_filepath} . . .")
-    right_finger_part.save_as_scad(right_finger_filepath)
-
-    right_thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-thumb.scad"
-    print(f"Writing right thumb output to {right_thumb_filepath} . . .")
-    right_thumb_part.save_as_scad(right_thumb_filepath)
-
-    right_connector_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-connector.scad"
-    print(f"Writing right connector output to {right_connector_filepath} . . .")
-    right_connector.save_as_scad(right_connector_filepath)
-
-    right_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-single-piece.scad"
-    print(f"Writing right single_piece output to {right_single_piece_filepath} . . .")
-    right_single_piece.save_as_scad(right_single_piece_filepath)
-
-    right_finger_bottom_cover_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover.scad"
-    print(f"Writing right finger_bottom_cover output to {right_finger_bottom_cover_filepath} . . .")
-    right_finger_bottom_cover.save_as_scad(right_finger_bottom_cover_filepath)
-
-    right_finger_bottom_cover_with_feet_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover-with-feet.scad"
-    print(f"Writing right finger_bottom_cover_with_feet output to {right_finger_bottom_cover_with_feet_filepath} . . .")
-    right_finger_bottom_cover_with_feet.save_as_scad(right_finger_bottom_cover_with_feet_filepath)
-
-    left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
-    print(f"Writing left finger output to {left_finger_filepath} . . .")
-    left_finger_part.save_as_scad(left_finger_filepath)
-
-    left_thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-thumb.scad"
-    print(f"Writing left thumb output to {left_thumb_filepath} . . .")
-    left_thumb_part.save_as_scad(left_thumb_filepath)
-
-    left_connector_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-connector.scad"
-    print(f"Writing left connector output to {left_connector_filepath} . . .")
-    left_connector.save_as_scad(left_connector_filepath)
-
-    left_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-single-piece.scad"
-    print(f"Writing left single_piece output to {left_single_piece_filepath} . . .")
-    left_single_piece.save_as_scad(left_single_piece_filepath)
-
-    left_finger_bottom_cover_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover.scad"
-    print(f"Writing left finger_bottom_cover output to {left_finger_bottom_cover_filepath} . . .")
-    left_finger_bottom_cover.save_as_scad(left_finger_bottom_cover_filepath)
-
-    left_finger_bottom_cover_with_feet_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover-with-feet.scad"
-    print(f"Writing left finger_bottom_cover_with_feet output to {left_finger_bottom_cover_with_feet_filepath} . . .")
-    left_finger_bottom_cover_with_feet.save_as_scad(left_finger_bottom_cover_with_feet_filepath)
-
-    lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
-    print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
-    assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
-
     def build_combined_output(separate_pieces=False, parts=()):
         """Build a combined "assembly" view of the keyboard, with the given parts.
 
@@ -229,6 +177,58 @@ if __name__ == "__main__":
             combined += assembled_lcd_mount.color((0.1, 0.3, 0.1))
 
         return combined
+
+    right_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger.scad"
+    print(f"Writing right finger output to {right_finger_filepath} . . .")
+    right_finger_part.save_as_scad(right_finger_filepath)
+
+    right_thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-thumb.scad"
+    print(f"Writing right thumb output to {right_thumb_filepath} . . .")
+    right_thumb_part.save_as_scad(right_thumb_filepath)
+
+    right_connector_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-connector.scad"
+    print(f"Writing right connector output to {right_connector_filepath} . . .")
+    right_connector.save_as_scad(right_connector_filepath)
+
+    right_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-single-piece.scad"
+    print(f"Writing right single_piece output to {right_single_piece_filepath} . . .")
+    right_single_piece.save_as_scad(right_single_piece_filepath)
+
+    right_finger_bottom_cover_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover.scad"
+    print(f"Writing right finger_bottom_cover output to {right_finger_bottom_cover_filepath} . . .")
+    right_finger_bottom_cover.save_as_scad(right_finger_bottom_cover_filepath)
+
+    right_finger_bottom_cover_with_feet_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover-with-feet.scad"
+    print(f"Writing right finger_bottom_cover_with_feet output to {right_finger_bottom_cover_with_feet_filepath} . . .")
+    right_finger_bottom_cover_with_feet.save_as_scad(right_finger_bottom_cover_with_feet_filepath)
+
+    left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
+    print(f"Writing left finger output to {left_finger_filepath} . . .")
+    left_finger_part.save_as_scad(left_finger_filepath)
+
+    left_thumb_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-thumb.scad"
+    print(f"Writing left thumb output to {left_thumb_filepath} . . .")
+    left_thumb_part.save_as_scad(left_thumb_filepath)
+
+    left_connector_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-connector.scad"
+    print(f"Writing left connector output to {left_connector_filepath} . . .")
+    left_connector.save_as_scad(left_connector_filepath)
+
+    left_single_piece_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-single-piece.scad"
+    print(f"Writing left single_piece output to {left_single_piece_filepath} . . .")
+    left_single_piece.save_as_scad(left_single_piece_filepath)
+
+    left_finger_bottom_cover_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover.scad"
+    print(f"Writing left finger_bottom_cover output to {left_finger_bottom_cover_filepath} . . .")
+    left_finger_bottom_cover.save_as_scad(left_finger_bottom_cover_filepath)
+
+    left_finger_bottom_cover_with_feet_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover-with-feet.scad"
+    print(f"Writing left finger_bottom_cover_with_feet output to {left_finger_bottom_cover_with_feet_filepath} . . .")
+    left_finger_bottom_cover_with_feet.save_as_scad(left_finger_bottom_cover_with_feet_filepath)
+
+    lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
+    print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
+    assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
 
     combined_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5.scad"
     print(f"Writing combined output to {combined_filepath} . . .")
