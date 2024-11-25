@@ -59,6 +59,7 @@ if __name__ == "__main__":
             shape = sa_cap(2)
         elif isinstance(column, float) and not column.is_integer():
             shape = sa_cap(2).rotate((0, 0, 90))
+        shape = shape.color((1.0, 0.98, 0.95))
         return shape
 
     right_finger_part = assembly.finger_part()
@@ -145,7 +146,7 @@ if __name__ == "__main__":
         if 'trackpoint' in parts:
             right_combined += assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape())
         if 'keycaps' in parts:
-            right_combined += right_keycaps.color((1.0, 0.98, 0.95))
+            right_combined += right_keycaps
         if 'keyswitches' in parts:
             right_combined += right_keyswitches.color((0.02, 0.02, 0.02))
         if 'pcbs' in parts:
@@ -164,7 +165,7 @@ if __name__ == "__main__":
                 + left_connector.color((0.4, 0.1, 0.1))
             )
         if 'keycaps' in parts:
-            left_combined += left_keycaps.color((1.0, 0.98, 0.95))
+            left_combined += left_keycaps
         if 'keyswitches' in parts:
             left_combined += left_keyswitches.color((0.02, 0.02, 0.02))
         if 'pcbs' in parts:
