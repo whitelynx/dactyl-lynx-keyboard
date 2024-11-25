@@ -685,11 +685,13 @@ class KeyboardAssembly:
                     thickness=self.bottom_cover_thickness
                 ),
             )
-            + (  # TODO: Add attachment between nuts and cover
-                self.transform_finger_nut1(self.tenting_nut)
-                + self.transform_finger_nut2(self.tenting_nut)
-                + self.transform_finger_nut3(self.tenting_nut)
-            ) if self.enable_nuts else nothing
+            + (
+                (  # TODO: Add attachment between nuts and cover
+                    self.transform_finger_nut1(self.tenting_nut)
+                    + self.transform_finger_nut2(self.tenting_nut)
+                    + self.transform_finger_nut3(self.tenting_nut)
+                ) if self.enable_nuts else nothing
+            )
         )
 
     def finger_bottom_cover_feet(self):
