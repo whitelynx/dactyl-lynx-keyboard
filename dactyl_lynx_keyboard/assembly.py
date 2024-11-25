@@ -49,6 +49,8 @@ class KeyboardAssembly:
 
         self.left_side = False
 
+        self.enable_trackpoint = True
+        self.enable_nuts = False
         self.bottom_thumb_nuts = False
 
         self.bottom_cover_offset = 11
@@ -326,7 +328,7 @@ class KeyboardAssembly:
             - self.transform_connector_mount(self.connector_mount.hole())
         )
 
-        if not self.left_side:
+        if self.enable_trackpoint and not self.left_side:
             shape += self.transform_trackpoint_mount(self.trackpoint_mount.trackpoint_mount())
             shape -= self.transform_trackpoint_mount(self.trackpoint_mount.trackpoint_holes())
 
@@ -683,6 +685,11 @@ class KeyboardAssembly:
                     thickness=self.bottom_cover_thickness
                 ),
             )
+            + (  # TODO: Add attachment between nuts and cover
+                self.transform_finger_nut1(self.tenting_nut)
+                + self.transform_finger_nut2(self.tenting_nut)
+                + self.transform_finger_nut3(self.tenting_nut)
+            ) if self.enable_nuts else nothing
         )
 
     def finger_bottom_cover_feet(self):
@@ -754,7 +761,7 @@ class KeyboardAssembly:
                     #     self.thumb_layout.web_corner(0, -1/2, left=True, top=True, row_span=2),
                     #     self.thumb_layout.web_corner(0, -1/2, left=False, top=True, row_span=2),
                     # )
-                ) if self.bottom_thumb_nuts else nothing
+                ) if self.enable_nuts and self.bottom_thumb_nuts else nothing
             )
         )
 
