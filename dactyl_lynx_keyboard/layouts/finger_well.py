@@ -64,7 +64,7 @@ class FingerWellLayout(Layout):
         if column == 2:
             return shape.translate((0, 6.82, -4.0))
         elif column >= 4:
-            return shape.translate((0, -11.8, 7.64))
+            return shape.translate((0, -20.8, 7.64))
         else:
             return shape
 
