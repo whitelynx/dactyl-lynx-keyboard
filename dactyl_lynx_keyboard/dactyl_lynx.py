@@ -45,6 +45,9 @@ if __name__ == "__main__":
         wall_thickness=2.625,  # The wall_thickness of the board mount socket (2.625)
     )
 
+    # Set this to True to etch key coordinates into the keycaps at each position.
+    etch_key_positions = False
+
     lcdMount = LCDMount()
 
     pcb_board = single_key_board()
@@ -60,6 +63,13 @@ if __name__ == "__main__":
         elif isinstance(column, float) and not column.is_integer():
             shape = sa_cap(2).rotate((0, 0, 90))
         shape = shape.color((1.0, 0.98, 0.95))
+        if etch_key_positions:
+            shape -= (
+                text(f'{column},{row}', size=keyswitch_length / 4, halign='center', valign='center')
+                .linear_extrude(30)
+                .up(10)
+                .color((0, 0, 0))
+            )
         return shape
 
     right_finger_part = assembly.finger_part()
