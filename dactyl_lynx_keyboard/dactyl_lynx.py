@@ -2,7 +2,7 @@
 import argparse
 from os.path import abspath, dirname, join
 
-from solid2 import cube, text
+from solid2 import cube, sphere, text
 
 from spkb.switch_plate import (
     keyswitch_length,
@@ -53,7 +53,9 @@ if __name__ == "__main__":
 
     def switch_cap(column, row):
         shape = sa_cap(1)
-        if isinstance(row, float) and not row.is_integer():
+        if row == 2 and 1 <= column <= 4:
+            shape -= sphere(_fn=50, r=30).up(48)
+        elif isinstance(row, float) and not row.is_integer():
             shape = sa_cap(2)
         elif isinstance(column, float) and not column.is_integer():
             shape = sa_cap(2).rotate((0, 0, 90))
