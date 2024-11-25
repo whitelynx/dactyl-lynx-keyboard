@@ -17546,25 +17546,30 @@ union() {
 											translate(v = [0, 0, 82.73635378597841]) {
 												rotate(a = 0.0, v = [1, 0, 0]) {
 													translate(v = [0, 0, -82.73635378597841]) {
-														color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-															translate(v = [0, 0, 8]) {
-																hull() {
-																	translate(v = [0, 0, 0.05]) {
-																		linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																			polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+														difference() {
+															color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																translate(v = [0, 0, 8]) {
+																	hull() {
+																		translate(v = [0, 0, 0.05]) {
+																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																				polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																			}
 																		}
-																	}
-																	translate(v = [0, 0, 6]) {
-																		linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																			polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																		translate(v = [0, 0, 6]) {
+																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																				polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																			}
 																		}
-																	}
-																	translate(v = [0, 0, 12]) {
-																		linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																			polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																		translate(v = [0, 0, 12]) {
+																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																				polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																			}
 																		}
 																	}
 																}
+															}
+															translate(v = [0, 0, 48]) {
+																sphere($fn = 50, r = 30);
 															}
 														}
 													}
@@ -17586,25 +17591,30 @@ union() {
 												translate(v = [0, 0, 82.73635378597841]) {
 													rotate(a = 0.0, v = [1, 0, 0]) {
 														translate(v = [0, 0, -82.73635378597841]) {
-															color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-																translate(v = [0, 0, 8]) {
-																	hull() {
-																		translate(v = [0, 0, 0.05]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+															difference() {
+																color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																	translate(v = [0, 0, 8]) {
+																		hull() {
+																			translate(v = [0, 0, 0.05]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 6]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																			translate(v = [0, 0, 6]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 12]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																			translate(v = [0, 0, 12]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																				}
 																			}
 																		}
 																	}
+																}
+																translate(v = [0, 0, 48]) {
+																	sphere($fn = 50, r = 30);
 																}
 															}
 														}
@@ -17626,25 +17636,30 @@ union() {
 											translate(v = [0, 0, 82.73635378597841]) {
 												rotate(a = 0.0, v = [1, 0, 0]) {
 													translate(v = [0, 0, -82.73635378597841]) {
-														color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-															translate(v = [0, 0, 8]) {
-																hull() {
-																	translate(v = [0, 0, 0.05]) {
-																		linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																			polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+														difference() {
+															color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																translate(v = [0, 0, 8]) {
+																	hull() {
+																		translate(v = [0, 0, 0.05]) {
+																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																				polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																			}
 																		}
-																	}
-																	translate(v = [0, 0, 6]) {
-																		linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																			polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																		translate(v = [0, 0, 6]) {
+																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																				polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																			}
 																		}
-																	}
-																	translate(v = [0, 0, 12]) {
-																		linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																			polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																		translate(v = [0, 0, 12]) {
+																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																				polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																			}
 																		}
 																	}
 																}
+															}
+															translate(v = [0, 0, 48]) {
+																sphere($fn = 50, r = 30);
 															}
 														}
 													}
@@ -17666,25 +17681,30 @@ union() {
 												translate(v = [0, 0, 82.73635378597841]) {
 													rotate(a = 0.0, v = [1, 0, 0]) {
 														translate(v = [0, 0, -82.73635378597841]) {
-															color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-																translate(v = [0, 0, 8]) {
-																	hull() {
-																		translate(v = [0, 0, 0.05]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+															difference() {
+																color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																	translate(v = [0, 0, 8]) {
+																		hull() {
+																			translate(v = [0, 0, 0.05]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 6]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																			translate(v = [0, 0, 6]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 12]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																			translate(v = [0, 0, 12]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																				}
 																			}
 																		}
 																	}
+																}
+																translate(v = [0, 0, 48]) {
+																	sphere($fn = 50, r = 30);
 																}
 															}
 														}
@@ -50394,25 +50414,30 @@ union() {
 												translate(v = [0, 0, 82.73635378597841]) {
 													rotate(a = 0.0, v = [1, 0, 0]) {
 														translate(v = [0, 0, -82.73635378597841]) {
-															color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-																translate(v = [0, 0, 8]) {
-																	hull() {
-																		translate(v = [0, 0, 0.05]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+															difference() {
+																color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																	translate(v = [0, 0, 8]) {
+																		hull() {
+																			translate(v = [0, 0, 0.05]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 6]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																			translate(v = [0, 0, 6]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 12]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																			translate(v = [0, 0, 12]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																				}
 																			}
 																		}
 																	}
+																}
+																translate(v = [0, 0, 48]) {
+																	sphere($fn = 50, r = 30);
 																}
 															}
 														}
@@ -50434,25 +50459,30 @@ union() {
 													translate(v = [0, 0, 82.73635378597841]) {
 														rotate(a = 0.0, v = [1, 0, 0]) {
 															translate(v = [0, 0, -82.73635378597841]) {
-																color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-																	translate(v = [0, 0, 8]) {
-																		hull() {
-																			translate(v = [0, 0, 0.05]) {
-																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																					polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																difference() {
+																	color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																		translate(v = [0, 0, 8]) {
+																			hull() {
+																				translate(v = [0, 0, 0.05]) {
+																					linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																						polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																					}
 																				}
-																			}
-																			translate(v = [0, 0, 6]) {
-																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																					polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																				translate(v = [0, 0, 6]) {
+																					linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																						polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																					}
 																				}
-																			}
-																			translate(v = [0, 0, 12]) {
-																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																					polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																				translate(v = [0, 0, 12]) {
+																					linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																						polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																					}
 																				}
 																			}
 																		}
+																	}
+																	translate(v = [0, 0, 48]) {
+																		sphere($fn = 50, r = 30);
 																	}
 																}
 															}
@@ -50474,25 +50504,30 @@ union() {
 												translate(v = [0, 0, 82.73635378597841]) {
 													rotate(a = 0.0, v = [1, 0, 0]) {
 														translate(v = [0, 0, -82.73635378597841]) {
-															color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-																translate(v = [0, 0, 8]) {
-																	hull() {
-																		translate(v = [0, 0, 0.05]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+															difference() {
+																color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																	translate(v = [0, 0, 8]) {
+																		hull() {
+																			translate(v = [0, 0, 0.05]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 6]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																			translate(v = [0, 0, 6]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																				}
 																			}
-																		}
-																		translate(v = [0, 0, 12]) {
-																			linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																				polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																			translate(v = [0, 0, 12]) {
+																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																					polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																				}
 																			}
 																		}
 																	}
+																}
+																translate(v = [0, 0, 48]) {
+																	sphere($fn = 50, r = 30);
 																}
 															}
 														}
@@ -50514,25 +50549,30 @@ union() {
 													translate(v = [0, 0, 82.73635378597841]) {
 														rotate(a = 0.0, v = [1, 0, 0]) {
 															translate(v = [0, 0, -82.73635378597841]) {
-																color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
-																	translate(v = [0, 0, 8]) {
-																		hull() {
-																			translate(v = [0, 0, 0.05]) {
-																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																					polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																difference() {
+																	color(alpha = 1.0, c = [0.8627450980392157, 0.6392156862745098, 0.6392156862745098, 1]) {
+																		translate(v = [0, 0, 8]) {
+																			hull() {
+																				translate(v = [0, 0, 0.05]) {
+																					linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																						polygon(points = [[9.125, 9.125], [9.125, -9.125], [-9.125, -9.125], [-9.125, 9.125]]);
+																					}
 																				}
-																			}
-																			translate(v = [0, 0, 6]) {
-																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																					polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																				translate(v = [0, 0, 6]) {
+																					linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																						polygon(points = [[8.5, 8.5], [8.5, -8.5], [-8.5, -8.5], [-8.5, 8.5]]);
+																					}
 																				}
-																			}
-																			translate(v = [0, 0, 12]) {
-																				linear_extrude(convexity = 0, height = 0.1, twist = 0) {
-																					polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																				translate(v = [0, 0, 12]) {
+																					linear_extrude(convexity = 0, height = 0.1, twist = 0) {
+																						polygon(points = [[6.0, 6.0], [6.0, -6.0], [-6.0, -6.0], [-6.0, 6.0]]);
+																					}
 																				}
 																			}
 																		}
+																	}
+																	translate(v = [0, 0, 48]) {
+																		sphere($fn = 50, r = 30);
 																	}
 																}
 															}
