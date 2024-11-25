@@ -12,6 +12,8 @@ class FingerWellLayout(Layout):
 
         self.use_1_5u_keys = use_1_5u_keys
 
+        self.placement_transform = (0, 0, 29.3)
+
     def generate_positions(self):
         """Generate the list of locations within the layout.
         """
@@ -76,7 +78,7 @@ class FingerWellLayout(Layout):
         return shape \
             .rotate(math.degrees(math.pi / 10), (0, 1, 0)) \
             .rotate(math.degrees(math.pi / 10), (1, 0, 0)) \
-            .translate((0, 0, 26.3))
+            .translate(self.placement_transform)
 
     def web_all(self, z_offset=0, thickness=None):
         """Return the complete "web" between all key positions in this layout.

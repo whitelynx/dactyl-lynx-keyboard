@@ -105,7 +105,7 @@ class KeyboardAssembly:
             .rotate(90, (0, 0, 1)) \
             .rotate(-120, (1, 0, 0)) \
             .rotate(17, (0, 1, 0)) \
-            .translate((-19, 53, 74.3))
+            .translate((-19, 53, 77.3))
 
     def transform_connector_mount(self, shape):
         """Place the given shape at the position and orientation of the Mini-DIN connector mount.
