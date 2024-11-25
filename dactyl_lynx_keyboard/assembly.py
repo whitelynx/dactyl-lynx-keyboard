@@ -60,23 +60,45 @@ class KeyboardAssembly:
         self.bottom_cover_magnet_thickness = 3
 
     def transform_finger_nut1(self, shape):
+        """Place the given shape at the position and orientation of the first finger nut.
+
+        This is the nut at the top outside corner of the finger well. (above column 5, row 0)
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(20, (1, 0, 0)) \
             .translate((64, 45, 45))
 
     def transform_finger_nut2(self, shape):
+        """Place the given shape at the position and orientation of the second finger nut.
+
+        This is the nut at the bottom outside corner of the finger well. (next to column 5, row 4)
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(-15, (1, 0, 0)) \
             .rotate(-5, (0, 1, 0)) \
             .translate((78, -49, 10))
 
     def transform_finger_nut3(self, shape):
+        """Place the given shape at the position and orientation of the third finger nut.
+
+        This is the nut in the middle of the inside edge of the finger well. (next to column 0, row 1)
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(15, (0, 1, 0)) \
             .rotate(9, (1, 0, 0)) \
             .translate((-54, 16, 49))
 
     def transform_board(self, shape):
+        """Place the given shape at the position and orientation of the microcontroller board mount.
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(90, (0, 0, 1)) \
             .rotate(-120, (1, 0, 0)) \
@@ -84,6 +106,10 @@ class KeyboardAssembly:
             .translate((-19, 53, 74.3))
 
     def transform_connector_mount(self, shape):
+        """Place the given shape at the position and orientation of the Mini-DIN connector mount.
+
+        :param shape: the shape to place
+        """
         return self.finger_layout.key_place(
             0,
             0,
@@ -97,9 +123,19 @@ class KeyboardAssembly:
         )
 
     def transform_trackpoint_mount(self, shape):
+        """Place the given shape at the position and orientation of the TrackPoint module.
+
+        :param shape: the shape to place
+        """
         return self.finger_layout.key_place(0.5, 2.5, shape)
 
     def transform_thumb_nut1(self, shape):
+        """Place the given shape at the position and orientation of the first thumb nut.
+
+        This is the nut in the bottom outside corner of the thumb well. (at the corner of column 0, row 0.5)
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(-10, (1, 0, 0)) \
             .rotate(5, (0, 1, 0)) \
@@ -109,6 +145,12 @@ class KeyboardAssembly:
             .translate(self.thumb_layout.placement_transform)
 
     def transform_thumb_nut2(self, shape):
+        """Place the given shape at the position and orientation of the second thumb nut.
+
+        This is the nut in the bottom inside corner of the thumb well. (next to column 0, row -1)
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(10, (1, 0, 0)) \
             .rotate(68, (0, 0, 1)) \
@@ -117,6 +159,12 @@ class KeyboardAssembly:
             .translate(self.thumb_layout.placement_transform)
 
     def transform_thumb_nut3(self, shape):
+        """Place the given shape at the position and orientation of the third thumb nut.
+
+        This is the nut behind the thumb well. (to attach to the web between column 1, row -1 and column 2, row -1)
+
+        :param shape: the shape to place
+        """
         return shape \
             .rotate(-15, (1, 0, 0)) \
             .rotate(-20, (0, 0, 1)) \
@@ -126,6 +174,14 @@ class KeyboardAssembly:
             .translate(self.thumb_layout.placement_transform)
 
     def switch_socket(self, column, row):
+        """Generate the switch plate socket for the given keyswitch.
+
+        :param column: the column of the keyswitch
+        :type column: number
+
+        :param row: the row of the keyswitch
+        :type row: number
+        """
         shape = self.socket_shape(column, row)
         if isinstance(row, float) and not row.is_integer():
             plate_height = (sa_double_length - self.finger_layout.keyswitch_length + 0.4) / 2
@@ -169,6 +225,14 @@ class KeyboardAssembly:
         return shape
 
     def switch_bottom_cover(self, column, row):
+        """Generate the portion of the bottom cover below the given keyswitch.
+
+        :param column: the column of the keyswitch
+        :type column: number
+
+        :param row: the row of the keyswitch
+        :type row: number
+        """
         if isinstance(row, float) and not row.is_integer():
             return cube(
                 self.finger_layout.keyswitch_width + self.wall_thickness * 2,
@@ -201,6 +265,10 @@ class KeyboardAssembly:
         ).translate(0, 0, -self.bottom_cover_offset - self.bottom_cover_thickness / 2)
 
     def finger_part(self):
+        """Generate the finger part of the assembly.
+
+        This includes the finger well, the board mount, and the Mini-DIN connector mount.
+        """
         shape = (
             self.finger_layout.place_all(self.switch_socket)
             + self.finger_layout.web_all()
@@ -618,7 +686,7 @@ class KeyboardAssembly:
         )
 
     def finger_bottom_cover_feet(self):
-        """Generate feet to union with the bottom cover.
+        """Generate fixed feet to union with the bottom cover.
         """
         bottom_cover_attachment_spot = cube(
             self.finger_layout.keyswitch_width + self.wall_thickness * 2,
@@ -649,6 +717,10 @@ class KeyboardAssembly:
         )
 
     def thumb_part(self):
+        """Generate the thumb part of the assembly.
+
+        This includes the thumb well and the thumb nuts.
+        """
         shape = (
             self.thumb_layout.place_all(self.switch_socket)
             + self.thumb_layout.web_all()
@@ -692,6 +764,8 @@ class KeyboardAssembly:
         return shape
 
     def connector(self):
+        """Generate the separate connector piece between the finger and thumb wells.
+        """
         return (
             self.transform_finger_nut3(
                 self.tenting_nut_unthreaded.down(10)
@@ -712,6 +786,11 @@ class KeyboardAssembly:
         )
 
     def single_piece(self):
+        """Generate the single-piece upper assembly.
+
+        This includes the finger part (finger well, board mount, and Mini-DIN connector mount) and thumb part (thumb
+        well and thumb nuts), as well as mouns for magnets to attach the bottom cover.
+        """
         return (
             self.finger_part()
             + hull()(
