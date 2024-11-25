@@ -70,7 +70,7 @@ class KeyboardAssembly:
         """
         return shape \
             .rotate(20, (1, 0, 0)) \
-            .translate((64, 45, 45))
+            .translate((70, 37, 45))
 
     def transform_finger_nut2(self, shape):
         """Place the given shape at the position and orientation of the second finger nut.
@@ -82,7 +82,7 @@ class KeyboardAssembly:
         return shape \
             .rotate(-15, (1, 0, 0)) \
             .rotate(-5, (0, 1, 0)) \
-            .translate((78, -49, 10))
+            .translate((81, -64, 6))
 
     def transform_finger_nut3(self, shape):
         """Place the given shape at the position and orientation of the third finger nut.
@@ -94,7 +94,7 @@ class KeyboardAssembly:
         return shape \
             .rotate(15, (0, 1, 0)) \
             .rotate(9, (1, 0, 0)) \
-            .translate((-54, 16, 49))
+            .translate((-57, 16, 49))
 
     def transform_board(self, shape):
         """Place the given shape at the position and orientation of the microcontroller board mount.
@@ -463,6 +463,17 @@ class KeyboardAssembly:
 
         return self.finger_layout.key_place(column, row, post)
 
+    def bottom_cover_web_corner_kwargs(self):
+        """Generate kwargs for passing to Layout.web_corner() when generating the bottom cover.
+
+        This includes the Z offset to put the corners at the depth of the bottom cover shell, and the adjusted
+        thickness of the cover.
+        """
+        return {
+            'z_offset': -self.bottom_cover_offset - self.bottom_cover_thickness,
+            'thickness': self.bottom_cover_thickness,
+        }
+
     def generate_cover_edge_corners(self, top_shell):
         """Generate the nested tuple of corners used with `hull()` to generate the edges of the top shell or bottom
         cover.
@@ -472,10 +483,7 @@ class KeyboardAssembly:
         """
         web_corner_kwargs = {}
         if not top_shell:
-            web_corner_kwargs = {
-                'z_offset': -self.bottom_cover_offset - self.bottom_cover_thickness,
-                'thickness': self.bottom_cover_thickness,
-            }
+            web_corner_kwargs = self.bottom_cover_web_corner_kwargs()
 
         return (
             (
@@ -685,12 +693,31 @@ class KeyboardAssembly:
                     thickness=self.bottom_cover_thickness
                 ),
             )
-            + (
-                (  # TODO: Add attachment between nuts and cover
-                    self.transform_finger_nut1(self.tenting_nut)
-                    + self.transform_finger_nut2(self.tenting_nut)
-                    + self.transform_finger_nut3(self.tenting_nut)
-                ) if self.enable_nuts else nothing
+        )
+
+    def finger_bottom_cover_nuts(self):
+        """Generate tenting nuts for M6 bolts to union with the bottom cover.
+        """
+        web_corner_kwargs = self.bottom_cover_web_corner_kwargs()
+
+        return (
+            self.transform_finger_nut1(self.tenting_nut)
+            + hull()(
+                self.transform_finger_nut1(cube(10, 0.1, 10, center=True).translate((0, -5, 0))),
+                self.finger_layout.web_corner(column=5, row=0, left=False, top=True, **web_corner_kwargs),
+                self.finger_layout.web_corner(column=5, row=0, left=True, top=True, **web_corner_kwargs),
+            )
+            + self.transform_finger_nut2(self.tenting_nut)
+            + hull()(
+                self.transform_finger_nut2(cube(0.1, 10, 10, center=True).translate((-5, 0, 0))),
+                self.finger_layout.web_corner(column=5, row=4, left=False, top=True, **web_corner_kwargs),
+                self.finger_layout.web_corner(column=5, row=4, left=False, top=False, **web_corner_kwargs),
+            )
+            + self.transform_finger_nut3(self.tenting_nut)
+            + hull()(
+                self.transform_finger_nut3(cube(0.1, 10, 10, center=True).translate((5, 0, 0))),
+                self.finger_layout.web_corner(column=0, row=1, left=True, top=True, **web_corner_kwargs),
+                self.finger_layout.web_corner(column=0, row=1, left=True, top=False, **web_corner_kwargs),
             )
         )
 
