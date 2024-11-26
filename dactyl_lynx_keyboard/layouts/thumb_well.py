@@ -20,7 +20,7 @@ class ThumbWellLayout(Layout):
 
         self.placement_transform = (-54, -77, 7.3)
 
-    def generate_positions(self):
+    def generate_positions(self) -> Iterable[Tuple[float, float]]:
         """Generate the list of locations within the layout.
         """
         return (
@@ -35,15 +35,11 @@ class ThumbWellLayout(Layout):
             (2, 1),
         )
 
-    def placement_adjust(self, column, row, shape):
+    def placement_adjust(self, column: float, row: float, shape: OpenSCADObject) -> OpenSCADObject:
         """Adjust the position of the given key/location in the layout.
 
         :param column: the column to place the key in
-        :type column: number
-
         :param row: the row to place the key in
-        :type row: number
-
         :param shape: the shape to place
         """
         if (isinstance(row, float) and not row.is_integer()) or (isinstance(column, float) and not column.is_integer()):
@@ -51,7 +47,7 @@ class ThumbWellLayout(Layout):
         else:
             return shape
 
-    def layout_place(self, shape):
+    def layout_place(self, shape: OpenSCADObject) -> OpenSCADObject:
         """Place the layout.
 
         :param shape: the shape to place
@@ -66,13 +62,11 @@ class ThumbWellLayout(Layout):
             .rotate(15, (1, 1, 1)) \
             .translate(self.placement_transform)
 
-    def web_all(self, z_offset=0, thickness=None):
+    def web_all(self, z_offset: float = 0, thickness: Optional[float] = None):
         """Return the complete "web" between all key positions in this layout.
 
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
-        :type z_offset: number
         :param thickness: the thickness of the web; if None, default to self.web_thickness
-        :type thickness: number
         """
         return reduce(
             operator.add,
