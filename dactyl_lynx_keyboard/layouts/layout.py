@@ -3,7 +3,7 @@ import operator
 from collections.abc import Iterable
 from functools import reduce
 from itertools import chain
-from typing import Callable, Optional, Tuple, Union
+from typing import Optional, Protocol, Tuple, Union
 
 from solid2 import cube, hull
 from solid2.core.object_base import OpenSCADObject
@@ -16,6 +16,12 @@ from spkb.switch_plate import (
     keyswitch_depth,
     plate_thickness,
 )
+
+
+class ShapeForLocationCallback(Protocol):
+    def __call__(self, column: float, row: float) -> OpenSCADObject:
+        """Return a shape to place at the given column/row position.
+        """
 
 
 class Layout:
@@ -154,7 +160,7 @@ class Layout:
         """
         return shape
 
-    def place_all(self, shape_or_callback: Union[OpenSCADObject, Callable[[float, float], OpenSCADObject]]) -> OpenSCADObject:
+    def place_all(self, shape_or_callback: Union[OpenSCADObject, ShapeForLocationCallback]) -> OpenSCADObject:
         """Place the given shape (or the shape returned by the given callback) at every location
         in the layout.
 
