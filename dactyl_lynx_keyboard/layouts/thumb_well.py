@@ -62,11 +62,13 @@ class ThumbWellLayout(Layout):
             .rotate(15, (1, 1, 1)) \
             .translate(self.placement_transform)
 
-    def web_all(self, z_offset: float = 0, thickness: Optional[float] = None):
+    def web_all(self, z_offset: float = 0, thickness: Optional[float] = None, size_adjust: Optional[XYAdjustCallback] = None, position_adjust: Optional[XYAdjustCallback] = None) -> OpenSCADObject:
         """Return the complete "web" between all key positions in this layout.
 
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
         :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :param size_adjust: a callback to adjust the size of the key at this column and row
+        :param position_adjust: a callback to adjust the position of the key at this column and row
         """
         return reduce(
             operator.add,

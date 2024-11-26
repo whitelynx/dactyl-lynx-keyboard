@@ -18,6 +18,13 @@ from spkb.switch_plate import (
 )
 
 
+class XYAdjustCallback(Protocol):
+    def __call__(self, column: float, row: float) -> Tuple[float, float]:
+        """Return a 2-tuple containing X and Y axis adjustments for the given column/row position.
+        (usually either size or position adjustments)
+        """
+
+
 class ShapeForLocationCallback(Protocol):
     def __call__(self, column: float, row: float) -> OpenSCADObject:
         """Return a shape to place at the given column/row position.
@@ -179,7 +186,7 @@ class Layout:
             )
         )
 
-    def web_corner(self, column: float, row: float, left: bool, top: bool, column_span: float = 1, row_span: float = 1, z_offset: float = 0, thickness: Optional[float] = None) -> OpenSCADObject:
+    def web_corner(self, column: float, row: float, left: bool, top: bool, column_span: float = 1, row_span: float = 1, z_offset: float = 0, thickness: Optional[float] = None, size_adjust: Optional[XYAdjustCallback] = None, position_adjust: Optional[XYAdjustCallback] = None) -> OpenSCADObject:
         """Return a tiny block encompassing the given corner of the given key position, for
         building the "web" between the keys.
 
@@ -191,6 +198,8 @@ class Layout:
         :param row_span: the number of rows occupied by the key
         :param z_offset: the offset in the Z direction of the corner block (before placing at the key position)
         :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :param size_adjust: a callback to adjust the size of the key at this column and row
+        :param position_adjust: a callback to adjust the position of the key at this column and row
 
         Example:
         web_corner(1, 1, left=True, top=True) will create the block at the position marked
@@ -210,8 +219,25 @@ class Layout:
             center=True
         ).translate((0, 0, plate_thickness - (thickness / 2)))
 
-        x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness
-        y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness
+        x_adjust = 0
+        y_adjust = 0
+        if size_adjust is not None:
+            x_size_adjust, y_size_adjust = size_adjust(column, row)
+            if left:
+                x_adjust -= x_size_adjust / 2
+            else:
+                x_adjust += x_size_adjust / 2
+            if top:
+                x_adjust += x_size_adjust / 2
+            else:
+                x_adjust -= x_size_adjust / 2
+        if position_adjust is not None:
+            x_pos_adjust, y_pos_adjust = position_adjust(column, row)
+            x_adjust += x_pos_adjust
+            y_adjust += y_pos_adjust
+
+        x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness + x_adjust
+        y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness + y_adjust
 
         return self.key_place(
             column,
@@ -223,7 +249,7 @@ class Layout:
             ))
         )
 
-    def web_left_of(self, column: float, row: float, z_offset: float = 0, thickness: Optional[float] = None) -> OpenSCADObject:
+    def web_left_of(self, column: float, row: float, z_offset: float = 0, thickness: Optional[float] = None, size_adjust: Optional[XYAdjustCallback] = None, position_adjust: Optional[XYAdjustCallback] = None) -> OpenSCADObject:
         """Return the "web" between the key at the given row/column and the neighboring one in the
         column to the left.
 
@@ -231,6 +257,8 @@ class Layout:
         :param row: the row of the key to create the web at
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
         :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :param size_adjust: a callback to adjust the size of the key at this column and row
+        :param position_adjust: a callback to adjust the position of the key at this column and row
 
         Example:
         web_top_left_of(1, 1) will create the web at the position marked with an X:
@@ -243,13 +271,21 @@ class Layout:
         └───┘┄┗━━━┛
         """
         return hull()(
-            self.web_corner(column, row, left=True, top=True, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column, row, left=True, top=False, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column - 1, row, left=False, top=False, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column - 1, row, left=False, top=True, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row, left=True, top=True,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column, row, left=True, top=False,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column - 1, row, left=False, top=False,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column - 1, row, left=False, top=True,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
         )
 
-    def web_above(self, column: float, row: float, z_offset: float = 0, thickness: Optional[float] = None) -> OpenSCADObject:
+    def web_above(self, column: float, row: float, z_offset: float = 0, thickness: Optional[float] = None, size_adjust: Optional[XYAdjustCallback] = None, position_adjust: Optional[XYAdjustCallback] = None) -> OpenSCADObject:
         """Return the "web" between the key at the given row/column and the neighboring one in the
         row above.
 
@@ -257,6 +293,8 @@ class Layout:
         :param row: the row of the key to create the web at
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
         :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :param size_adjust: a callback to adjust the size of the key at this column and row
+        :param position_adjust: a callback to adjust the position of the key at this column and row
 
         Example:
         web_above(1, 1) will create the web at the position marked with an X:
@@ -269,13 +307,21 @@ class Layout:
         └───┘ ┗━━━┛
         """
         return hull()(
-            self.web_corner(column, row, left=True, top=True, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column, row, left=False, top=True, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column, row - 1, left=False, top=False, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column, row - 1, left=True, top=False, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row, left=True, top=True,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column, row, left=False, top=True,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column, row - 1, left=False, top=False,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column, row - 1, left=True, top=False,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
         )
 
-    def web_top_left_of(self, column: float, row: float, z_offset: float = 0, thickness: Optional[float] = None) -> OpenSCADObject:
+    def web_top_left_of(self, column: float, row: float, z_offset: float = 0, thickness: Optional[float] = None, size_adjust: Optional[XYAdjustCallback] = None, position_adjust: Optional[XYAdjustCallback] = None) -> OpenSCADObject:
         """Return the "web" between the key at the given row/column and the neighboring ones in the
         column to the left and/or the row above.
 
@@ -283,6 +329,8 @@ class Layout:
         :param row: the row of the key to create the web at
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
         :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :param size_adjust: a callback to adjust the size of the key at this column and row
+        :param position_adjust: a callback to adjust the position of the key at this column and row
 
         Example:
         web_top_left_of(1, 1) will create the web at the position marked with an X:
@@ -295,33 +343,49 @@ class Layout:
         └───┘ ┗━━━┛
         """
         return hull()(
-            self.web_corner(column, row, left=True, top=True, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column - 1, row, left=False, top=True, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column - 1, row - 1, left=False, top=False, z_offset=z_offset, thickness=thickness),
-            self.web_corner(column, row - 1, left=True, top=False, z_offset=z_offset, thickness=thickness),
+            self.web_corner(column, row, left=True, top=True,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column - 1, row, left=False, top=True,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column - 1, row - 1, left=False, top=False,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
+            self.web_corner(column, row - 1, left=True, top=False,
+                            z_offset=z_offset, thickness=thickness,
+                            size_adjust=size_adjust, position_adjust=position_adjust),
         )
 
-    def web_all(self, z_offset: float = 0, thickness: Optional[float] = None) -> OpenSCADObject:
+    def web_all(self, z_offset: float = 0, thickness: Optional[float] = None, size_adjust: Optional[XYAdjustCallback] = None, position_adjust: Optional[XYAdjustCallback] = None) -> OpenSCADObject:
         """Return the complete "web" between all key positions in this layout.thumb_place_all
 
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
         :param thickness: the thickness of the web; if None, default to self.web_thickness
+        :param size_adjust: a callback to adjust the size of the key at this column and row
+        :param position_adjust: a callback to adjust the position of the key at this column and row
         """
         return reduce(
             operator.add,
             chain(
                 (
-                    self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_top_left_of(column, row,
+                                         z_offset=z_offset, thickness=thickness,
+                                         size_adjust=size_adjust, position_adjust=position_adjust)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > 0
                 ),
                 (
-                    self.web_left_of(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_left_of(column, row,
+                                     z_offset=z_offset, thickness=thickness,
+                                     size_adjust=size_adjust, position_adjust=position_adjust)
                     for (column, row) in self.generate_positions()
                     if column > 0
                 ),
                 (
-                    self.web_above(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_above(column, row,
+                                   z_offset=z_offset, thickness=thickness,
+                                   size_adjust=size_adjust, position_adjust=position_adjust)
                     for (column, row) in self.generate_positions()
                     if row > 0
                 ),
