@@ -14,7 +14,7 @@ class FingerWellLayout(Layout):
 
         self.placement_transform = (0, 0, 29.3)
 
-    def generate_positions(self):
+    def generate_positions(self) -> Iterable[Tuple[float, float]]:
         """Generate the list of locations within the layout.
         """
         return (
@@ -24,43 +24,36 @@ class FingerWellLayout(Layout):
             if (column != 0) or (row != 4)
         )
 
-    def column_adjust(self, column):
+    def column_adjust(self, column: float) -> float:
         """Adjust the effective column number of a given column to account for 1.5u keys on the
         outside columns.
 
         :param column: the column number to adjust
-        :type column: number
         """
         if self.use_1_5u_keys and column >= 5:
             return column + (column - 4) * 0.25
         else:
             return column
 
-    def row_angle(self, row):
+    def row_angle(self, row: float) -> float:
         """Calculate the X rotation angle for the given row.
 
         :param row: the row number to rotate for
-        :type row: number
         """
         return math.degrees(self.rad_per_row * (2 - row))
 
-    def column_angle(self, column):
+    def column_angle(self, column: float) -> float:
         """Calculate the Y rotation angle for the given column.
 
         :param column: the row number to rotate for
-        :type column: number
         """
         return math.degrees(self.rad_per_col * (2 - column))
 
-    def placement_adjust(self, column, row, shape):
+    def placement_adjust(self, column: float, row: float, shape: OpenSCADObject) -> OpenSCADObject:
         """Adjust the position of the given key/location in the layout.
 
         :param column: the column to place the key in
-        :type column: number
-
         :param row: the row to place the key in
-        :type row: number
-
         :param shape: the shape to place
         """
         if column == 2:
@@ -70,7 +63,7 @@ class FingerWellLayout(Layout):
         else:
             return shape
 
-    def layout_place(self, shape):
+    def layout_place(self, shape: OpenSCADObject) -> OpenSCADObject:
         """Place the layout.
 
         :param shape: the shape to place
@@ -80,13 +73,11 @@ class FingerWellLayout(Layout):
             .rotate(math.degrees(math.pi / 10), (1, 0, 0)) \
             .translate(self.placement_transform)
 
-    def web_all(self, z_offset=0, thickness=None):
+    def web_all(self, z_offset: float = 0, thickness: Optional[float] = None) -> OpenSCADObject:
         """Return the complete "web" between all key positions in this layout.
 
         :param z_offset: the offset in the Z direction of the corner blocks (before placing at the key positions)
-        :type z_offset: number
         :param thickness: the thickness of the web; if None, default to self.web_thickness
-        :type thickness: number
         """
         return reduce(
             operator.add,
