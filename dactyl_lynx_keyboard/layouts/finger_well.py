@@ -1,7 +1,11 @@
 import math
 import operator
+from collections.abc import Iterable
 from functools import reduce
 from itertools import chain
+from typing import Optional, Tuple
+
+from solid2.core.object_base import OpenSCADObject
 
 from .layout import Layout, XYAdjustCallback
 

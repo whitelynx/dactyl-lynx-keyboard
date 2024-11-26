@@ -1,13 +1,16 @@
 import math
 import operator
+from collections.abc import Iterable
 from functools import reduce
 from itertools import chain
+from typing import Optional, Tuple
 
 from solid2 import hull
+from solid2.core.object_base import OpenSCADObject
 
 from spkb.switch_plate import mount_width
 
-from .layout import Layout
+from .layout import Layout, XYAdjustCallback
 
 
 class ThumbWellLayout(Layout):
