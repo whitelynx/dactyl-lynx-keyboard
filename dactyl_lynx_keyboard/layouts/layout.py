@@ -16,7 +16,6 @@ from spkb.switch_plate import (
     keyswitch_depth,
     plate_thickness,
 )
-from spkb.keycaps import sa_cap
 
 
 class Layout:
@@ -185,9 +184,6 @@ class Layout:
                 for (column, row) in self.generate_positions()
             )
         )
-
-    def caps(self):
-        return self.place_all(sa_cap(1))
 
     def web_corner(self, column, row, left, top, column_span=1, row_span=1, z_offset=0, thickness=None):
         """Return a tiny block encompassing the given corner of the given key position, for
