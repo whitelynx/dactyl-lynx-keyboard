@@ -98,7 +98,7 @@ union() {
 		}
 		translate(v = [-100, 0, 0]) {
 			mirror(v = [1, 0, 0]) {
-				translate(v = [-54, 16, 49]) {
+				translate(v = [-57, 16, 49]) {
 					rotate(a = 9, v = [1, 0, 0]) {
 						rotate(a = 15, v = [0, 1, 0]) {
 							translate(v = [0, 5, -10]) {
@@ -112,7 +112,7 @@ union() {
 	}
 	translate(v = [-100, 0, 0]) {
 		mirror(v = [1, 0, 0]) {
-			translate(v = [-54, 16, 49]) {
+			translate(v = [-57, 16, 49]) {
 				rotate(a = 9, v = [1, 0, 0]) {
 					rotate(a = 15, v = [0, 1, 0]) {
 						translate(v = [0, 0, -10]) {

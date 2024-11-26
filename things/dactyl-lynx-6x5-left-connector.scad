@@ -30,7 +30,7 @@ include </home/whitelynx/.local/share/virtualenvs/dactyl-lynx-keyboard-vn24Ws0r/
 
 mirror(v = [1, 0, 0]) {
 	union() {
-		translate(v = [-54, 16, 49]) {
+		translate(v = [-57, 16, 49]) {
 			rotate(a = 9, v = [1, 0, 0]) {
 				rotate(a = 15, v = [0, 1, 0]) {
 					translate(v = [0, 0, -10]) {
@@ -42,7 +42,7 @@ mirror(v = [1, 0, 0]) {
 				}
 			}
 		}
-		translate(v = [-54, -77, 4.3]) {
+		translate(v = [-54, -77, 7.3]) {
 			rotate(a = 10, v = [1, 1, 1]) {
 				translate(v = [-3, 57, 33.2]) {
 					rotate(a = -10, v = [0, 1, 0]) {
@@ -61,7 +61,7 @@ mirror(v = [1, 0, 0]) {
 			}
 		}
 		hull() {
-			translate(v = [-54, 16, 49]) {
+			translate(v = [-57, 16, 49]) {
 				rotate(a = 9, v = [1, 0, 0]) {
 					rotate(a = 15, v = [0, 1, 0]) {
 						translate(v = [0, -5, -10]) {
@@ -70,7 +70,7 @@ mirror(v = [1, 0, 0]) {
 					}
 				}
 			}
-			translate(v = [-54, -77, 4.3]) {
+			translate(v = [-54, -77, 7.3]) {
 				rotate(a = 10, v = [1, 1, 1]) {
 					translate(v = [-3, 57, 33.2]) {
 						rotate(a = -10, v = [0, 1, 0]) {

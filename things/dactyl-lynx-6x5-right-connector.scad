@@ -29,7 +29,7 @@ include </home/whitelynx/.local/share/virtualenvs/dactyl-lynx-keyboard-vn24Ws0r/
 include </home/whitelynx/.local/share/virtualenvs/dactyl-lynx-keyboard-vn24Ws0r/lib/python3.12/site-packages/solid2/extensions/bosl2/BOSL2/screws.scad>;
 
 union() {
-	translate(v = [-54, 16, 49]) {
+	translate(v = [-57, 16, 49]) {
 		rotate(a = 9, v = [1, 0, 0]) {
 			rotate(a = 15, v = [0, 1, 0]) {
 				translate(v = [0, 0, -10]) {
@@ -41,7 +41,7 @@ union() {
 			}
 		}
 	}
-	translate(v = [-54, -77, 4.3]) {
+	translate(v = [-54, -77, 7.3]) {
 		rotate(a = 10, v = [1, 1, 1]) {
 			translate(v = [-3, 57, 33.2]) {
 				rotate(a = -10, v = [0, 1, 0]) {
@@ -60,7 +60,7 @@ union() {
 		}
 	}
 	hull() {
-		translate(v = [-54, 16, 49]) {
+		translate(v = [-57, 16, 49]) {
 			rotate(a = 9, v = [1, 0, 0]) {
 				rotate(a = 15, v = [0, 1, 0]) {
 					translate(v = [0, -5, -10]) {
@@ -69,7 +69,7 @@ union() {
 				}
 			}
 		}
-		translate(v = [-54, -77, 4.3]) {
+		translate(v = [-54, -77, 7.3]) {
 			rotate(a = 10, v = [1, 1, 1]) {
 				translate(v = [-3, 57, 33.2]) {
 					rotate(a = -10, v = [0, 1, 0]) {
