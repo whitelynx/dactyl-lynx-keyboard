@@ -19,6 +19,49 @@ from lcd_mount import LCDMount
 from assembly import KeyboardAssembly
 
 
+command_legend = '⌘'
+delete_legend = '⌦'
+backspace_legend = '⌫'
+shift_legend = '⇧'
+enter_legend = '⏎'
+tab_legend = '⇥'
+esc_legend = '␛'
+
+# lynx_layout[left_side][thumb][column][row]
+lynx_layout = {
+    False: {  # right side
+        False: [  # finger well (column-major, which means that this looks sideways in the code)
+            ['6', 'F', 'D', 'B'],
+            ['7', 'G', 'H', 'M', '←'],
+            ['8', 'C', 'T', 'W', '↓'],
+            ['9', 'R', 'N', 'V', '↑'],
+            ['0', 'L', 'S', 'Z', '→'],
+            ['\\', '/', '-', shift_legend, command_legend],
+        ],
+        True: {  # thumb well
+            2: { -1: command_legend, 0: 'Alt', 1: 'Ctrl' },
+            1: { -1: 'Fn', 0: enter_legend, 1: shift_legend },
+            0: { -1: 'NOP', 0.5: '' },
+        },
+    },
+    True: {  # left side
+        False: [  # finger well (column-major, which means that this looks sideways in the code)
+            ['5', 'Y', 'I', 'X'],
+            ['4', 'P', 'U', 'K', ']'],
+            ['3', '.', 'E', 'J', '['],
+            ['2', ',', 'O', 'Q', '='],
+            ['1', '\'', 'A', ';', '`'],
+            ['Menu', tab_legend, esc_legend, shift_legend, command_legend],
+        ],
+        True: {  # thumb well
+            2: { 1: 'Ctrl', 0: 'Alt', -1: command_legend },
+            1: { 1: shift_legend, 0: delete_legend, -1: 'Fn' },
+            0: { 0.5: backspace_legend, -1: 'NOP' },
+        },
+    },
+}
+
+
 def tagged_switch_plate(column, row):
     return (
         mx_plate_with_board_mount()
@@ -45,8 +88,13 @@ if __name__ == "__main__":
         wall_thickness=2.625,  # The wall_thickness of the board mount socket (2.625)
     )
 
-    # Set this to True to etch key coordinates into the keycaps at each position.
-    etch_key_positions = False
+    # Choose your keycap legends!
+    # No keycap legends
+    #keycap_text = None
+    # The coordinates of each key in the layout math
+    #keycap_text = lambda column, row, **kwargs: f'{kwargs['column']},{kwargs['row']}'
+    # The key mapping at each position in my `lynx` layout
+    keycap_text = lambda left_side, thumb, column, row, **kwargs: lynx_layout[left_side][thumb][column][row]
 
     lcdMount = LCDMount()
 
@@ -54,23 +102,39 @@ if __name__ == "__main__":
 
     keyswitch = lambda column, row: mx_keyswitch()
 
-    def switch_cap(column, row):
-        shape = sa_cap(1)
-        if row == 2 and 1 <= column <= 4:
-            shape -= sphere(_fn=50, r=30).up(48)
-        elif isinstance(row, float) and not row.is_integer():
-            shape = sa_cap(2)
-        elif isinstance(column, float) and not column.is_integer():
-            shape = sa_cap(2).rotate((0, 0, 90))
-        shape = shape.color((1.0, 0.98, 0.95))
-        if etch_key_positions:
-            shape -= (
-                text(f'{column},{row}', size=keyswitch_length / 4, halign='center', valign='center')
-                .linear_extrude(30)
-                .up(10)
-                .color((0, 0, 0))
-            )
-        return shape
+    def switch_cap(thumb):
+        def _switch_cap_inner(column, row):
+            shape = sa_cap(1)
+            if (column == 1 and row == 0) if thumb else (row == 2 and 1 <= column <= 4):
+                shape -= sphere(_fn=50, r=30).up(48)
+            elif isinstance(row, float) and not row.is_integer():
+                shape = sa_cap(2)
+            elif isinstance(column, float) and not column.is_integer():
+                shape = sa_cap(2).rotate((0, 0, 90))
+            shape = shape.color((1.0, 0.98, 0.95))
+            if keycap_text is not None:
+                rendered_keycap_text = keycap_text(column=column, row=row, thumb=thumb, left_side=assembly.left_side)
+                if rendered_keycap_text:
+                    key_text = (
+                        text(
+                            rendered_keycap_text,
+                            size=keyswitch_length / 6 if len(rendered_keycap_text) > 1 else keyswitch_length / 3,
+                            halign='center',
+                            valign='center',
+                            font='FiraCode Nerd Font Propo',
+                            #font='Segoe UI Symbol',
+                        )
+                        .linear_extrude(30)
+                        .up(10)
+                        .color((0, 0, 0))
+                    )
+                    if assembly.left_side:
+                        key_text = key_text.mirror((1, 0, 0))
+                    if thumb:
+                        key_text = key_text.rotate((0, 0, -90))
+                    shape -= key_text
+            return shape
+        return _switch_cap_inner
 
     right_finger_part = assembly.finger_part()
     right_finger_bottom_cover = assembly.finger_bottom_cover()
@@ -85,8 +149,8 @@ if __name__ == "__main__":
     right_thumb_part = assembly.thumb_part()
     right_connector = assembly.connector()
     right_keycaps = (
-        assembly.finger_layout.place_all(switch_cap)
-        + assembly.thumb_layout.place_all(switch_cap)
+        assembly.finger_layout.place_all(switch_cap(thumb=False))
+        + assembly.thumb_layout.place_all(switch_cap(thumb=True))
     )
     right_keyswitches = (
         assembly.finger_layout.place_all(keyswitch)
@@ -114,8 +178,8 @@ if __name__ == "__main__":
     left_thumb_part = assembly.thumb_part().mirror((1, 0, 0))
     left_connector = assembly.connector().mirror((1, 0, 0))
     left_keycaps = (
-        assembly.finger_layout.place_all(switch_cap)
-        + assembly.thumb_layout.place_all(switch_cap)
+        assembly.finger_layout.place_all(switch_cap(thumb=False))
+        + assembly.thumb_layout.place_all(switch_cap(thumb=True))
     ).mirror((1, 0, 0))
     left_keyswitches = (
         assembly.finger_layout.place_all(keyswitch)
