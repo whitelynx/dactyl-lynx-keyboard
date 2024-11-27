@@ -85,21 +85,28 @@ class FingerWellLayout(Layout):
         :param size_adjust: a callback to adjust the size of the key at this column and row
         :param position_adjust: a callback to adjust the position of the key at this column and row
         """
+        web_kwargs = {
+            'z_offset': z_offset,
+            'thickness': thickness,
+            'size_adjust': size_adjust,
+            'position_adjust': position_adjust,
+        }
+
         return reduce(
             operator.add,
             chain(
                 (
-                    self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_top_left_of(column, row, **web_kwargs)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > 0 and (column != 1 or row != 4)
                 ),
                 (
-                    self.web_left_of(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_left_of(column, row, **web_kwargs)
                     for (column, row) in self.generate_positions()
                     if column > 0 and (column != 1 or row != 4)
                 ),
                 (
-                    self.web_above(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_above(column, row, **web_kwargs)
                     for (column, row) in self.generate_positions()
                     if row > 0
                 ),

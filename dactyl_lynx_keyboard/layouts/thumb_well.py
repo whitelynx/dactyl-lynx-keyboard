@@ -73,11 +73,18 @@ class ThumbWellLayout(Layout):
         :param size_adjust: a callback to adjust the size of the key at this column and row
         :param position_adjust: a callback to adjust the position of the key at this column and row
         """
+        web_kwargs = {
+            'z_offset': z_offset,
+            'thickness': thickness,
+            'size_adjust': size_adjust,
+            'position_adjust': position_adjust,
+        }
+
         return reduce(
             operator.add,
             chain(
                 (
-                    self.web_top_left_of(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_top_left_of(column, row, **web_kwargs)
                     for (column, row) in self.generate_positions()
                     if column > 0 and row > -1 and (column, row) not in (
                         (1, 0),
@@ -85,7 +92,7 @@ class ThumbWellLayout(Layout):
                     )
                 ),
                 (
-                    self.web_left_of(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_left_of(column, row, **web_kwargs)
                     for (column, row) in self.generate_positions()
                     if column > 0 and (column, row) not in (
                         (1, 0),
@@ -93,7 +100,7 @@ class ThumbWellLayout(Layout):
                     )
                 ),
                 (
-                    self.web_above(column, row, z_offset=z_offset, thickness=thickness)
+                    self.web_above(column, row, **web_kwargs)
                     for (column, row) in self.generate_positions()
                     if row > -1 and (column, row) not in (
                         (0, 1/2),
@@ -102,32 +109,32 @@ class ThumbWellLayout(Layout):
                 ),
                 [
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(0, -1, left=False, top=False, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, -1, left=True, top=False, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 0, left=True, top=True, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, **web_kwargs),
+                        self.web_corner(0, -1, left=False, top=False, **web_kwargs),
+                        self.web_corner(1, -1, left=True, top=False, **web_kwargs),
+                        self.web_corner(1, 0, left=True, top=True, **web_kwargs),
                     ),
                     hull()(
-                        self.web_corner(0, -1, left=True, top=False, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(0, -1, left=False, top=False, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(0, 1/2, left=True, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, -1, left=True, top=False, **web_kwargs),
+                        self.web_corner(0, -1, left=False, top=False, **web_kwargs),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, **web_kwargs),
+                        self.web_corner(0, 1/2, left=True, top=True, row_span=2, **web_kwargs),
                     ),
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=False, row_span=2, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 1, left=True, top=True, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 1, left=True, top=False, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=False, top=False, row_span=2, **web_kwargs),
+                        self.web_corner(1, 1, left=True, top=True, **web_kwargs),
+                        self.web_corner(1, 1, left=True, top=False, **web_kwargs),
                     ),
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=False, row_span=2, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 0, left=True, top=False, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 1, left=True, top=True, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=False, top=False, row_span=2, **web_kwargs),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, **web_kwargs),
+                        self.web_corner(1, 0, left=True, top=False, **web_kwargs),
+                        self.web_corner(1, 1, left=True, top=True, **web_kwargs),
                     ),
                     hull()(
-                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 0, left=True, top=False, z_offset=z_offset, thickness=thickness),
-                        self.web_corner(1, 0, left=True, top=True, z_offset=z_offset, thickness=thickness),
+                        self.web_corner(0, 1/2, left=False, top=True, row_span=2, **web_kwargs),
+                        self.web_corner(1, 0, left=True, top=False, **web_kwargs),
+                        self.web_corner(1, 0, left=True, top=True, **web_kwargs),
                     ),
                 ],
             )
