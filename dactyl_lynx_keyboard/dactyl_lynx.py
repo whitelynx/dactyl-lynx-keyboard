@@ -255,7 +255,7 @@ if __name__ == "__main__":
         'bottom_cover', 'bottom_cover_with_feet', 'bottom_cover_with_nuts', 'lcd_mount')
         :type parts: list[str]
         """
-        right_combined = right_single_piece.color((0.1, 0.1, 0.1))
+        right_combined = right_single_piece.color((0.03, 0.03, 0.03))
         if separate_pieces:
             right_combined = (
                 right_finger_part.color((0.1, 0.1, 0.9))
@@ -272,15 +272,15 @@ if __name__ == "__main__":
             right_combined += right_pcbs.color((0.02, 0.02, 0.02))
 
         if 'bottom_cover' in parts:
-            right_combined += right_finger_bottom_cover.color((0.12, 0.12, 0.12)).down(0.01)
+            right_combined += right_finger_bottom_cover.color((0.027, 0.027, 0.027)).down(0.01)
         elif 'bottom_cover_with_feet' in parts:
-            right_combined += right_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
+            right_combined += right_finger_bottom_cover_with_feet.color((0.027, 0.027, 0.027)).down(0.01)
         elif 'bottom_cover_with_nuts' in parts:
-            right_combined += right_finger_bottom_cover_with_nuts.color((0.12, 0.12, 0.12)).down(0.01)
+            right_combined += right_finger_bottom_cover_with_nuts.color((0.027, 0.027, 0.027)).down(0.01)
 
         combined = right_combined.right(100)
 
-        left_combined = left_single_piece.color((0.1, 0.1, 0.1))
+        left_combined = left_single_piece.color((0.03, 0.03, 0.03))
         if separate_pieces:
             left_combined = (
                 left_finger_part.color((0.1, 0.1, 0.9))
@@ -295,11 +295,11 @@ if __name__ == "__main__":
             left_combined += left_pcbs.color((0.02, 0.02, 0.02))
 
         if 'bottom_cover' in parts:
-            left_combined += left_finger_bottom_cover.color((0.12, 0.12, 0.12)).down(0.01)
+            left_combined += left_finger_bottom_cover.color((0.027, 0.027, 0.027)).down(0.01)
         elif 'bottom_cover_with_feet' in parts:
-            left_combined += left_finger_bottom_cover_with_feet.color((0.12, 0.12, 0.12)).down(0.01)
+            left_combined += left_finger_bottom_cover_with_feet.color((0.027, 0.027, 0.027)).down(0.01)
         elif 'bottom_cover_with_nuts' in parts:
-            left_combined += left_finger_bottom_cover_with_nuts.color((0.12, 0.12, 0.12)).down(0.01)
+            left_combined += left_finger_bottom_cover_with_nuts.color((0.027, 0.027, 0.027)).down(0.01)
 
         combined += left_combined.left(100)
 
