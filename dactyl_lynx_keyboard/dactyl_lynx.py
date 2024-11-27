@@ -19,6 +19,41 @@ from lcd_mount import LCDMount
 from assembly import KeyboardAssembly
 
 
+# matrix_coords[left_side][thumb][column][row]
+matrix_coords = {
+    False: {  # right side
+        False: [  # finger well (column-major, which means that this looks sideways in the code)
+            ['0,0', '0,1', '0,2', '0,3'],
+            ['1,0', '1,1', '1,2', '1,3', '1,4'],
+            ['2,0', '2,1', '2,2', '2,3', '2,4'],
+            ['3,0', '3,1', '3,2', '3,3', '3,4'],
+            ['4,0', '4,1', '4,2', '4,3', '4,4'],
+            ['5,0', '5,1', '5,2', '5,3', '5,4'],
+        ],
+        True: {  # thumb well
+            2: { -1: '0,5', 0: '1,5', 1: '2,5' },
+            1: { -1: '3,5', 0: '4,5', 1: '5,5' },
+            0: { -1: '0,6', 0.5: '1,6' },
+        },
+    },
+    True: {  # left side
+        False: [  # finger well (column-major, which means that this looks sideways in the code)
+            ['5,0', '5,1', '5,2', '5,3'],
+            ['4,0', '4,1', '4,2', '4,3', '5,4'],
+            ['3,0', '3,1', '3,2', '3,3', '4,4'],
+            ['2,0', '2,1', '2,2', '2,3', '3,4'],
+            ['1,0', '1,1', '1,2', '1,3', '2,4'],
+            ['0,0', '0,1', '0,2', '0,3', '1,4'],
+        ],
+        True: {  # thumb well
+            2: { 1: '0,5', 0: '1,5', -1: '2,5' },
+            1: { 1: '3,5', 0: '4,5', -1: '5,5' },
+            0: { 0.5: '0,6', -1: '1,6' },
+        },
+    },
+}
+
+
 command_legend = '⌘'
 delete_legend = '⌦'
 backspace_legend = '⌫'
@@ -51,7 +86,7 @@ lynx_layout = {
             ['3', '.', 'E', 'J', '['],
             ['2', ',', 'O', 'Q', '='],
             ['1', '\'', 'A', ';', '`'],
-            ['Menu', tab_legend, esc_legend, shift_legend, command_legend],
+            ['Menu', tab_legend, esc_legend, shift_legend, 'Ctrl'],
         ],
         True: {  # thumb well
             2: { 1: 'Ctrl', 0: 'Alt', -1: command_legend },
@@ -93,6 +128,8 @@ if __name__ == "__main__":
     #keycap_text = None
     # The coordinates of each key in the layout math
     #keycap_text = lambda column, row, **kwargs: f'{kwargs['column']},{kwargs['row']}'
+    # The wiring matrix coordinates for each key
+    #keycap_text = lambda left_side, thumb, column, row, **kwargs: matrix_coords[left_side][thumb][column][row]
     # The key mapping at each position in my `lynx` layout
     keycap_text = lambda left_side, thumb, column, row, **kwargs: lynx_layout[left_side][thumb][column][row]
 
