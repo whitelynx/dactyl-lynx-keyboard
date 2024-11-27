@@ -223,18 +223,18 @@ class Layout:
         y_adjust = 0
         if size_adjust is not None:
             x_size_adjust, y_size_adjust = size_adjust(column, row)
-            if left:
-                x_adjust -= x_size_adjust / 2
-            else:
-                x_adjust += x_size_adjust / 2
-            if top:
-                x_adjust += x_size_adjust / 2
-            else:
-                x_adjust -= x_size_adjust / 2
+            x_adjust += x_size_adjust / 2
+            y_adjust += y_size_adjust / 2
         if position_adjust is not None:
             x_pos_adjust, y_pos_adjust = position_adjust(column, row)
-            x_adjust += x_pos_adjust
-            y_adjust += y_pos_adjust
+            if left:
+                x_adjust -= x_pos_adjust
+            else:
+                x_adjust += x_pos_adjust
+            if top:
+                y_adjust += y_pos_adjust
+            else:
+                y_adjust -= y_pos_adjust
 
         x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness + x_adjust
         y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness + y_adjust
