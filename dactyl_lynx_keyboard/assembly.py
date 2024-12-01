@@ -457,7 +457,7 @@ class KeyboardAssembly:
             + self.finger_layout.key_place(column=1, row=4, shape=shape.back(offset))
             + self.finger_layout.key_place(column=5, row=4, shape=shape.back(offset))
             + self.finger_layout.key_place(column=5, row=2, shape=shape.right(offset))
-            + self.finger_layout.key_place(column=5, row=0, shape=shape.forward(offset))
+            + self.finger_layout.key_place(column=5, row=0, shape=shape.forward(offset).left(1.5))
         )
 
     def cover_edge_corner(self,
