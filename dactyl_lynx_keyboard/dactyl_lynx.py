@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # No keycap legends
     #keycap_text = None
     # The coordinates of each key in the layout math
-    #keycap_text = lambda column, row, **kwargs: f'{kwargs['column']},{kwargs['row']}'
+    #keycap_text = lambda column, row, **kwargs: f'{column},{row}'
     # The wiring matrix coordinates for each key
     #keycap_text = lambda left_side, thumb, column, row, **kwargs: matrix_coords[left_side][thumb][column][row]
     # The key mapping at each position in my `lynx` layout
