@@ -392,10 +392,55 @@ class KeyboardAssembly:
         :param top_shell: whether this is for the top shell (True) or for the bottom cover (False)
         :type top_shell: bool
         """
-        return cylinder_outer(
-            self.bottom_cover_magnet_radius,
-            self.bottom_cover_magnet_thickness * 2,
-            center=True
+        hex_radius = self.bottom_cover_magnet_radius * 0.99
+        hex_chamfer_width = 0.3
+        end_groove_depth = 0.5
+        end_groove_radius = hex_radius + end_groove_depth
+        end_groove_height = 0.5
+
+        return (
+            cylinder_outer(  # Top end groove
+                end_groove_radius,
+                end_groove_height,
+                segments=6,
+                center=True,
+            ).up(self.bottom_cover_magnet_thickness - end_groove_height / 2)
+            + cylinder_outer(  # Top end groove chamfer
+                [hex_radius, end_groove_radius],
+                end_groove_depth,
+                segments=6,
+                center=True,
+            ).up(self.bottom_cover_magnet_thickness - end_groove_height - end_groove_depth / 2)
+            + cylinder_outer(  # Top main hole chamfer
+                [hex_radius, hex_radius + hex_chamfer_width],
+                end_groove_depth,
+                segments=6,
+                center=True,
+            ).down(end_groove_depth / 2)
+            + cylinder_outer(  # Main hole
+                hex_radius,
+                self.bottom_cover_magnet_thickness * 2,
+                segments=6,
+                center=True,
+            )
+            + cylinder_outer(  # Bottom main hole chamfer
+                [hex_radius + hex_chamfer_width, hex_radius],
+                end_groove_depth,
+                segments=6,
+                center=True,
+            ).up(end_groove_depth / 2)
+            + cylinder_outer(  # Bottom end groove chamfer
+                [end_groove_radius, hex_radius],
+                end_groove_depth,
+                segments=6,
+                center=True,
+            ).down(self.bottom_cover_magnet_thickness - end_groove_height - end_groove_depth / 2)
+            + cylinder_outer(  # Bottom end groove
+                end_groove_radius,
+                end_groove_height,
+                segments=6,
+                center=True,
+            ).down(self.bottom_cover_magnet_thickness - end_groove_height / 2)
         )
 
     def place_cover_magnets(self, shape):
