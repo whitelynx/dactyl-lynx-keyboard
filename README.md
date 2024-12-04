@@ -83,10 +83,11 @@ You can also generate an image of the whole assembly:
 openscad --camera=2,12,10,69.7,0,30,480 --autocenter --colorscheme BeforeDawn --imgsize 3840,1800 -o things/dactyl-lynx-6x5.png things/dactyl-lynx-6x5.scad
 ```
 
-Or generate a much higher-quality image using [POV-Ray][] by first exporting from OpenSCAD to `dactyl-lynx-6x5.scad`, and then running:
+Or generate a much higher-quality image using [POV-Ray][] by first exporting from OpenSCAD to `dactyl-lynx-6x5.pov`, and then running:
 ```bash
-povray +L/usr/share/povray-3.7/include povray.ini;
+povray +L/usr/share/povray-3.7/include dactyl-lynx-6x5-1920x950.ini
 ```
+or using any of the other `.ini` files.
 
 [an issue rendering some files this way]: https://github.com/openscad/openscad/issues/5447
 [POV-Ray]: https://www.povray.org/
