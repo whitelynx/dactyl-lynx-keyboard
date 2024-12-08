@@ -53,6 +53,8 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 
 * [Python][] version 3.11 or newer
 * [pipenv](https://pipenv.pypa.io/en/latest/)
+* [OpenSCAD](https://openscad.org/downloads.html#snapshots) development snapshot 2024.12.06 or newer
+* [POV-Ray][] _(optional, for rendering high-quality images)_
 
 #### Installing dependencies
 
@@ -71,10 +73,10 @@ To view the available options:
 pipenv run python dactyl_lynx_keyboard/dactyl_lynx.py --help
 ```
 
-You can then generate STL files from the OpenSCAD files with: _(NOTE: There is currently [an issue rendering some files this way][]; until this is fixed, please load them in the OpenSCAD GUI, render them (F6), and export them to STL from there)_
+You can then generate STL files from the OpenSCAD files with:
 ```bash
 for model in things/*.scad; do
-    openscad --enable lazy-union --enable predictible-output -o things/$(basename "$model" .scad).stl "$model"
+    openscad --enable lazy-union --enable predictible-output --backend Manifold -o things/$(basename "$model" .scad).stl "$model"
 done
 ```
 
@@ -83,8 +85,9 @@ You can also generate an image of the whole assembly:
 openscad --camera=2,12,10,69.7,0,30,480 --autocenter --colorscheme BeforeDawn --imgsize 3840,1800 -o things/dactyl-lynx-6x5.png things/dactyl-lynx-6x5.scad
 ```
 
-Or generate a much higher-quality image using [POV-Ray][] by first exporting from OpenSCAD to `dactyl-lynx-6x5.pov`, and then running:
+Or generate a much higher-quality image using [POV-Ray][] by running:
 ```bash
+openscad --enable lazy-union --enable predictible-output --backend Manifold -o things/dactyl-lynx-6x5.pov things/dactyl-lynx-6x5.scad
 povray +L/usr/share/povray-3.7/include dactyl-lynx-6x5-1920x950.ini
 ```
 or using any of the other `.ini` files.
