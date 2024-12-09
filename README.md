@@ -54,7 +54,7 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 * [Python][] version 3.11 or newer
 * [Poetry](https://python-poetry.org/)
 * [OpenSCAD](https://openscad.org/downloads.html#snapshots) development snapshot 2024.12.06 or newer
-* [POV-Ray][] _(optional, for rendering high-quality images)_
+* [POV-Ray][] *(optional, for rendering high-quality images)*
 
 #### Installing dependencies
 
@@ -104,24 +104,24 @@ Pregenerated STL files are available in the [things/](things/) directory.
 ### Bill of Materials
 
 * 2x microcontrollers - one of the following ([see QMK docs][] for what combinations make sense)
-    * [RP2040 TYPE-C 16MB][] - _recommended_
+    * [RP2040 TYPE-C 16MB][] - *recommended*
     * [Raspberry Pi Pico][]
     * [STM32F4x1 Black Pill][]
     * [STM32 Blue Pill][]
     * [QMK Proton C][]
 * 2x 4+-conductor jacks and matching cable to connect the two sides using full-duplex serial; one of:
-    * 4-pin mini-DIN (A.K.A. S-Video) - _recommended; if accidentally tugged on, it will cleanly disconnect without shorting anything and without pulling the other side of your keyboard off the desk_
+    * 4-pin mini-DIN (A.K.A. S-Video) - *recommended; if accidentally tugged on, it will cleanly disconnect without shorting anything and without pulling the other side of your keyboard off the desk*
     * 4P4C, 6P4C, or similar modular connector (A.K.A. RJ11 or [telephone plug][])
-    * TRRS audio jacks - _not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!_
+    * TRRS audio jacks - *not recommended; if you use this, be careful to not connect or disconnect the cable while the board is powered on!*
     * any other 4-pin (or more) connector, though be wary of things like USB connectors that would be easy to mistake for other buses
-* 74x [MX-style key switches][] _(or maybe Alps-style; I haven't actually checked if that will still work correctly)_
-* 74x signal diodes _(1N4148 or similar works well)_
-* 74x [Kailh hot-swap sockets][] _(optional - you can pass `socket_shape=mx_plate` to the `KeyboardAssembly` constructor in `dactyl_lynx_keyboard/dactyl_lynx.py` if you want to solder directly to the switches, or pass `socket_shape=mx_plate_with_board_mount` to use either my [MX single keyswitch hot swap board][] or my [Choc single keyswitch hot swap board][]; eventually these will be a command-line option)_
+* 74x [MX-style key switches][] *(or maybe Alps-style; I haven't actually checked if that will still work correctly)*
+* 74x signal diodes *(1N4148 or similar works well)*
+* 74x [Kailh hot-swap sockets][] *(optional - you can pass `socket_shape=mx_plate` to the `KeyboardAssembly` constructor in `dactyl_lynx_keyboard/dactyl_lynx.py` if you want to solder directly to the switches, or pass `socket_shape=mx_plate_with_board_mount` to use either my [MX single keyswitch hot swap board][] or my [Choc single keyswitch hot swap board][]; eventually these will be a command-line option)*
 * A set of 74+ keycaps - symmetric unsculpted profiles work best with the sculpted form factor of Dactyl-style boards
     * 72x 1u keycaps
     * 2x 2u keycaps
 * 24x [5mm x 3mm cylindrical magnets][], plus an additional 12 for each set of different bottom cases you want
-* A USB-C _(or USB Micro-B, depending on your microcontroller)_ cable to plug in your keyboard
+* A USB-C *(or USB Micro-B, depending on your microcontroller)* cable to plug in your keyboard
 * connection wires (and ideally some Dupont-style connectors for the microcontroller side of things, so you can swap the microcontroller if/when needed)
 
 
@@ -164,8 +164,8 @@ This is by no means a comprehensive guide to wiring a keyboard, but here's the a
   | Row 5 (thumb) | purple     | green      | 13  |
   | Row 6 (thumb) | grey       | yellow     | 14  |
 
-  _Note: the right side's color scheme should probably not be used; it's definitely more haphazard because it was done ad-hoc._
-  _Note 2: the top columns cable on the left side finger well is wired in reverse; brown goes to column 5 instead of column 0, and so is on pin 7 instead of 2. The cable connecting to the thumb well is correctly wired, so the colors switch at the column connections._
+  *Note: the right side's color scheme should probably not be used; it's definitely more haphazard because it was done ad-hoc.*
+  *Note 2: the top columns cable on the left side finger well is wired in reverse; brown goes to column 5 instead of column 0, and so is on pin 7 instead of 2. The cable connecting to the thumb well is correctly wired, so the colors switch at the column connections.*
 
 Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][].
 
