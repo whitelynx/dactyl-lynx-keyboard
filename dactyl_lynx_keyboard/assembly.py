@@ -16,10 +16,10 @@ from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length
 from spkb.utils import cylinder_outer, fudge_radius, nothing
 
-from layouts.finger_well import FingerWellLayout
-from layouts.thumb_well import ThumbWellLayout
-from mini_din_connector_mount import MiniDINConnectorMount
-from trackpoint_mount import TrackPointMount
+from .layouts.finger_well import FingerWellLayout
+from .layouts.thumb_well import ThumbWellLayout
+from .mini_din_connector_mount import MiniDINConnectorMount
+from .trackpoint_mount import TrackPointMount
 
 
 class KeyboardAssembly:

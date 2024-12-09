@@ -65,12 +65,12 @@ pipenv install
 #### Generating
 
 ```bash
-pipenv run python dactyl_lynx_keyboard/dactyl_lynx.py
+pipenv run python -m dactyl_lynx_keyboard.dactyl_lynx
 ```
 
 To view the available options:
 ```bash
-pipenv run python dactyl_lynx_keyboard/dactyl_lynx.py --help
+pipenv run python -m dactyl_lynx_keyboard.dactyl_lynx --help
 ```
 
 You can then generate STL files from the OpenSCAD files with:

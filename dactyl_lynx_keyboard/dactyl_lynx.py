@@ -14,9 +14,9 @@ from spkb.keyswitch import mx_keyswitch
 from spkb.single_key_pcb import single_key_board
 from spkb.utils import nothing
 
-from layouts.layout import Layout
-from lcd_mount import LCDMount
-from assembly import KeyboardAssembly
+from .layouts.layout import Layout
+from .lcd_mount import LCDMount
+from .assembly import KeyboardAssembly
 
 
 # matrix_coords[left_side][thumb][column][row]
