@@ -1,0 +1,29 @@
+.pdoc .modulename, .pdoc .attr {
+	font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.docstring img {
+	max-width: 100%;
+}
+
+.pdoc .decorator-deprecated, .deprecated, .warning {
+	background: #ffff00;
+	color: #000000;
+	padding: 0.25em;
+	border-radius: 0.5em;
+	box-shadow: 1px 1px 2px #000000;
+}
+.pdoc .decorator-deprecated::before, .deprecated::before, .warning::before {
+	content: '⚠';
+}
+
+.todo {
+	background: #aaaa66;
+	color: #000000;
+	padding: 0.25em;
+	border-radius: 0.5em;
+	box-shadow: 1px 1px 2px #000000;
+}
+.todo::before {
+	content: '🮱 ';
+}
