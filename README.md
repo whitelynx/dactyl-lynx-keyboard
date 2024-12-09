@@ -188,6 +188,19 @@ See [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch][] for 
 [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch]: https://github.com/whitelynx/qmk_firmware/tree/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx
 
 
+## Customizing
+
+When customizing your keyboard, you might want to look at API docs for the classes in `dactyl_lynx_keyboard`. You can use `pdoc` for this:
+```bash
+pdoc -t templates dactyl_lynx_keyboard
+```
+
+If you have cloned the source for [spkb][] and/or [SolidPython2][], you can also include them:
+```bash
+pdoc -t templates dactyl_lynx_keyboard ../../spkb ../SolidPython/solid2
+```
+
+
 ## License
 
 Copyright © 2015-2024 Matthew Adereth and David H. Bronke
