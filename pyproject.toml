@@ -1,0 +1,26 @@
+[tool.poetry]
+package-mode = false
+name = "dactyl-lynx-keyboard"
+version = "0.1.0"
+description = "The Dactyl Lynx is a parameterized, split-hand, concave, columnar, ergonomic keyboard."
+authors = ["David H. Bronke <whitelynx@gmail.com>"]
+license = "AGPL-3.0-only"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+solidpython2 = "^2.1.0"
+spkb = "^0.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.1"
+pyright = "^1.1.390"
+
+
+[tool.poetry.group.docs.dependencies]
+pdoc = "^15.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

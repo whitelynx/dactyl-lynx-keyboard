@@ -52,25 +52,25 @@ This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
 #### Prerequisites
 
 * [Python][] version 3.11 or newer
-* [pipenv](https://pipenv.pypa.io/en/latest/)
+* [Poetry](https://python-poetry.org/)
 * [OpenSCAD](https://openscad.org/downloads.html#snapshots) development snapshot 2024.12.06 or newer
 * [POV-Ray][] _(optional, for rendering high-quality images)_
 
 #### Installing dependencies
 
 ```bash
-pipenv install
+poetry install
 ```
 
 #### Generating
 
 ```bash
-pipenv run python -m dactyl_lynx_keyboard.dactyl_lynx
+poetry run python -m dactyl_lynx_keyboard.dactyl_lynx
 ```
 
 To view the available options:
 ```bash
-pipenv run python -m dactyl_lynx_keyboard.dactyl_lynx --help
+poetry run python -m dactyl_lynx_keyboard.dactyl_lynx --help
 ```
 
 You can then generate STL files from the OpenSCAD files with:
