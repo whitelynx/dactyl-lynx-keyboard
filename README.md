@@ -167,10 +167,10 @@ This is by no means a comprehensive guide to wiring a keyboard, but here's the a
   *Note: the right side's color scheme should probably not be used; it's definitely more haphazard because it was done ad-hoc.*
   *Note 2: the top columns cable on the left side finger well is wired in reverse; brown goes to column 5 instead of column 0, and so is on pin 7 instead of 2. The cable connecting to the thumb well is correctly wired, so the colors switch at the column connections.*
 
-Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][].
+Wire according to [the key matrix in my `whitelynx/dactyl_lynx` QMK branch][QMK key matrix].
 
 
-[the key matrix in my `whitelynx/dactyl_lynx` QMK branch]: https://github.com/whitelynx/qmk_firmware/blob/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx/info.json
+[QMK key matrix]: https://github.com/whitelynx/qmk_firmware/blob/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx/info.json
 
 
 ### Firmware
@@ -183,9 +183,9 @@ See [the dactyl-lynx-rmk repo][] for this firmware. It's based on [RMK][]. (with
 
 #### QMK-based (old, more featureful)
 
-See [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch][] for instructions on building and flashing the firmware.
+See [the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch][QMK firmware] for instructions on building and flashing the firmware.
 
-[the corresponding firmware in my `whitelynx/dactyl_lynx` QMK branch]: https://github.com/whitelynx/qmk_firmware/tree/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx
+[QMK firmware]: https://github.com/whitelynx/qmk_firmware/tree/whitelynx/dactyl_lynx/keyboards/handwired/dactyl_lynx
 
 
 ## Customizing
