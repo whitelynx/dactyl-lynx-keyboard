@@ -1,3 +1,5 @@
+"""Defines the base class for key layouts.
+"""
 import math
 import operator
 from collections.abc import Iterable
@@ -19,6 +21,9 @@ from spkb.switch_plate import (
 
 
 class XYAdjustCallback(Protocol):
+    """A callback for adjusting X and Y coordinates (usually either size or position adjustments)
+    based on the column/row position.
+    """
     def __call__(self, column: float, row: float) -> Tuple[float, float]:
         """Return a 2-tuple containing X and Y axis adjustments for the given column/row position.
         (usually either size or position adjustments)
@@ -26,12 +31,18 @@ class XYAdjustCallback(Protocol):
 
 
 class ShapeForLocationCallback(Protocol):
+    """A callback for generating a shape to place at a given column/row position.
+    """
     def __call__(self, column: float, row: float) -> OpenSCADObject:
         """Return a shape to place at the given column/row position.
         """
 
 
 class Layout:
+    """The base implementation of a layout manager.
+
+    This can generate a grid of key positions.
+    """
     def __init__(self, columns: int = 6, rows: int = 5, wall_thickness: float = 1.5):
         """Create a layout manager.
 

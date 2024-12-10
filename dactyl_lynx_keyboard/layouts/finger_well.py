@@ -1,3 +1,5 @@
+"""The layout of a finger well.
+"""
 import math
 import operator
 from collections.abc import Iterable
@@ -11,7 +13,9 @@ from .layout import Layout, XYAdjustCallback
 
 
 class FingerWellLayout(Layout):
-    def __init__(self, columns=6, rows=5, use_1_5u_keys=True, wall_thickness=1.5):
+    """The layout of a finger well.
+    """
+    def __init__(self, columns: float = 6, rows: float = 5, use_1_5u_keys: bool = True, wall_thickness: float = 1.5):
         super(FingerWellLayout, self).__init__(columns=columns, rows=rows, wall_thickness=wall_thickness)
 
         self.use_1_5u_keys = use_1_5u_keys

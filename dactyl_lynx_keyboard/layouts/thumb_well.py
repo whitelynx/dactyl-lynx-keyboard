@@ -1,3 +1,5 @@
+"""The layout of a thumb well.
+"""
 import math
 import operator
 from collections.abc import Iterable
@@ -14,7 +16,9 @@ from .layout import Layout, XYAdjustCallback
 
 
 class ThumbWellLayout(Layout):
-    def __init__(self, columns=3, rows=3, wall_thickness=1.5):
+    """The layout of a thumb well.
+    """
+    def __init__(self, columns: float = 3, rows: float = 3, wall_thickness: float = 1.5):
         super(ThumbWellLayout, self).__init__(columns=columns, rows=rows, wall_thickness=wall_thickness)
 
         # Cupping amounts, in radians per row/column
