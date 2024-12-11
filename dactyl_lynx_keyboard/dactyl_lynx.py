@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 from os.path import abspath, dirname, join
+from typing import List, Tuple
 
 from solid2 import cube, sphere, text
 
-from spkb.switch_plate import (
-    keyswitch_length,
-    mx_plate_with_backplate,
-    mx_plate_with_board_mount,
-)
+from spkb.keyswitch import Keyswitch, MX, Choc
 from spkb.keycaps import sa_cap
 from spkb.keyswitch import mx_keyswitch
 from spkb.single_key_pcb import single_key_board
@@ -97,30 +94,43 @@ lynx_layout = {
 }
 
 
-def tagged_switch_plate(column, row):
-    return (
-        mx_plate_with_board_mount()
-        + text(f'{column},{row}', size=keyswitch_length / 3, halign='center', valign='center')
-    )
-
-
 if __name__ == "__main__":
+    keyswitch_type: Keyswitch = MX()
+    #keyswitch_type: Keyswitch = Choc()
+
+    # Screw positions for single-key PCBs (plate_with_board_mount)
+    board_screw_positions: List[Tuple[float, float]] = [(8, 8), (-8, 8), (8, -8), (-8, -8)]
+
+    # The wall_thickness of the board mount socket (2.625)
+    wall_thickness: float = 2.625
+
+    def tagged_switch_plate(column, row):
+        return (
+            keyswitch_type.plate_with_board_mount(board_screw_positions, wall_thickness=wall_thickness)
+            + text(f'{column},{row}', size=keyswitch_type.keyswitch_length / 3, halign='center', valign='center')
+        )
+
     assembly = KeyboardAssembly(
         columns=6,
         rows=5,
         use_1_5u_keys=False,
         use_color=False,
 
-        # The default socket shape has a backplate supporting an MX hotswap socket, 5-pin switches, and a 2-pin or
-        # 4-pin LED.
+        # The default socket shape for MX-style or Choc switches has a backplate supporting a hotswap socket, 5-pin
+        # switches, and a 2-pin or 4-pin LED.
+        #socket_shape=lambda column, row: keyswitch_type.plate_with_backplate(wall_thickness=wall_thickness),
 
         # To remove backplates from keyswitch sockets:
-        #socket_shape=lambda column, row: mx_plate(),
+        #socket_shape=lambda column, row: keyswitch_type.plate(wall_thickness=wall_thickness),
 
         # To use a single-key PCB:
-        socket_shape=lambda column, row: mx_plate_with_board_mount(),
+        socket_shape=lambda column, row:
+        keyswitch_type.plate_with_board_mount(board_screw_positions, wall_thickness=wall_thickness),
+
+        # To use a switch plate with engraved layout positions (for troubleshooting):
         #socket_shape=tagged_switch_plate,
-        wall_thickness=2.625,  # The wall_thickness of the board mount socket (2.625)
+
+        wall_thickness=wall_thickness,
     )
 
     # Choose your keycap legends!
@@ -155,7 +165,11 @@ if __name__ == "__main__":
                     key_text = (
                         text(
                             rendered_keycap_text,
-                            size=keyswitch_length / 6 if len(rendered_keycap_text) > 1 else keyswitch_length / 3,
+                            size=(
+                                keyswitch_type.keyswitch_length / 6
+                                if len(rendered_keycap_text) > 1
+                                else keyswitch_type.keyswitch_length / 3
+                            ),
                             halign='center',
                             valign='center',
                             font='FiraCode Nerd Font Propo',
@@ -459,8 +473,8 @@ if __name__ == "__main__":
             if args.show_keycaps else nothing
         )
         + (
-            layout.finger_place_all(mx_plate_with_backplate())
-            + layout.thumb_place_all(mx_plate_with_backplate())
+            layout.finger_place_all(keyswitch_type.plate_with_backplate())
+            + layout.thumb_place_all(keyswitch_type.plate_with_backplate())
             if args.show_sockets else nothing
         )
     ).save_as_scad(filepath)

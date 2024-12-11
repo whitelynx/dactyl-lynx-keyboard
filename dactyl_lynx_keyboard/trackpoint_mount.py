@@ -18,6 +18,7 @@ class TrackPointMount:
         self.trackpoint_stem_base_height = 2
 
         self.trackpoint_board_size = (23.5, 17, 1)
+        self.trackpoint_z_offset = 5
 
     def trackpoint_holes(self):
         return (
@@ -30,7 +31,7 @@ class TrackPointMount:
             .translate((-self.trackpoint_screw_hole_offset, 0, 0))
             + cube(self.trackpoint_board_size, center=True)
             .translate((0, 0, -self.trackpoint_mount_thickness))
-        ).down(2)
+        ).down(self.trackpoint_z_offset)
 
     def trackpoint_mount(self):
         screw_surround_radius = self.trackpoint_screw_hole_radius * 2.5
@@ -50,7 +51,7 @@ class TrackPointMount:
             - cube((10, 10, 20), center=True).translate((-cutout_x_offset, cutout_y_offset, 0))
             - cube((10, 10, 20), center=True).translate((cutout_x_offset, -cutout_y_offset, 0))
             - cube((10, 10, 20), center=True).translate((-cutout_x_offset, -cutout_y_offset, 0))
-        ).down(2).color((0, 1, 0))
+        ).down(self.trackpoint_z_offset).color((0, 1, 0))
 
     def trackpoint_shape(self):
         return (
@@ -58,4 +59,4 @@ class TrackPointMount:
                 cylinder_outer(self.trackpoint_stem_radius, self.trackpoint_stem_length, center=True)
                 + sphere(self.trackpoint_ball_radius, _fn=12).translate((0, 0, self.trackpoint_stem_length / 2))
             ).translate((0, 0, self.trackpoint_stem_length / 2 - self.trackpoint_mount_thickness + self.trackpoint_stem_base_height))
-        ).down(2).color((0.8, 0.8, 0.8))
+        ).down(self.trackpoint_z_offset).color((0.8, 0.8, 0.8))

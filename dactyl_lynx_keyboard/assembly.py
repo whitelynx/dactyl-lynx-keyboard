@@ -53,6 +53,7 @@ class KeyboardAssembly:
         self.enable_nuts = False
         self.bottom_thumb_nuts = False
 
+        self.edge_vertical_offset = 8
         self.bottom_cover_offset = 11
         self.bottom_cover_edge_protusion = self.finger_layout.keyswitch_length - 1
         self.bottom_cover_thickness = 3
@@ -60,6 +61,7 @@ class KeyboardAssembly:
         self.bottom_cover_magnet_mount_thickness = 1.5
         self.bottom_cover_magnet_radius = 2.5
         self.bottom_cover_magnet_thickness = 3
+        self.bottom_cover_magnet_offset = 13.7
 
     def transform_finger_nut1(self, shape):
         """Place the given shape at the position and orientation of the first finger nut.
@@ -196,7 +198,7 @@ class KeyboardAssembly:
             ).translate(
                 0,
                 (plate_height + self.finger_layout.keyswitch_length) / 2 + self.wall_thickness,
-                plate_thickness - self.thumb_layout.web_thickness / 2
+                -self.thumb_layout.web_thickness / 2
             )
             shape = (
                 shape
@@ -214,7 +216,7 @@ class KeyboardAssembly:
             ).translate(
                 (plate_width + self.finger_layout.keyswitch_width) / 2 + self.wall_thickness,
                 0,
-                plate_thickness - self.thumb_layout.web_thickness / 2
+                -self.thumb_layout.web_thickness / 2
             )
             shape = (
                 shape
@@ -265,7 +267,7 @@ class KeyboardAssembly:
             ).translate(
                 x_shift,
                 y_shift,
-                plate_thickness - self.thumb_layout.web_thickness / 2 - self.bottom_cover_offset - self.bottom_cover_thickness / 2
+                -self.bottom_cover_offset - self.bottom_cover_thickness / 2
             )
 
         elif isinstance(column, float) and not column.is_integer():
@@ -277,7 +279,7 @@ class KeyboardAssembly:
             ).translate(
                 x_shift,
                 y_shift,
-                plate_thickness - self.thumb_layout.web_thickness / 2 - self.bottom_cover_offset - self.bottom_cover_thickness / 2
+                -self.bottom_cover_offset - self.bottom_cover_thickness / 2
             )
 
         return cube(
@@ -448,8 +450,8 @@ class KeyboardAssembly:
 
         :param shape: the shape to place
         """
-        shape = shape.down(5)
-        offset = self.finger_layout.keyswitch_length
+        shape = shape.down(self.edge_vertical_offset)
+        offset = self.bottom_cover_magnet_offset
 
         return (
             self.finger_layout.key_place(column=0, row=0, shape=shape.forward(offset))
@@ -493,7 +495,7 @@ class KeyboardAssembly:
         :param top_shell: whether this is for the top shell (True) or for the bottom cover (False)
         :type top_shell: bool
         """
-        vertical_offset = 5 + self.bottom_cover_post_size / (-2 if top_shell else 2)
+        vertical_offset = self.edge_vertical_offset + self.bottom_cover_post_size / (-2 if top_shell else 2)
 
         edge_post = cube(
             self.bottom_cover_thickness if side and not outer else self.bottom_cover_post_size,
@@ -536,7 +538,7 @@ class KeyboardAssembly:
         thickness of the cover.
         """
         return {
-            'z_offset': -self.bottom_cover_offset - self.bottom_cover_thickness,
+            'z_offset': -self.bottom_cover_offset,
             'thickness': self.bottom_cover_thickness,
             'size_adjust': self.bottom_cover_size_adjust,
             'position_adjust': self.bottom_cover_position_adjust,

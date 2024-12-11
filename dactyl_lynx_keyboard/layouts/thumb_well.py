@@ -60,7 +60,7 @@ class ThumbWellLayout(Layout):
         :param shape: the shape to place
         """
         return shape \
-            .translate((mount_width, 0, 0)) \
+            .translate((mount_width, 0, 3)) \
             .rotate(math.degrees(math.pi / 2.8), (0, 1, 0)) \
             .rotate(math.degrees(math.pi * 9/32), (0, 0, 1)) \
             .rotate(math.degrees(math.pi / 14), (1, 1, 0)) \

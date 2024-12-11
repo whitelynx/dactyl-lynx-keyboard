@@ -56,22 +56,23 @@ class Layout:
         self.rows = rows
         self.columns = columns
 
-        # Approx. height from top of the plate to the top of the shortest
-        # keycap in an SA profile? Really not sure.
         self.sa_profile_key_height = 12.7
+        """Approx. height from top of the plate to the top of the shortest
+        keycap in an SA profile? Really not sure."""
 
-        # Cupping amounts, in radians per row/column
         self.rad_per_row = math.pi / 12
+        "Cupping amount, in radians per row"
         self.rad_per_col = math.pi / 36
+        "Cupping amount, in radians per column"
 
-        # Clearance for the depth of the switch - only needed for the bottom
-        # right 2x key and the top right 1x key
         self.thumb_switch_clearance = 12
+        """Clearance for the depth of the switch - only needed for the bottom
+        right 2x key and the top right 1x key"""
 
         self.keyswitch_length = keyswitch_length
         self.keyswitch_width = keyswitch_width
 
-        self.cap_top_height = plate_thickness + self.sa_profile_key_height
+        self.cap_top_height = self.sa_profile_key_height
 
         self.web_post_size = 0.1
         self.web_thickness = keyswitch_depth
@@ -153,17 +154,17 @@ class Layout:
         row_angle = self.row_angle(row)
 
         row_placed_shape = shape \
-            .translate((0, 0, -self.row_radius)) \
+            .down(self.row_radius) \
             .rotate(row_angle, (1, 0, 0)) \
-            .translate((0, 0, self.row_radius))
+            .up(self.row_radius)
 
         column = self.column_adjust(column)
         column_angle = self.column_angle(column)
 
         column_placed_shape = row_placed_shape \
-            .translate((0, 0, -self.column_radius)) \
+            .down(self.column_radius) \
             .rotate(column_angle, (0, 1, 0)) \
-            .translate((0, 0, self.column_radius)) \
+            .up(self.column_radius) \
 
         return self.layout_place(
             self.placement_adjust(column, row, column_placed_shape)
@@ -228,7 +229,7 @@ class Layout:
         post = cube(
             (self.web_post_size, self.web_post_size, thickness),
             center=True
-        ).translate((0, 0, plate_thickness - (thickness / 2)))
+        ).down(thickness / 2)
 
         x_adjust = 0
         y_adjust = 0

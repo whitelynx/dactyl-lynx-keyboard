@@ -29,7 +29,7 @@ class FingerWellLayout(Layout):
             (column, row)
             for row in range(self.rows)
             for column in range(self.columns)
-            if (column != 0) or (row != 4)
+            if (column, row) not in ((0, 4), )
         )
 
     def column_adjust(self, column: float) -> float:
@@ -77,6 +77,7 @@ class FingerWellLayout(Layout):
         :param shape: the shape to place
         """
         return shape \
+            .up(3) \
             .rotate(math.degrees(math.pi / 10), (0, 1, 0)) \
             .rotate(math.degrees(math.pi / 10), (1, 0, 0)) \
             .translate(self.placement_transform)
