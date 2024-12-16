@@ -75,9 +75,7 @@ poetry run python -m dactyl_lynx_keyboard.dactyl_lynx --help
 
 You can then generate STL files from the OpenSCAD files with:
 ```bash
-for model in things/*.scad; do
-    openscad --enable lazy-union --enable predictible-output --backend Manifold -o things/$(basename "$model" .scad).stl "$model"
-done
+scripts/render-stls.sh
 ```
 
 You can also generate an image of the whole assembly:
