@@ -7,7 +7,6 @@ from solid2 import cube, sphere, text
 
 from spkb.keyswitch import Keyswitch, MX, Choc
 from spkb.keycaps import sa_cap
-from spkb.keyswitch import mx_keyswitch
 from spkb.single_key_pcb import single_key_board
 from spkb.types import HoleDef, Offset2D
 from spkb.utils import nothing
@@ -139,6 +138,21 @@ if __name__ == "__main__":
         #socket_shape=tagged_switch_plate,
     )
 
+    combined_colors = {
+        'combined': (0.03, 0.03, 0.03),
+        #'combined': (0.33, 0.33, 0.33),
+        'finger_part': (0.1, 0.1, 0.9),
+        'thumb_part': (0.1, 0.1, 0.1),
+        'connector': (0.4, 0.1, 0.1),
+        'keycaps': (1.0, 0.98, 0.95),
+        'keycap_text': (0, 0, 0),
+        'keyswitches': (0.02, 0.02, 0.02),
+        'pcbs': (0.02, 0.02, 0.02),
+        #'pcbs': (0.02, 0.5, 0.02),
+        'bottom_cover': (0.027, 0.027, 0.027),
+        'lcd_mount': (0.1, 0.3, 0.1),
+    }
+
     # Choose your keycap legends!
     # No keycap legends
     #keycap_text = None
@@ -153,7 +167,7 @@ if __name__ == "__main__":
 
     pcb_board = single_key_board()
 
-    keyswitch = lambda column, row: mx_keyswitch()
+    keyswitch = lambda column, row: keyswitch_type.switch()
 
     def switch_cap(thumb):
         def _switch_cap_inner(column, row):
@@ -164,7 +178,9 @@ if __name__ == "__main__":
                 shape = sa_cap(2)
             elif isinstance(column, float) and not column.is_integer():
                 shape = sa_cap(2).rotate((0, 0, 90))
-            shape = shape.color((1.0, 0.98, 0.95))
+
+            shape = shape.color(combined_colors['keycaps'])
+
             if keycap_text is not None:
                 rendered_keycap_text = keycap_text(column=column, row=row, thumb=thumb, left_side=assembly.left_side)
                 if rendered_keycap_text:
@@ -183,7 +199,7 @@ if __name__ == "__main__":
                         )
                         .linear_extrude(30)
                         .up(10)
-                        .color((0, 0, 0))
+                        .color(combined_colors['keycap_text'])
                     )
                     if assembly.left_side:
                         key_text = key_text.mirror((1, 0, 0))
@@ -275,56 +291,56 @@ if __name__ == "__main__":
         'bottom_cover', 'bottom_cover_with_feet', 'bottom_cover_with_nuts', 'lcd_mount')
         :type parts: list[str]
         """
-        right_combined = right_single_piece.color((0.03, 0.03, 0.03))
+        right_combined = right_single_piece.color(combined_colors['combined'])
         if separate_pieces:
             right_combined = (
-                right_finger_part.color((0.1, 0.1, 0.9))
-                + right_thumb_part.color((0.1, 0.1, 0.1))
-                + right_connector.color((0.4, 0.1, 0.1))
+                right_finger_part.color(combined_colors['finger_part'])
+                + right_thumb_part.color(combined_colors['thumb_part'])
+                + right_connector.color(combined_colors['connector'])
             )
         if 'trackpoint' in parts:
             right_combined += assembly.transform_trackpoint_mount(assembly.trackpoint_mount.trackpoint_shape())
         if 'keycaps' in parts:
             right_combined += right_keycaps
         if 'keyswitches' in parts:
-            right_combined += right_keyswitches.color((0.02, 0.02, 0.02))
+            right_combined += right_keyswitches.color(combined_colors['keyswitches'])
         if 'pcbs' in parts:
-            right_combined += right_pcbs.color((0.02, 0.02, 0.02))
+            right_combined += right_pcbs.color(combined_colors['pcbs'])
 
         if 'bottom_cover' in parts:
-            right_combined += right_finger_bottom_cover.color((0.027, 0.027, 0.027)).down(0.01)
+            right_combined += right_finger_bottom_cover.color(combined_colors['bottom_cover']).down(0.01)
         elif 'bottom_cover_with_feet' in parts:
-            right_combined += right_finger_bottom_cover_with_feet.color((0.027, 0.027, 0.027)).down(0.01)
+            right_combined += right_finger_bottom_cover_with_feet.color(combined_colors['bottom_cover']).down(0.01)
         elif 'bottom_cover_with_nuts' in parts:
-            right_combined += right_finger_bottom_cover_with_nuts.color((0.027, 0.027, 0.027)).down(0.01)
+            right_combined += right_finger_bottom_cover_with_nuts.color(combined_colors['bottom_cover']).down(0.01)
 
         combined = right_combined.right(100)
 
-        left_combined = left_single_piece.color((0.03, 0.03, 0.03))
+        left_combined = left_single_piece.color(combined_colors['combined'])
         if separate_pieces:
             left_combined = (
-                left_finger_part.color((0.1, 0.1, 0.9))
-                + left_thumb_part.color((0.1, 0.1, 0.1))
-                + left_connector.color((0.4, 0.1, 0.1))
+                left_finger_part.color(combined_colors['finger_part'])
+                + left_thumb_part.color(combined_colors['thumb_part'])
+                + left_connector.color(combined_colors['connector'])
             )
         if 'keycaps' in parts:
             left_combined += left_keycaps
         if 'keyswitches' in parts:
-            left_combined += left_keyswitches.color((0.02, 0.02, 0.02))
+            left_combined += left_keyswitches.color(combined_colors['keyswitches'])
         if 'pcbs' in parts:
-            left_combined += left_pcbs.color((0.02, 0.02, 0.02))
+            left_combined += left_pcbs.color(combined_colors['pcbs'])
 
         if 'bottom_cover' in parts:
-            left_combined += left_finger_bottom_cover.color((0.027, 0.027, 0.027)).down(0.01)
+            left_combined += left_finger_bottom_cover.color(combined_colors['bottom_cover']).down(0.01)
         elif 'bottom_cover_with_feet' in parts:
-            left_combined += left_finger_bottom_cover_with_feet.color((0.027, 0.027, 0.027)).down(0.01)
+            left_combined += left_finger_bottom_cover_with_feet.color(combined_colors['bottom_cover']).down(0.01)
         elif 'bottom_cover_with_nuts' in parts:
-            left_combined += left_finger_bottom_cover_with_nuts.color((0.027, 0.027, 0.027)).down(0.01)
+            left_combined += left_finger_bottom_cover_with_nuts.color(combined_colors['bottom_cover']).down(0.01)
 
         combined += left_combined.left(100)
 
         if 'lcd_mount' in parts:
-            combined += assembled_lcd_mount.color((0.1, 0.3, 0.1))
+            combined += assembled_lcd_mount.color(combined_colors['lcd_mount'])
 
         return combined
 
