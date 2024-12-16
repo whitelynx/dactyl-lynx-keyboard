@@ -10,14 +10,7 @@ from typing import Optional, Protocol, Tuple, Union
 from solid2 import cube, hull
 from solid2.core.object_base import OpenSCADObject
 
-from spkb.switch_plate import (
-    mount_width,
-    mount_length,
-    keyswitch_length,
-    keyswitch_width,
-    keyswitch_depth,
-    plate_thickness,
-)
+from spkb.keyswitch import Keyswitch, MX
 
 
 class XYAdjustCallback(Protocol):
@@ -43,14 +36,12 @@ class Layout:
 
     This can generate a grid of key positions.
     """
-    def __init__(self, columns: int = 6, rows: int = 5, wall_thickness: float = 1.5):
+    def __init__(self, columns: int = 6, rows: int = 5, keyswitch: Keyswitch = MX()):
         """Create a layout manager.
 
         :param columns: the number of columns in the layout
 
         :param rows: the number of rows in the layout
-
-        :param wall_thickness: the wall thickness of the chosen socket shape
         """
 
         self.rows = rows
@@ -69,27 +60,29 @@ class Layout:
         """Clearance for the depth of the switch - only needed for the bottom
         right 2x key and the top right 1x key"""
 
-        self.keyswitch_length = keyswitch_length
-        self.keyswitch_width = keyswitch_width
+        self.keyswitch = keyswitch
 
         self.cap_top_height = self.sa_profile_key_height
 
         self.web_post_size = 0.1
-        self.web_thickness = keyswitch_depth
+        self.web_thickness = keyswitch.keyswitch_depth
 
-        self.wall_thickness = wall_thickness
+        #self.offset_per_row = self.keyswitch.plate_size().y + 0.5
+        self.offset_per_row = 17.5
+        #self.offset_per_col = self.keyswitch.plate_size().x + 2.0
+        self.offset_per_col = 19
 
     @property
     def row_radius(self) -> float:
         return (
-            ((mount_length + 0.5) / 2)
+            (self.offset_per_row / 2)
             / (math.sin(self.rad_per_row / 2))
         ) + self.cap_top_height
 
     @property
     def column_radius(self) -> float:
         return (
-            ((mount_width + 2.0) / 2)
+            (self.offset_per_col / 2)
             / (math.sin(self.rad_per_col / 2))
         ) + self.cap_top_height
 
@@ -248,8 +241,12 @@ class Layout:
             else:
                 y_adjust -= y_pos_adjust
 
-        x_move_amount = (self.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness + x_adjust
-        y_move_amount = (self.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size) / 2 + self.wall_thickness + y_adjust
+        x_move_amount = (
+            self.keyswitch.keyswitch_width + ((column_span - 1) * 24) - self.web_post_size
+        ) / 2 + self.keyswitch.wall_thickness + x_adjust
+        y_move_amount = (
+            self.keyswitch.keyswitch_length + ((row_span - 1) * 24) - self.web_post_size
+        ) / 2 + self.keyswitch.wall_thickness + y_adjust
 
         return self.key_place(
             column,

@@ -1,21 +1,20 @@
 from collections.abc import Iterable
 from itertools import chain, pairwise
-from typing import Tuple
+from typing import Tuple, Optional
 
 from solid2 import cube, hull, sphere, union
 from solid2.core.object_base import OpenSCADObject
 from solid2.extensions.bosl2 import screws
 
 from spkb.switch_plate import (
-    keyswitch_length,
-    keyswitch_width,
-    plate_thickness,
     mx_plate_with_backplate,
 )
 from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length
+from spkb.keyswitch import Keyswitch, MX
 from spkb.utils import cylinder_outer, fudge_radius, nothing
 
+from .layouts.layout import ShapeForLocationCallback
 from .layouts.finger_well import FingerWellLayout
 from .layouts.thumb_well import ThumbWellLayout
 from .mini_din_connector_mount import MiniDINConnectorMount
@@ -23,13 +22,28 @@ from .trackpoint_mount import TrackPointMount
 
 
 class KeyboardAssembly:
-    def __init__(self, columns=6, rows=5, use_1_5u_keys=False, use_color=False, socket_shape=mx_plate_with_backplate, wall_thickness=1.5):
+    def __init__(
+        self,
+        columns: int = 6,
+        rows: int = 5,
+        use_1_5u_keys: bool = False,
+        use_color: bool = False,
+        socket_shape: Optional[ShapeForLocationCallback] = None,
+        keyswitch: Keyswitch = MX(),
+    ):
         self.use_color = use_color
         self.socket_shape = socket_shape
-        self.wall_thickness = wall_thickness
 
-        self.finger_layout = FingerWellLayout(columns=columns, rows=rows, use_1_5u_keys=use_1_5u_keys, wall_thickness=wall_thickness)
-        self.thumb_layout = ThumbWellLayout(wall_thickness=wall_thickness)
+        self.finger_layout = FingerWellLayout(
+            columns=columns,
+            rows=rows,
+            use_1_5u_keys=use_1_5u_keys,
+            keyswitch=keyswitch,
+        )
+        self.thumb_layout = ThumbWellLayout(keyswitch=keyswitch)
+
+        if socket_shape is None:
+            self.socket_shape = lambda _column, _row: self.finger_layout.keyswitch.plate()
 
         self.connector_mount = MiniDINConnectorMount()
         self.trackpoint_mount = TrackPointMount()
@@ -55,13 +69,17 @@ class KeyboardAssembly:
 
         self.edge_vertical_offset = 8
         self.bottom_cover_offset = 11
-        self.bottom_cover_edge_protusion = self.finger_layout.keyswitch_length - 1
+        self.bottom_cover_edge_protusion = self.finger_layout.keyswitch.keyswitch_length - 1
         self.bottom_cover_thickness = 3
         self.bottom_cover_post_size = 0.2
         self.bottom_cover_magnet_mount_thickness = 1.5
         self.bottom_cover_magnet_radius = 2.5
         self.bottom_cover_magnet_thickness = 3
         self.bottom_cover_magnet_offset = 13.7
+
+    @property
+    def wall_thickness(self):
+        return self.finger_layout.keyswitch.wall_thickness
 
     def transform_finger_nut1(self, shape):
         """Place the given shape at the position and orientation of the first finger nut.
@@ -120,7 +138,7 @@ class KeyboardAssembly:
             shape
             .rotate(-90, (0, 1, 0))
             .translate((
-                (self.finger_layout.keyswitch_width + self.connector_mount.outerFrameThickness) / -2 - 1.5,
+                (self.finger_layout.keyswitch.keyswitch_width + self.connector_mount.outerFrameThickness) / -2 - 1.5,
                 0,
                 -self.connector_mount.outerRadius() - 2
             ))
@@ -177,7 +195,7 @@ class KeyboardAssembly:
             .rotate(10, (1, 1, 1)) \
             .translate(self.thumb_layout.placement_transform)
 
-    def switch_socket(self, column, row):
+    def switch_socket(self, column, row) -> OpenSCADObject:
         """Generate the switch plate socket for the given keyswitch.
 
         :param column: the column of the keyswitch
@@ -188,16 +206,16 @@ class KeyboardAssembly:
         """
         shape = self.socket_shape(column, row)
         if isinstance(row, float) and not row.is_integer():
-            plate_height = (sa_double_length - self.finger_layout.keyswitch_length + 0.4) / 2
+            plate_height = (sa_double_length - self.finger_layout.keyswitch.keyswitch_length + 0.4) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
             stabilizer_mount = cube(
-                self.finger_layout.keyswitch_width + self.wall_thickness * 2,
+                self.finger_layout.keyswitch.keyswitch_width + self.wall_thickness * 2,
                 plate_height,
                 self.thumb_layout.web_thickness,
                 center=True
             ).translate(
                 0,
-                (plate_height + self.finger_layout.keyswitch_length) / 2 + self.wall_thickness,
+                (plate_height + self.finger_layout.keyswitch.keyswitch_length) / 2 + self.wall_thickness,
                 -self.thumb_layout.web_thickness / 2
             )
             shape = (
@@ -206,15 +224,15 @@ class KeyboardAssembly:
                 + stabilizer_mount.mirror(0, 1, 0)
             )
         elif isinstance(column, float) and not column.is_integer():
-            plate_width = (sa_double_length - self.finger_layout.keyswitch_width + 0.4) / 2
+            plate_width = (sa_double_length - self.finger_layout.keyswitch.keyswitch_width + 0.4) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348
             stabilizer_mount = cube(
                 plate_width,
-                self.finger_layout.keyswitch_length + self.wall_thickness * 2,
+                self.finger_layout.keyswitch.keyswitch_length + self.wall_thickness * 2,
                 self.thumb_layout.web_thickness,
                 center=True
             ).translate(
-                (plate_width + self.finger_layout.keyswitch_width) / 2 + self.wall_thickness,
+                (plate_width + self.finger_layout.keyswitch.keyswitch_width) / 2 + self.wall_thickness,
                 0,
                 -self.thumb_layout.web_thickness / 2
             )
@@ -260,7 +278,7 @@ class KeyboardAssembly:
 
         if isinstance(row, float) and not row.is_integer():
             return cube(
-                self.finger_layout.keyswitch_width + self.wall_thickness * 2 + extra_width,
+                self.finger_layout.keyswitch.keyswitch_width + self.wall_thickness * 2 + extra_width,
                 sa_double_length + extra_length,
                 self.bottom_cover_thickness,
                 center=True
@@ -273,7 +291,7 @@ class KeyboardAssembly:
         elif isinstance(column, float) and not column.is_integer():
             return cube(
                 sa_double_length + extra_width,
-                self.finger_layout.keyswitch_length + self.wall_thickness * 2 + extra_length,
+                self.finger_layout.keyswitch.keyswitch_length + self.wall_thickness * 2 + extra_length,
                 self.bottom_cover_thickness,
                 center=True
             ).translate(
@@ -283,8 +301,8 @@ class KeyboardAssembly:
             )
 
         return cube(
-            self.finger_layout.keyswitch_width + self.wall_thickness * 2 + extra_width,
-            self.finger_layout.keyswitch_length + self.wall_thickness * 2 + extra_length,
+            self.finger_layout.keyswitch.keyswitch_width + self.wall_thickness * 2 + extra_width,
+            self.finger_layout.keyswitch.keyswitch_length + self.wall_thickness * 2 + extra_length,
             self.bottom_cover_thickness,
             center=True
         ).translate(x_shift, y_shift, -self.bottom_cover_offset - self.bottom_cover_thickness / 2)
@@ -778,12 +796,12 @@ class KeyboardAssembly:
         """Generate fixed feet to union with the bottom cover.
         """
         bottom_cover_attachment_spot = cube(
-            self.finger_layout.keyswitch_width + self.wall_thickness * 2,
-            self.finger_layout.keyswitch_length + self.wall_thickness * 2,
+            self.finger_layout.keyswitch.keyswitch_width + self.wall_thickness * 2,
+            self.finger_layout.keyswitch.keyswitch_length + self.wall_thickness * 2,
             0.1,
             center=True
         ).up(
-            plate_thickness - self.thumb_layout.web_thickness / 2 - self.bottom_cover_offset - self.bottom_cover_thickness / 2
+            self.finger_layout.keyswitch.plate_thickness - self.thumb_layout.web_thickness / 2 - self.bottom_cover_offset - self.bottom_cover_thickness / 2
         )
 
         return (
@@ -900,11 +918,11 @@ class KeyboardAssembly:
                         center=True
                     ).translate((
                         -(
-                            (self.finger_layout.keyswitch_width - self.finger_layout.web_post_size) / 2
-                            + self.finger_layout.wall_thickness
+                            (self.finger_layout.keyswitch.keyswitch_width - self.finger_layout.web_post_size) / 2
+                            + self.wall_thickness
                         ),
                         0,
-                        plate_thickness - (self.finger_layout.web_thickness / 2)
+                        -self.finger_layout.web_thickness / 2,
                     ))
                 ),
                 self.thumb_layout.web_corner(2, 0, left=True, top=True),

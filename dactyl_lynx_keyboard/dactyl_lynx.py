@@ -9,6 +9,7 @@ from spkb.keyswitch import Keyswitch, MX, Choc
 from spkb.keycaps import sa_cap
 from spkb.keyswitch import mx_keyswitch
 from spkb.single_key_pcb import single_key_board
+from spkb.types import HoleDef, Offset2D
 from spkb.utils import nothing
 
 from .layouts.layout import Layout
@@ -95,11 +96,21 @@ lynx_layout = {
 
 
 if __name__ == "__main__":
-    keyswitch_type: Keyswitch = MX()
-    #keyswitch_type: Keyswitch = Choc()
+    # Dimensions of single-key PCB
+    board_dimensions = Offset2D(19.15, 19.15)
 
-    # Screw positions for single-key PCBs (plate_with_board_mount)
-    board_screw_positions: List[Tuple[float, float]] = [(8, 8), (-8, 8), (8, -8), (-8, -8)]
+    # Screw positions for single-key PCB
+    board_screw_positions: List[HoleDef] = [
+        HoleDef(8, 8, 0.5),
+        HoleDef(-8, 8, 0.5),
+        HoleDef(8, -8, 0.5),
+        HoleDef(-8, -8, 0.5),
+    ]
+
+    #keyswitch_type: Keyswitch = MX()
+    keyswitch_type: Keyswitch = MX.with_board(board_dimensions, *board_screw_positions)
+    #keyswitch_type: Keyswitch = Choc()
+    #keyswitch_type: Keyswitch = Choc.with_board(board_dimensions, *board_screw_positions)
 
     # The wall_thickness of the board mount socket (2.625)
     wall_thickness: float = 2.625
@@ -115,22 +126,17 @@ if __name__ == "__main__":
         rows=5,
         use_1_5u_keys=False,
         use_color=False,
+        keyswitch=keyswitch_type,
 
-        # The default socket shape for MX-style or Choc switches has a backplate supporting a hotswap socket, 5-pin
-        # switches, and a 2-pin or 4-pin LED.
-        #socket_shape=lambda column, row: keyswitch_type.plate_with_backplate(wall_thickness=wall_thickness),
+        # The default, if `socket_shape` is omitted: Basic sockets without a backplate; also use this if using
+        # single-key PCBs.
+        #socket_shape=lambda column, row: keyswitch_type.plate(),
 
-        # To remove backplates from keyswitch sockets:
-        #socket_shape=lambda column, row: keyswitch_type.plate(wall_thickness=wall_thickness),
-
-        # To use a single-key PCB:
-        socket_shape=lambda column, row:
-        keyswitch_type.plate_with_board_mount(board_screw_positions, wall_thickness=wall_thickness),
+        # Sockets with a backplate supporting a hotswap socket, 5-pin switches, and a 2-pin or 4-pin LED.
+        #socket_shape=lambda column, row: keyswitch_type.plate_with_backplate(),
 
         # To use a switch plate with engraved layout positions (for troubleshooting):
         #socket_shape=tagged_switch_plate,
-
-        wall_thickness=wall_thickness,
     )
 
     # Choose your keycap legends!

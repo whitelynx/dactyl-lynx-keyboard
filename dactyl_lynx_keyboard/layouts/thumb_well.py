@@ -10,7 +10,7 @@ from typing import Optional, Tuple
 from solid2 import hull
 from solid2.core.object_base import OpenSCADObject
 
-from spkb.switch_plate import mount_width
+from spkb.keyswitch import Keyswitch, MX
 
 from .layout import Layout, XYAdjustCallback
 
@@ -18,8 +18,8 @@ from .layout import Layout, XYAdjustCallback
 class ThumbWellLayout(Layout):
     """The layout of a thumb well.
     """
-    def __init__(self, columns: float = 3, rows: float = 3, wall_thickness: float = 1.5):
-        super(ThumbWellLayout, self).__init__(columns=columns, rows=rows, wall_thickness=wall_thickness)
+    def __init__(self, columns: float = 3, rows: float = 3, keyswitch: Keyswitch = MX()):
+        super(ThumbWellLayout, self).__init__(columns=columns, rows=rows, keyswitch=keyswitch)
 
         # Cupping amounts, in radians per row/column
         self.rad_per_row = math.pi / 12
@@ -60,7 +60,7 @@ class ThumbWellLayout(Layout):
         :param shape: the shape to place
         """
         return shape \
-            .translate((mount_width, 0, 3)) \
+            .translate((17, 0, 3)) \
             .rotate(math.degrees(math.pi / 2.8), (0, 1, 0)) \
             .rotate(math.degrees(math.pi * 9/32), (0, 0, 1)) \
             .rotate(math.degrees(math.pi / 14), (1, 1, 0)) \

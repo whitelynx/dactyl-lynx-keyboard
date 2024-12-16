@@ -9,14 +9,16 @@ from typing import Optional, Tuple
 
 from solid2.core.object_base import OpenSCADObject
 
+from spkb.keyswitch import Keyswitch, MX
+
 from .layout import Layout, XYAdjustCallback
 
 
 class FingerWellLayout(Layout):
     """The layout of a finger well.
     """
-    def __init__(self, columns: float = 6, rows: float = 5, use_1_5u_keys: bool = True, wall_thickness: float = 1.5):
-        super(FingerWellLayout, self).__init__(columns=columns, rows=rows, wall_thickness=wall_thickness)
+    def __init__(self, columns: float = 6, rows: float = 5, use_1_5u_keys: bool = True, keyswitch: Keyswitch = MX()):
+        super(FingerWellLayout, self).__init__(columns=columns, rows=rows, keyswitch=keyswitch)
 
         self.use_1_5u_keys = use_1_5u_keys
 
