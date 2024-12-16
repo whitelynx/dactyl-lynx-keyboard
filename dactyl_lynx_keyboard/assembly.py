@@ -12,6 +12,7 @@ from spkb.switch_plate import (
 from spkb.board_mount import stm32_blackpill
 from spkb.keycaps import sa_double_length
 from spkb.keyswitch import Keyswitch, MX
+from spkb.single_key_pcb import single_key_board
 from spkb.utils import cylinder_outer, fudge_radius, nothing
 
 from .layouts.layout import ShapeForLocationCallback
@@ -372,6 +373,8 @@ class KeyboardAssembly:
         if self.enable_trackpoint and not self.left_side:
             shape += self.transform_trackpoint_mount(self.trackpoint_mount.trackpoint_mount())
             shape -= self.transform_trackpoint_mount(self.trackpoint_mount.trackpoint_holes())
+
+        shape -= self.finger_layout.place_all(single_key_board(simple=True, extra_spacing=0.02))
 
         if self.use_color:
             return shape.color((0.1, 0.1, 0.1))
@@ -863,6 +866,8 @@ class KeyboardAssembly:
                     # )
                 ) if self.enable_nuts and self.bottom_thumb_nuts else nothing
             )
+
+            - self.thumb_layout.place_all(single_key_board(simple=True, extra_spacing=0.02))
         )
 
         if self.use_color:
