@@ -826,6 +826,31 @@ class KeyboardAssembly:
             )
         )
 
+    def finger_bottom_cover_with_tripod_mount(self):
+        """Generate bottom cover with integrated tripod mount.
+
+        Use a 1/4"-20 carpentry T nut for the threads.
+        (e.g., https://www.amazon.de/-/en/gp/product/B0DK1HGGKM/ref=sw_img_1?smid=A301WKE65PGVT5&psc=1)
+        """
+        z_offset = self.bottom_cover_offset + self.bottom_cover_thickness + 1.5
+
+        tripod_mount = cylinder_outer(r=26 / 2, h=10, center=True).down(z_offset)
+
+        prong_hole = cylinder_outer(r=3 / 2, h=11, center=True).up(3)
+        tripod_mount_holes = (
+            cylinder_outer(r=7.9 / 2, h=11, center=True)
+            + prong_hole.right(7.5)
+            + prong_hole.left(7.5)
+            + prong_hole.forward(7.5)
+            + prong_hole.back(7.5)
+        ).down(z_offset)
+
+        return (
+            self.finger_bottom_cover()
+            + self.finger_layout.key_place(2, 3, tripod_mount)
+            - self.finger_layout.key_place(2, 3, tripod_mount_holes)
+        )
+
     def thumb_part(self):
         """Generate the thumb part of the assembly.
 
