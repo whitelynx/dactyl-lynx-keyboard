@@ -2,7 +2,7 @@
 """
 import math
 import operator
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from functools import reduce
 from itertools import chain
 from typing import Optional, Protocol, Tuple, Union
@@ -75,6 +75,9 @@ class Layout:
         #self.offset_per_col = self.keyswitch.plate_size().x + 2.0
         self.offset_per_col = 19
 
+        self.positions_to_skip: Sequence[Tuple[float, float]] = ()
+        "A sequence of positions in the layout to skip when generating positions."
+
     @property
     def row_radius(self) -> float:
         return (
@@ -98,6 +101,7 @@ class Layout:
             (column, row)
             for row in range(self.rows)
             for column in range(self.columns)
+            if (column, row) not in self.positions_to_skip
         )
 
     def column_adjust(self, column: float) -> float:
