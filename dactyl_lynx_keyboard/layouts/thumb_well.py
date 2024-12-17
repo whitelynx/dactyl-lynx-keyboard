@@ -18,7 +18,7 @@ from .layout import Layout, XYAdjustCallback
 class ThumbWellLayout(Layout):
     """The layout of a thumb well.
     """
-    def __init__(self, columns: float = 3, rows: float = 3, keyswitch: Keyswitch = MX()):
+    def __init__(self, columns: int = 3, rows: int = 3, keyswitch: Keyswitch = MX()):
         super(ThumbWellLayout, self).__init__(columns=columns, rows=rows, keyswitch=keyswitch)
 
         # Cupping amounts, in radians per row/column

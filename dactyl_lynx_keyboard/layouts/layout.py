@@ -11,6 +11,7 @@ from solid2 import cube, hull
 from solid2.core.object_base import OpenSCADObject
 
 from spkb.keyswitch import Keyswitch, MX
+from spkb.utils import nothing
 
 
 class XYAdjustCallback(Protocol):
@@ -21,6 +22,7 @@ class XYAdjustCallback(Protocol):
         """Return a 2-tuple containing X and Y axis adjustments for the given column/row position.
         (usually either size or position adjustments)
         """
+        return (0, 0)
 
 
 class ShapeForLocationCallback(Protocol):
@@ -29,6 +31,7 @@ class ShapeForLocationCallback(Protocol):
     def __call__(self, column: float, row: float) -> OpenSCADObject:
         """Return a shape to place at the given column/row position.
         """
+        return nothing
 
 
 class Layout:
@@ -87,7 +90,9 @@ class Layout:
         ) + self.cap_top_height
 
     def generate_positions(self) -> Iterable[Tuple[float, float]]:
-        """Override this to change the list of locations within the layout.
+        """Generate the list of locations within the layout.
+
+        Override this to change the list of locations, or set `positions_to_skip` to filter out certain positions.
         """
         return (
             (column, row)

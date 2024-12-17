@@ -17,7 +17,7 @@ from .layout import Layout, XYAdjustCallback
 class FingerWellLayout(Layout):
     """The layout of a finger well.
     """
-    def __init__(self, columns: float = 6, rows: float = 5, use_1_5u_keys: bool = True, keyswitch: Keyswitch = MX()):
+    def __init__(self, columns: int = 6, rows: int = 5, use_1_5u_keys: bool = True, keyswitch: Keyswitch = MX()):
         super(FingerWellLayout, self).__init__(columns=columns, rows=rows, keyswitch=keyswitch)
 
         self.use_1_5u_keys = use_1_5u_keys

@@ -205,7 +205,11 @@ class KeyboardAssembly:
         :param row: the row of the keyswitch
         :type row: number
         """
-        shape = self.socket_shape(column, row)
+        if self.socket_shape is None:
+            shape = self.finger_layout.keyswitch.plate()
+        else:
+            shape = self.socket_shape(column, row)
+
         if isinstance(row, float) and not row.is_integer():
             plate_height = (sa_double_length - self.finger_layout.keyswitch.keyswitch_length + 0.4) / 2
             # TODO: Subtract stabilizer mount holes; see dactyl.clj line 348

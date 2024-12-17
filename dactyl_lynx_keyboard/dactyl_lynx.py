@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     def tagged_switch_plate(column, row):
         return (
-            keyswitch_type.plate_with_board_mount(board_screw_positions, wall_thickness=wall_thickness)
+            keyswitch_type.plate()
             + text(f'{column},{row}', size=keyswitch_type.keyswitch_length / 3, halign='center', valign='center')
         )
 
