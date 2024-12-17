@@ -832,13 +832,49 @@ class KeyboardAssembly:
         Use a 1/4"-20 carpentry T nut for the threads.
         (e.g., https://www.amazon.de/-/en/gp/product/B0DK1HGGKM/ref=sw_img_1?smid=A301WKE65PGVT5&psc=1)
         """
-        z_offset = self.bottom_cover_offset + self.bottom_cover_thickness + 1.5
+        web_kwargs = self.bottom_cover_web_kwargs()
 
-        tripod_mount = cylinder_outer(r=26 / 2, h=10, center=True).down(z_offset)
+        z_offset = self.bottom_cover_offset + self.bottom_cover_thickness + 4
+
+        tripod_mount = (
+            hull()(
+                self.finger_layout.key_place(2, 3, (
+                    cylinder_outer(r=26 / 2, h=10, center=True)
+                    & cube(100, 100, 100, center=True).left(50)
+                ).down(z_offset)),
+                self.finger_layout.web_corner(column=1, row=2, left=True, top=False, **web_kwargs),
+                self.finger_layout.web_corner(column=1, row=3, left=True, top=True, **web_kwargs),
+            )
+            + hull()(
+                self.finger_layout.key_place(2, 3, (
+                    cylinder_outer(r=26 / 2, h=10, center=True)
+                    & cube(100, 100, 100, center=True).right(50)
+                ).down(z_offset)),
+                self.finger_layout.web_corner(column=3, row=2, left=False, top=False, **web_kwargs),
+                self.finger_layout.web_corner(column=3, row=3, left=False, top=True, **web_kwargs),
+            )
+            + hull()(
+                self.finger_layout.key_place(2, 3, (
+                    cylinder_outer(r=26 / 2, h=10, center=True)
+                    & cube(100, 100, 100, center=True).forward(50)
+                ).down(z_offset)),
+                self.finger_layout.web_corner(column=2, row=2, left=True, top=True, **web_kwargs),
+                self.finger_layout.web_corner(column=2, row=2, left=False, top=True, **web_kwargs),
+            )
+            + hull()(
+                self.finger_layout.key_place(2, 3, (
+                    cylinder_outer(r=26 / 2, h=10, center=True)
+                    & cube(100, 100, 100, center=True).back(50)
+                ).down(z_offset)),
+                self.finger_layout.web_corner(column=2, row=4, left=True, top=False, **web_kwargs),
+                self.finger_layout.web_corner(column=2, row=4, left=False, top=False, **web_kwargs),
+            )
+        )
 
         prong_hole = cylinder_outer(r=3 / 2, h=11, center=True).up(3)
         tripod_mount_holes = (
-            cylinder_outer(r=7.9 / 2, h=11, center=True)
+            cylinder_outer(r=7.9 / 2, h=14, center=True)
+            + cylinder_outer(r=19 / 2, h=10, center=True).up(10)
             + prong_hole.right(7.5)
             + prong_hole.left(7.5)
             + prong_hole.forward(7.5)
@@ -847,7 +883,7 @@ class KeyboardAssembly:
 
         return (
             self.finger_bottom_cover()
-            + self.finger_layout.key_place(2, 3, tripod_mount)
+            + tripod_mount
             - self.finger_layout.key_place(2, 3, tripod_mount_holes)
         )
 
