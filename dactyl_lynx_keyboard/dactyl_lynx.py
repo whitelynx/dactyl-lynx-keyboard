@@ -152,6 +152,7 @@ if __name__ == "__main__":
         'bottom_cover': (0.027, 0.027, 0.027),
         'lcd_mount': (0.1, 0.3, 0.1),
     }
+    combined_parts = ('trackpoint', 'keycaps', 'keyswitches', 'pcbs', 'bottom_cover_with_feet_and_tripod_mount')
 
     # Choose your keycap legends!
     # No keycap legends
@@ -220,6 +221,10 @@ if __name__ == "__main__":
         + assembly.finger_bottom_cover_nuts()
     )
     right_finger_bottom_cover_with_tripod_mount = assembly.finger_bottom_cover_with_tripod_mount()
+    right_finger_bottom_cover_with_feet_and_tripod_mount = (
+        right_finger_bottom_cover_with_tripod_mount
+        + assembly.finger_bottom_cover_feet()
+    )
     right_thumb_part = assembly.thumb_part()
     right_connector = assembly.connector()
     right_keycaps = (
@@ -250,6 +255,10 @@ if __name__ == "__main__":
         + assembly.finger_bottom_cover_nuts().mirror((1, 0, 0))
     )
     left_finger_bottom_cover_with_tripod_mount = assembly.finger_bottom_cover_with_tripod_mount().mirror((1, 0, 0))
+    left_finger_bottom_cover_with_feet_and_tripod_mount = (
+        left_finger_bottom_cover_with_tripod_mount
+        + assembly.finger_bottom_cover_feet().mirror((1, 0, 0))
+    )
     left_thumb_part = assembly.thumb_part().mirror((1, 0, 0))
     left_connector = assembly.connector().mirror((1, 0, 0))
     left_keycaps = (
@@ -290,7 +299,8 @@ if __name__ == "__main__":
         :type columns: bool
 
         :param parts: the parts to include in the assembly (choices: 'trackpoint', 'keycaps', 'keyswitches', 'pcbs',
-        'bottom_cover', 'bottom_cover_with_feet', 'bottom_cover_with_nuts', 'lcd_mount')
+        'bottom_cover', 'bottom_cover_with_feet', 'bottom_cover_with_nuts', 'bottom_cover_with_tripod_mount',
+        'bottom_cover_with_feet_and_tripod_mount', 'lcd_mount')
         :type parts: list[str]
         """
         right_combined = right_single_piece.color(combined_colors['combined'])
@@ -317,6 +327,8 @@ if __name__ == "__main__":
             right_combined += right_finger_bottom_cover_with_nuts.color(combined_colors['bottom_cover']).down(0.01)
         elif 'bottom_cover_with_tripod_mount' in parts:
             right_combined += right_finger_bottom_cover_with_tripod_mount.color(combined_colors['bottom_cover']).down(0.01)
+        elif 'bottom_cover_with_feet_and_tripod_mount' in parts:
+            right_combined += right_finger_bottom_cover_with_feet_and_tripod_mount.color(combined_colors['bottom_cover']).down(0.01)
 
         combined = right_combined.right(100)
 
@@ -342,6 +354,8 @@ if __name__ == "__main__":
             left_combined += left_finger_bottom_cover_with_nuts.color(combined_colors['bottom_cover']).down(0.01)
         elif 'bottom_cover_with_tripod_mount' in parts:
             left_combined += left_finger_bottom_cover_with_tripod_mount.color(combined_colors['bottom_cover']).down(0.01)
+        elif 'bottom_cover_with_feet_and_tripod_mount' in parts:
+            left_combined += left_finger_bottom_cover_with_feet_and_tripod_mount.color(combined_colors['bottom_cover']).down(0.01)
 
         combined += left_combined.left(100)
 
@@ -382,6 +396,10 @@ if __name__ == "__main__":
     print(f"Writing right finger_bottom_cover_with_tripod_mount output to {right_finger_bottom_cover_with_tripod_mount_filepath} . . .")
     right_finger_bottom_cover_with_tripod_mount.save_as_scad(right_finger_bottom_cover_with_tripod_mount_filepath)
 
+    right_finger_bottom_cover_with_feet_and_tripod_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-right-finger-bottom-cover-with-feet-and-tripod-mount.scad"
+    print(f"Writing right finger_bottom_cover_with_feet_and_tripod_mount output to {right_finger_bottom_cover_with_feet_and_tripod_mount_filepath} . . .")
+    right_finger_bottom_cover_with_feet_and_tripod_mount.save_as_scad(right_finger_bottom_cover_with_feet_and_tripod_mount_filepath)
+
     left_finger_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger.scad"
     print(f"Writing left finger output to {left_finger_filepath} . . .")
     left_finger_part.save_as_scad(left_finger_filepath)
@@ -414,6 +432,10 @@ if __name__ == "__main__":
     print(f"Writing left finger_bottom_cover_with_tripod_mount output to {left_finger_bottom_cover_with_tripod_mount_filepath} . . .")
     left_finger_bottom_cover_with_tripod_mount.save_as_scad(left_finger_bottom_cover_with_tripod_mount_filepath)
 
+    left_finger_bottom_cover_with_feet_and_tripod_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-finger-bottom-cover-with-feet-and-tripod-mount.scad"
+    print(f"Writing left finger_bottom_cover_with_feet_and_tripod_mount output to {left_finger_bottom_cover_with_feet_and_tripod_mount_filepath} . . .")
+    left_finger_bottom_cover_with_feet_and_tripod_mount.save_as_scad(left_finger_bottom_cover_with_feet_and_tripod_mount_filepath)
+
     lcd_mount_filepath = "/home/whitelynx/Development/Personal/dactyl-lynx-keyboard/things/dactyl-lynx-6x5-left-lcd-mount.scad"
     print(f"Writing LCD mount output to {lcd_mount_filepath} . . .")
     assembled_lcd_mount.save_as_scad(lcd_mount_filepath)
@@ -422,7 +444,7 @@ if __name__ == "__main__":
     print(f"Writing combined output to {combined_filepath} . . .")
     build_combined_output(
         separate_pieces=False,
-        parts=('trackpoint', 'keycaps', 'keyswitches', 'pcbs', 'bottom_cover_with_feet')
+        parts=combined_parts,
     ).save_as_scad(combined_filepath)
 
     import sys
