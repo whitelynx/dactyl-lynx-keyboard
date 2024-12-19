@@ -122,11 +122,14 @@ class KeyboardAssembly:
 
         :param shape: the shape to place
         """
-        return shape \
-            .rotate(90, (0, 0, 1)) \
-            .rotate(-120, (1, 0, 0)) \
-            .rotate(17, (0, 1, 0)) \
-            .translate((-19, 53, 77.3))
+        return self.finger_layout.key_place(
+            2,
+            -1,
+            shape
+            .rotate(90, (0, 0, 1))
+            .rotate(160, (1, 0, 0))
+            .translate((-26, -2.5, -6))
+        )
 
     def transform_connector_mount(self, shape):
         """Place the given shape at the position and orientation of the Mini-DIN connector mount.
@@ -330,10 +333,6 @@ class KeyboardAssembly:
                 self.finger_layout.web_corner(3, 0, left=False, top=True),
                 self.finger_layout.web_corner(3, 0, left=True, top=True),
             )
-            - self.transform_board(
-                cube((4, 6, 10), center=True)
-                .translate((6, -46, 0))
-            )
             + hull()(
                 self.transform_board(
                     cube((60, 120, 6), center=True)
@@ -352,13 +351,14 @@ class KeyboardAssembly:
                 + cube((11, 2.9, 13), center=True)
                 .translate((0, 3 / 2, 13 / 2))
                 - stm32_blackpill.board_profile(distance_from_surface=8)
-
+            )
+            - self.transform_board(
                 # Holes for buttons on RP2040 TYPE-C 16MB
-                - cube((4, 6, 10), center=True)
+                cube((4, 6, 40), center=True)
                 .translate((-5 if self.left_side else 5, -22, 0))
-                - cube((4, 6, 10), center=True)
+                + cube((4, 6, 40), center=True)
                 .translate((-6, -46, 0))
-                - cube((4, 6, 10), center=True)
+                + cube((4, 6, 40), center=True)
                 .translate((6, -46, 0))
             )
 
@@ -770,6 +770,15 @@ class KeyboardAssembly:
                 ),
                 self.finger_layout.web_corner(column=1, row=0, left=True, top=True, **web_kwargs),
                 self.finger_layout.web_corner(column=1, row=0, left=True, top=False, **web_kwargs),
+            )
+            - self.finger_layout.key_place(
+                2, -1,
+                cube(
+                    60,
+                    37,
+                    30,
+                    center=True
+                ).translate((3, 0, 10 - self.bottom_cover_offset))
             )
         )
 
