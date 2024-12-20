@@ -11669,4 +11669,29 @@ difference() {
 			}
 		}
 	}
+	translate(v = [0, 0, 29.3]) {
+		rotate(a = 18.0, v = [1, 0, 0]) {
+			rotate(a = 18.0, v = [0, 1, 0]) {
+				translate(v = [0, 0, 3]) {
+					translate(v = [0, 6.82, -4.0]) {
+						translate(v = [0, 0, 230.49306344750678]) {
+							rotate(a = 0.0, v = [0, 1, 0]) {
+								translate(v = [0, 0, -230.49306344750678]) {
+									translate(v = [0, 0, 79.73635378597841]) {
+										rotate(a = 45.0, v = [1, 0, 0]) {
+											translate(v = [0, 0, -79.73635378597841]) {
+												translate(v = [3, 0, -1]) {
+													cube(center = true, size = [60, 37, 30]);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
