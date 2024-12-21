@@ -22,7 +22,7 @@ class FingerWellLayout(Layout):
 
         self.use_1_5u_keys = use_1_5u_keys
 
-        self.placement_transform = (0, 0, 29.3)
+        self.placement_transform = (0, 0, 30.5)
 
         self.positions_to_skip = ((0, 4), )
 
