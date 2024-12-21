@@ -840,44 +840,105 @@ class KeyboardAssembly:
         )
 
     def finger_bottom_cover_with_tripod_mount(self):
-        """Generate bottom cover with integrated tripod mount.
+        """Generate bottom cover with 40mm 1/4"-20 tripod mount.
 
-        Use a 1/4"-20 carpentry T nut for the threads.
+        Use this tripod mount, style 2:
+        https://www.aliexpress.com/item/1005006363751688.html
+        """
+        web_kwargs = self.bottom_cover_web_kwargs()
+
+        z_offset = self.bottom_cover_offset + self.bottom_cover_thickness + 2
+
+        mount_cylinder = cylinder_outer(r=50 / 2, h=8, center=True)
+
+        mount_column = 2
+        mount_row = 1.8
+
+        finger = self.finger_layout
+        tripod_mount = (
+            hull()(
+                finger.key_place(mount_column, mount_row, (
+                    mount_cylinder & cube(100, 100, 100, center=True).left(50)
+                ).down(z_offset)),
+                finger.web_corner(column=mount_column - 1, row=round(mount_row) - 1, left=True, top=False, **web_kwargs),
+                finger.web_corner(column=mount_column - 1, row=round(mount_row), left=True, top=True, **web_kwargs),
+            )
+            + hull()(
+                finger.key_place(mount_column, mount_row, (
+                    mount_cylinder & cube(100, 100, 100, center=True).right(50)
+                ).down(z_offset)),
+                finger.web_corner(column=mount_column + 1, row=round(mount_row) - 1, left=False, top=False, **web_kwargs),
+                finger.web_corner(column=mount_column + 1, row=round(mount_row), left=False, top=True, **web_kwargs),
+            )
+            + hull()(
+                finger.key_place(mount_column, mount_row, (
+                    mount_cylinder & cube(100, 100, 100, center=True).forward(50)
+                ).down(z_offset)),
+                finger.web_corner(column=mount_column, row=round(mount_row) - 1, left=True, top=True, **web_kwargs),
+                finger.web_corner(column=mount_column, row=round(mount_row) - 1, left=False, top=True, **web_kwargs),
+            )
+            + hull()(
+                finger.key_place(mount_column, mount_row, (
+                    mount_cylinder & cube(100, 100, 100, center=True).back(50)
+                ).down(z_offset)),
+                finger.web_corner(column=mount_column, row=round(mount_row) + 1, left=True, top=False, **web_kwargs),
+                finger.web_corner(column=mount_column, row=round(mount_row) + 1, left=False, top=False, **web_kwargs),
+            )
+        )
+
+        prong = cylinder_outer(r=4.1 / 2, h=6, center=True).down(z_offset - 1)
+        tripod_mount_holes = (
+            cylinder_outer(r=20 / 2, h=14, center=True)
+            + cylinder_outer(r=40.2 / 2, h=12, center=True).up(6)
+        ).down(z_offset)
+
+        return (
+            self.finger_bottom_cover()
+            + tripod_mount
+            - finger.key_place(mount_column, mount_row, tripod_mount_holes)
+            + finger.key_place(mount_column, mount_row, (
+                prong.right(15)
+                + prong.left(15)
+                + prong.forward(15)
+                + prong.back(15)
+            ))
+        )
+
+    def finger_bottom_cover_with_t_nut(self):
+        """Generate bottom cover with 1/4"-20 carpentry T nut for tripod mounting.
         (e.g., https://www.amazon.de/-/en/gp/product/B0DK1HGGKM/ref=sw_img_1?smid=A301WKE65PGVT5&psc=1)
         """
         web_kwargs = self.bottom_cover_web_kwargs()
 
         z_offset = self.bottom_cover_offset + self.bottom_cover_thickness + 4
 
+        mount_cylinder = cylinder_outer(r=26 / 2, h=10, center=True)
+
         tripod_mount = (
             hull()(
                 self.finger_layout.key_place(2, 3, (
-                    cylinder_outer(r=26 / 2, h=10, center=True)
-                    & cube(100, 100, 100, center=True).left(50)
+                    mount_cylinder & cube(100, 100, 100, center=True).left(50)
                 ).down(z_offset)),
                 self.finger_layout.web_corner(column=1, row=2, left=True, top=False, **web_kwargs),
                 self.finger_layout.web_corner(column=1, row=3, left=True, top=True, **web_kwargs),
             )
             + hull()(
                 self.finger_layout.key_place(2, 3, (
-                    cylinder_outer(r=26 / 2, h=10, center=True)
-                    & cube(100, 100, 100, center=True).right(50)
+                    mount_cylinder & cube(100, 100, 100, center=True).right(50)
                 ).down(z_offset)),
                 self.finger_layout.web_corner(column=3, row=2, left=False, top=False, **web_kwargs),
                 self.finger_layout.web_corner(column=3, row=3, left=False, top=True, **web_kwargs),
             )
             + hull()(
                 self.finger_layout.key_place(2, 3, (
-                    cylinder_outer(r=26 / 2, h=10, center=True)
-                    & cube(100, 100, 100, center=True).forward(50)
+                    mount_cylinder & cube(100, 100, 100, center=True).forward(50)
                 ).down(z_offset)),
                 self.finger_layout.web_corner(column=2, row=2, left=True, top=True, **web_kwargs),
                 self.finger_layout.web_corner(column=2, row=2, left=False, top=True, **web_kwargs),
             )
             + hull()(
                 self.finger_layout.key_place(2, 3, (
-                    cylinder_outer(r=26 / 2, h=10, center=True)
-                    & cube(100, 100, 100, center=True).back(50)
+                    mount_cylinder & cube(100, 100, 100, center=True).back(50)
                 ).down(z_offset)),
                 self.finger_layout.web_corner(column=2, row=4, left=True, top=False, **web_kwargs),
                 self.finger_layout.web_corner(column=2, row=4, left=False, top=False, **web_kwargs),
