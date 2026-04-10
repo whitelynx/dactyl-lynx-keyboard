@@ -1,5 +1,15 @@
 # The Dactyl Lynx Keyboard
 
+---
+
+[![Moved to Codeberg](https://img.shields.io/badge/moved_to-Codeberg-%232185D0?logo=codeberg&logoColor=white)][codeberg project]
+
+**Notice: This project has [moved to Codeberg.org][codeberg project]. All further development will take place there.**
+
+[codeberg project]: https://codeberg.org/whitelynx/dactyl-lynx-keyboard
+
+---
+
 The Dactyl Lynx is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
 This is my fork/rewrite of [the original Dactyl][]. I've changed a few things:
@@ -143,7 +153,7 @@ This is by no means a comprehensive guide to wiring a keyboard, but here's the a
 * use COL2ROW diode orientation
 * solder diode leads together for the rows
 * use insulated hookup wire for the columns
-* pick a pinout for wiring the 4-pin mini-DIN connectors: 
+* pick a pinout for wiring the 4-pin mini-DIN connectors:
     ![4-pin mini-DIN pinout](https://raw.githubusercontent.com/whitelynx/dactyl-lynx-keyboard/master/resources/4-pin-mini-din-pinout.png)
 * connect each column and row of a side to a different color of wire: (aside from some repetition because I ran out of colors)
   |      Position | Left Side  | Right Side | Pin |
